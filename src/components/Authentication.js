@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import GoogleAuth from './GoogleAuth';
 import FacebookLogin from 'react-facebook-login';
-import { findAllByDisplayValue } from '@testing-library/react';
+import FacebookAuth from './FacebookAuth';
 
 const Authentication = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -10,37 +11,53 @@ const Authentication = () => {
   const [picture, setPicture] = useState(null);
 
   const responseFacebook = (response) => {
-    console.log(response.email);
+    if (response) {
+      setIsLoggedIn(true);
+      setUserID(response.id);
+      setName(response.name);
+      setPicture(response.picture.data.url);
+    }
   };
 
   const componentClicked = () => {
     console.log('clicked');
   };
 
-  let fbContent;
+  let loginContent;
 
   if (isLoggedIn) {
-    fbContent = (
+    loginContent = (
       <div
         style={{
           width: '400px',
-          margin: 'auto',
+          backgroundColor: '#f3f3f3',
+          diplay: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-around',
+          padding: '2rem',
         }}
-      ></div>
+      >
+        <img src={picture} alt="" style={{ width: '30%' }} />
+        <p>{name}</p>
+      </div>
     );
   } else {
-    fbContent = (
-      <FacebookLogin
+    loginContent = (
+      <FacebookAuth
         appId="1004857033295756"
-        autoLoad={true}
+        // autoLoad={true}
         fields="name,email,picture"
         onClick={componentClicked}
-        callback={responseFacebook}
+        callback={() => responseFacebook()}
       />
     );
   }
 
-  return <div>{fbContent}</div>;
+  return (
+    <div>
+      <div>{loginContent}</div>
+      <GoogleAuth />
+    </div>
+  );
 };
-
 export default Authentication;
