@@ -1,12 +1,12 @@
 import React from 'react';
 import FacebookLogin from 'react-facebook-login';
 
-const FacebookAuth = ({ appId, fields, onClick, callback }) => {
+const FacebookAuth = ({ appId, autoload, fields, onClick, callback }) => {
   return (
     <div>
       <FacebookLogin
         appId={appId}
-        autoLoad={false}
+        autoLoad={autoload}
         fields={fields}
         onClick={onClick}
         callback={callback}
