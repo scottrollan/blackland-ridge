@@ -44,11 +44,11 @@ const Authentication = () => {
     loginContent = (
       <div>
         <FacebookAuth
-          appId="1004857033295756"
-          autoload={false}
+          // appId="1004857033295756"
+          // autoload={false}
           onClick={() => componentClicked('Facebook')}
           // callback={() => responseFacebook()}
-          fields="name,email,picture"
+          // fields="name,email,picture"
         />
         <GoogleAuth onClick={() => responseGoogle()} />
       </div>

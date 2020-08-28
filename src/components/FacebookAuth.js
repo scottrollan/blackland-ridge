@@ -2,7 +2,7 @@ import React from 'react';
 import FacebookLogin from 'react-facebook-login';
 import styles from './Authentication.module.scss';
 
-const FacebookAuth = ({ callback }) => {
+const FacebookAuth = ({ onClick }) => {
   const responseFacebook = (response) => {
     console.log(response);
     // if (response) {
@@ -20,8 +20,8 @@ const FacebookAuth = ({ callback }) => {
         appId="1004857033295756"
         autoload={false}
         fields="name,email,picture"
-        onClick={() => responseFacebook()}
-        callback={callback}
+        callback={() => responseFacebook()}
+        onClick={onClick}
       />
     </div>
   );
