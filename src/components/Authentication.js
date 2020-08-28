@@ -25,7 +25,6 @@ const Authentication = () => {
       .getAuthInstance()
       .isSignedIn.get();
     $(`#googleAuthButton`).attr('loggedin', isSignedInGoogle);
-    console.log($(`#googleAuthButton`).attr('loggedin'));
   };
 
   const componentClicked = (who) => {
@@ -48,13 +47,10 @@ const Authentication = () => {
           appId="1004857033295756"
           autoload={false}
           onClick={() => componentClicked('Facebook')}
-          callback={() => responseFacebook()}
+          // callback={() => responseFacebook()}
           fields="name,email,picture"
         />
-        <GoogleAuth
-          onClick={() => responseGoogle()}
-          callback={() => responseGoogle()}
-        />
+        <GoogleAuth onClick={() => responseGoogle()} />
       </div>
     );
   }

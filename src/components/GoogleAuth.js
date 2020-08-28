@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import $ from 'jquery';
+import styles from './Authentication.module.scss';
 
 const GoogleAuth = ({ onClick }) => {
   let auth;
@@ -27,8 +28,14 @@ const GoogleAuth = ({ onClick }) => {
 
   return (
     <div>
-      <Button id="googleAuthButton" loggedin="false" onClick={onClick}>
-        google auth
+      <Button
+        id="googleAuthButton"
+        className={styles.googleAuthButton}
+        loggedin="false"
+        onClick={onClick}
+      >
+        <i className="fab fa-google"></i>
+        {'  '}Login with Google
       </Button>
     </div>
   );
