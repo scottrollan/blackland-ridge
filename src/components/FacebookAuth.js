@@ -18,7 +18,7 @@ const FacebookAuth = ({ onClick }) => {
       <FacebookLogin
         className={styles.facebookAuthButton}
         appId="1004857033295756"
-        autoload={false}
+        autoload
         fields="name,email,picture"
         callback={() => responseFacebook()}
         onClick={onClick}

@@ -11,20 +11,24 @@ const Authentication = () => {
   const [email, setEmail] = useState('');
   const [picture, setPicture] = useState(null);
 
-  const responseFacebook = (response) => {
-    console.log(response);
-    // if (response) {
-    //   setIsLoggedIn(true);
-    //   setUserID(response.id);
-    //   setName(response.name);
-    //   setPicture(response.picture.data.url);
-    // }
-  };
+  // const responseFacebook = (response) => {
+  //   console.log(response);
+  //   if (response) {
+  //     setIsLoggedIn(true);
+  //     setUserID(response.id);
+  //     setName(response.name);
+  //     setPicture(response.picture.data.url);
+  //   }
+  // };
   const responseGoogle = () => {
-    const isSignedInGoogle = window.gapi.auth2
-      .getAuthInstance()
-      .isSignedIn.get();
+    const auth = window.gapi.auth2.getAuthInstance();
+    const isSignedInGoogle = auth.isSignedIn.get();
     $(`#googleAuthButton`).attr('loggedin', isSignedInGoogle);
+    if (isSignedInGoogle) {
+      setIsLoggedIn(true);
+    } else {
+      auth.signIn();
+    }
   };
 
   const componentClicked = (who) => {
