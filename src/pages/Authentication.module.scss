@@ -1,0 +1,56 @@
+@import '../styles/custom-properties.scss';
+
+.authentication {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 990;
+  background-color: var(--overlay);
+  justify-content: center;
+  align-items: center;
+}
+.loginWrapper {
+  text-align: center;
+  width: 45%;
+  border-radius: 10px;
+  background: linear-gradient(
+    to left,
+    #ffffff,
+    rgba(255, 255, 255, 0.9) 10%,
+    rgba(255, 255, 255, 0.9) 50%,
+    rgba(255, 255, 255, 0.9) 90%,
+    #fff 100%
+  );
+  padding: 2vh 10px;
+  z-index: 999;
+}
+.buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.facebookAuthButton,
+.googleAuthButton {
+  width: var(--button-width);
+  height: var(--button-height);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  color: white;
+  border-radius: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.googleAuthButton {
+  background-color: var(--google-red);
+  border: var(--google-red);
+  &:hover {
+    background-color: white;
+    color: var(--google-red);
+    border: white;
+  }
+}

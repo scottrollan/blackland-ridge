@@ -1,0 +1,99 @@
+@import '../../styles/custom-properties.scss';
+
+.alertDiv {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+  width: 100vw;
+  height: 100vh;
+  z-index: 990;
+  background-color: var(--overlay);
+  justify-content: center;
+  align-items: center;
+}
+
+.alertDiv > div {
+  text-align: center;
+  width: 45%;
+  border-radius: 10px;
+  background: linear-gradient(
+    to left,
+    #ffffff,
+    rgba(255, 255, 255, 0.9) 10%,
+    rgba(255, 255, 255, 0.9) 50%,
+    rgba(255, 255, 255, 0.9) 90%,
+    #fff 100%
+  );
+  padding: 2vh 10px;
+  z-index: 999;
+}
+
+.fadeIn {
+  animation: fade ease 0.5s;
+  -webkit-animation: fade ease 0.5s;
+  -moz-animation: fade ease 0.5s;
+  -o-animation: fade ease 0.5s;
+  -ms-animation: fade ease 0.5s;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+    transform: translateY(-4rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@-moz-keyframes fade {
+  0% {
+    opacity: 0;
+    transform: translateY(-4rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@-webkit-keyframes fade {
+  0% {
+    opacity: 0;
+    transform: translateY(-4rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@-o-keyframes fade {
+  0% {
+    opacity: 0;
+    transform: translateY(-4rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@-ms-keyframes fade {
+  0% {
+    opacity: 0;
+    transform: translateY(-4rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media screen and (max-width: 967px) {
+  .alertDiv > div {
+    width: 88%;
+  }
+}
