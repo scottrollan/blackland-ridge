@@ -10,12 +10,12 @@ const useAuth = () => {
     return db.checkAuth((user) => {
       setLoading(false);
       setThisUser(user);
-      setUserName(user.displayName);
-      console.log(user.displayName);
     });
   }, []);
 
   return { thisUser, loading, userName };
 };
+
+//TWitter Bearer token: AAAAAAAAAAAAAAAAAAAAAJfzHAEAAAAAu6YOOOA0%2FSF4hT%2Ba5AJhYUhOklU%3DvOApaxhayB6NNEUrDrp1PweXoLJ6dBwNKXWFCLKnkW7tQPzOsU
 
 export default useAuth;

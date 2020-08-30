@@ -32,6 +32,11 @@
   justify-content: space-evenly;
   align-items: center;
 }
+.buttons span {
+  font-size: x-large;
+}
+.anonymousAuthButton,
+.twitterAuthButton,
 .facebookAuthButton,
 .googleAuthButton {
   width: var(--button-width);
@@ -45,12 +50,39 @@
   margin: 0.5rem 0;
 }
 
+.twitterAuthButton {
+  background-color: var(--twitter-blue);
+  border: var(--twitter-blue);
+  &:hover {
+    background-color: white;
+    color: var(--twitter-blue);
+    border: white;
+  }
+}
 .googleAuthButton {
   background-color: var(--google-red);
   border: var(--google-red);
   &:hover {
     background-color: white;
     color: var(--google-red);
+    border: white;
+  }
+}
+.facebookAuthButton {
+  background-color: var(--facebook-blue);
+  border: var(--facebook-blue);
+  &:hover {
+    background-color: white;
+    color: var(--facebook-blue);
+    border: white;
+  }
+}
+.anonymousAuthButton {
+  background-color: var(--caution-orange);
+  border: var(--caution-orange);
+  &:hover {
+    background-color: white;
+    color: var(--caution-orange);
     border: white;
   }
 }

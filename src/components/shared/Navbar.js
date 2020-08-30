@@ -10,8 +10,8 @@ const NavBar = ({ userName }) => {
       className={styles.navBar}
       collapseOnSelect
       expand="lg"
-      bg="dark"
-      variant="dark"
+      // bg="dark"
+      // variant="dark"
       fixed="top"
     >
       <Navbar.Brand style={{ display: userName ? 'inherit' : 'none' }}>
@@ -30,10 +30,11 @@ const NavBar = ({ userName }) => {
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto"></Nav>
         <Nav>
-          <Link to="/" className="nav-link">
+          <Link to="/" className={[`nav-link ${styles.navLink}`]}>
             Home
           </Link>
-          <Link to="/notHome" className="nav-link">
+
+          <Link to="/notHome" className={[`nav-link ${styles.navLink}`]}>
             Not Home
           </Link>
         </Nav>

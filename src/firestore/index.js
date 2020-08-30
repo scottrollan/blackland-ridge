@@ -31,9 +31,21 @@ export const signInWithFacebook = async () => {
   await auth.signInWithPopup(provider);
   window.location.reload();
 };
+export const signInWithTwitter = async () => {
+  const provider = new firebase.auth.TwitterAuthProvider();
+  await auth.signInWithPopup(provider);
+  window.location.reload();
+};
 
-export const signOut = () => {
-  auth.signOut();
+export const signInAnonymously = async () => {
+  // const provider = new firebase.anonymousAuthProvider();
+  // await auth.signInWithPopup(provider);
+  window.location.reload();
+};
+
+export const signOut = async () => {
+  await auth.signOut();
+  window.location.reload();
 };
 
 export const checkAuth = (cb) => {

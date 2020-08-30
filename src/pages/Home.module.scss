@@ -8,7 +8,6 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   position: relative;
 }
 
@@ -26,4 +25,9 @@
     rgba(255, 255, 255, 0.8),
     rgba(255, 255, 255, 0)
   );
+}
+
+.blackland {
+  font-size: 4vw;
+  font-weight: 900;
 }

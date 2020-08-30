@@ -8,17 +8,20 @@ import Home from './pages/Home';
 import NotHome from './pages/NotHome';
 import styles from './App.module.scss';
 
+export const UserContext = React.createContext();
+
 const App = () => {
   const { thisUser, loading, userName } = useAuth();
 
   return (
     <div className={styles.App}>
       <Router>
-        <Navbar userName={userName} />
-
+        <Navbar userName={thisUser ? thisUser.displayName : null} />
         <Switch>
-          <Route path="/" exact component={Home}></Route>
-          <Route path="/notHome" component={NotHome}></Route>
+          <UserContext.Provider value={thisUser}>
+            <Route path="/" exact component={Home}></Route>
+            <Route path="/notHome" component={NotHome}></Route>
+          </UserContext.Provider>
         </Switch>
       </Router>
       <Loading loading={loading} />
