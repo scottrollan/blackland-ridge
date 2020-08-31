@@ -1,31 +1,50 @@
 import React from 'react';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import $ from 'jquery';
 import * as db from '../../firestore';
 import styles from './NavBar.module.scss';
 
 const NavBar = ({ userName }) => {
+  const logout = () => {
+    db.signOut();
+  };
+
+  const checkLogin = (userName) => {
+    if (userName) {
+      $('#loginBtn').show();
+      $('#logoutBtn').hide();
+    } else {
+      $('#logoutBtn').show();
+      $('#loginBtn').hide();
+    }
+  };
+
+  React.useEffect(() => {
+    checkLogin();
+  }, []);
   return (
-    <Navbar
-      className={styles.navBar}
-      collapseOnSelect
-      expand="lg"
-      // bg="dark"
-      // variant="dark"
-      fixed="top"
-    >
-      <Navbar.Brand style={{ display: userName ? 'inherit' : 'none' }}>
-        Welcome, {userName}
+    <Navbar className={styles.navBar} collapseOnSelect expand="lg" fixed="top">
+      <Navbar.Brand>
+        <span id="welcome" className={styles.welcome}>
+          Welcome{userName ? `, ${userName}.` : '!'}
+          <Button
+            id="loginBtn"
+            className={styles.loginBtn}
+            onClick={() => $('#authentication').css('display', 'flex')}
+          >
+            Login
+          </Button>
+        </span>
         <Button
-          onClick={() => db.signOut()}
-          style={
-            ({ display: userName ? 'inherit' : 'none' }, { marginLeft: '1rem' })
-          }
+          id="logoutBtn"
+          className={styles.logoutBtn}
+          onClick={() => logout()}
         >
-          Logout{'   '}
-          <i className="fas fa-arrow-right"></i>
+          Logout
         </Button>
       </Navbar.Brand>
+
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto"></Nav>

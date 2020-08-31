@@ -12,8 +12,10 @@
   align-items: center;
 }
 .loginWrapper {
+  display: flex;
+  flex-direction: row;
   text-align: center;
-  width: 45%;
+  width: auto;
   border-radius: 10px;
   background: linear-gradient(
     to left,
@@ -24,9 +26,13 @@
     #fff 100%
   );
   padding: 2vh 10px;
-  z-index: 999;
+  z-index: 888;
+  @media screen and (max-width: $breakpoint-medium) {
+    width: 95%;
+  }
 }
-.buttons {
+
+.buttonSection {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -48,6 +54,11 @@
   color: white;
   border-radius: 0.5rem;
   margin: 0.5rem 0;
+  @media (pointer: coarse) {
+    @media screen and (max-width: $breakpoint-medium) {
+      max-width: 100%;
+    }
+  }
 }
 
 .twitterAuthButton {

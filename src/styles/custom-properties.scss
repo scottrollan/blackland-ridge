@@ -1,12 +1,16 @@
 :root {
-  --nav-height: 5rem;
   --facebook-blue: #1778f2;
   --twitter-blue: #00acee;
   --google-red: #dd4b39;
   --caution-yellow: #eed202;
   --caution-orange: #ff6700;
-  --button-width: 20rem;
-  --button-height: 3.5rem;
   --overlay-light: rgba(0, 0, 0, 0.3);
   --overlay: rgba(0, 0, 0, 0.3);
+  --nav-height: 5rem;
+  --button-width: 20rem;
+  --button-height: 3.5rem;
 }
+
+$breakpoint-small: 688px;
+$breakpoint-medium: 992px;
+$breakpoint-large: 1312px;

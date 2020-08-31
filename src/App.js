@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import useAuth from './hooks/useAuth';
 import Navbar from './components/shared/Navbar';
@@ -11,7 +11,7 @@ import styles from './App.module.scss';
 export const UserContext = React.createContext();
 
 const App = () => {
-  const { thisUser, loading, userName } = useAuth();
+  const { thisUser, loading } = useAuth();
 
   return (
     <div className={styles.App}>
