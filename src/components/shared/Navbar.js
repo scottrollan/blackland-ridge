@@ -12,11 +12,13 @@ const NavBar = ({ userName }) => {
 
   const checkLogin = (userName) => {
     if (userName) {
-      $('#loginBtn').show();
-      $('#logoutBtn').hide();
-    } else {
-      $('#logoutBtn').show();
       $('#loginBtn').hide();
+      $('#welcome').show();
+      $('#logoutBtn').show();
+    } else {
+      $('#logoutBtn').hide();
+      $('#welcome').hide();
+      $('#loginBtn').show();
     }
   };
 

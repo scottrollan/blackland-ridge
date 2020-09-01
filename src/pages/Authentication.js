@@ -37,6 +37,9 @@ const Authentication = ({ user }) => {
     }
   };
 
+  $('#welcome').hide();
+  $('#logoutBtn').show();
+
   return (
     <div
       className={styles.authentication}

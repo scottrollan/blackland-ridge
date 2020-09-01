@@ -42,14 +42,15 @@ export const signInUserWithEmail = async (email, password) => {
   try {
     promise = await auth.signInWithEmailAndPassword(email, password);
   } catch (e) {
-    console.log('email: ', email, '!');
-    console.log(e);
     if (e.code === 'auth/wrong-password') {
       $('#incorrectPassword').css('display', 'flex');
     } else if (e.code === 'auth/user-not-found') {
       $('#userNotFound').css('display', 'flex');
     } else if (e.code === '"auth/too-many-requests"') {
       $('#tooManyAttempts').css('display', 'flex');
+    } else {
+      $('#welcome').show();
+      $('#logoutBtn').show();
     }
   }
   // return promise;
