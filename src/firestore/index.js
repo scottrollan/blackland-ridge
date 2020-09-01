@@ -84,8 +84,6 @@ export const checkAuth = (cb) => {
 
 firebase.auth().onAuthStateChanged((firebaseUser) => {
   if (firebaseUser) {
-    console.log(firebaseUser);
   } else {
-    console.log('not logged in');
   }
 });

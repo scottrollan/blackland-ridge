@@ -50,7 +50,7 @@ const Authentication = ({ user }) => {
       <IncorrectPassword />
       <ResetPassword />
       <div id="firebaseui-auth-container" className={styles.loginWrapper}>
-        <h3 style={{ marginBottom: '2rem' }}>Sign in to Blackland Ridge</h3>
+        <div className={styles.header}>Sign in to Blackland Ridge</div>
         <Button
           onClick={db.signInWithFacebook}
           className={styles.facebookAuthButton}
