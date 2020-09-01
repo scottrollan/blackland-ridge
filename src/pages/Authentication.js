@@ -76,6 +76,7 @@ const Authentication = ({ user }) => {
           <Form style={{ width: 'var(--button-width' }}>
             <h5>or sign in with your email</h5>
             <Form.Control
+              className={styles.input}
               type="email"
               id="email"
               placeholder="email"
@@ -84,6 +85,7 @@ const Authentication = ({ user }) => {
               required
             ></Form.Control>
             <Form.Control
+              className={styles.input}
               type="password"
               id="password"
               placeholder="password"

@@ -25,7 +25,6 @@
     rgba(255, 255, 255, 0.9) 90%,
     #fff 100%
   );
-  padding: 2vh 10px;
   z-index: 888;
   @media screen and (max-width: $breakpoint-medium) {
     width: 95%;
@@ -37,6 +36,7 @@
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+  margin: 20px;
 }
 .buttons span {
   font-size: x-large;
@@ -56,7 +56,7 @@
   margin: 0.5rem 0;
   @media (pointer: coarse) {
     @media screen and (max-width: $breakpoint-medium) {
-      max-width: 100%;
+      width: 80%;
     }
   }
 }
@@ -86,6 +86,22 @@
     background-color: white;
     color: var(--facebook-blue);
     border: white;
+  }
+}
+form {
+  margin: 1rem 0;
+  @media (pointer: coarse) {
+    @media screen and (max-width: $breakpoint-medium) {
+      width: 80%;
+    }
+  }
+}
+.input {
+  margin: 0.25rem 0;
+  @media (pointer: coarse) {
+    @media screen and (max-width: $breakpoint-medium) {
+      width: 80%;
+    }
   }
 }
 .anonymousAuthButton {
