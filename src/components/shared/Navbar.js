@@ -10,21 +10,6 @@ const NavBar = ({ userName }) => {
     db.signOut();
   };
 
-  const checkLogin = (userName) => {
-    if (userName) {
-      $('#loginBtn').hide();
-      $('#welcome').show();
-      $('#logoutBtn').show();
-    } else {
-      $('#logoutBtn').hide();
-      $('#welcome').hide();
-      $('#loginBtn').show();
-    }
-  };
-
-  React.useEffect(() => {
-    checkLogin();
-  }, []);
   return (
     <Navbar className={styles.navBar} collapseOnSelect expand="lg" fixed="top">
       <Navbar.Brand>
@@ -42,8 +27,9 @@ const NavBar = ({ userName }) => {
           id="logoutBtn"
           className={styles.logoutBtn}
           onClick={() => logout()}
+          style={{ display: userName ? 'flex' : 'none' }}
         >
-          Logout
+          Logout {userName}
         </Button>
       </Navbar.Brand>
 
