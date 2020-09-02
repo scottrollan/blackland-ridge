@@ -12,7 +12,6 @@ const useAuth = () => {
         setLoading(false);
         setThisUser(user);
         setIsLoggedIn(true);
-        console.log(user);
       }
     });
   }, []);
