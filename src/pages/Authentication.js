@@ -55,17 +55,15 @@ const Authentication = ({ user }) => {
           onClick={db.signInWithFacebook}
           className={styles.facebookAuthButton}
         >
-          <i className="fab fa-facebook" style={{ fontSize: 'xx-large' }}></i>
-          <span style={{ fontSize: 'x-large' }}>
-            {'   '}Sign in with Facebook
-          </span>
+          <i className={[`fab fa-facebook ${styles.authLogin}`]}></i>
+          <span className={styles.authLogin}>{'   '}Sign in with Facebook</span>
         </Button>
         <Button
           onClick={db.signInWithGoogle}
           className={styles.googleAuthButton}
         >
-          <i className="fab fa-google" style={{ fontSize: 'xx-large' }}></i>
-          <span style={{ fontSize: 'x-large' }}>
+          <i className={[`fab fa-google ${styles.authLogin}`]}></i>
+          <span className={styles.authLogin}>
             {'   '}Sign in with Google
           </span>{' '}
         </Button>
@@ -74,14 +72,12 @@ const Authentication = ({ user }) => {
           onClick={db.signInWithTwitter}
           className={styles.twitterAuthButton}
         >
-          <i className="fab fa-twitter" style={{ fontSize: 'xx-large' }}></i>
-          <span style={{ fontSize: 'x-large' }}>
-            {'   '}Sign in with Twitter
-          </span>
+          <i className={[`fab fa-twitter ${styles.authLogin}`]}></i>
+          <span className={styles.authLogin}>{'   '}Sign in with Twitter</span>
         </Button>
         <h5 style={{ marginTop: '1rem' }}>or sign in with your email</h5>
 
-        <Form style={{ width: 'var(--button-width' }}>
+        <Form>
           <Form.Control
             className={styles.input}
             type="email"
@@ -100,27 +96,35 @@ const Authentication = ({ user }) => {
             onChange={(e) => setPassword(e.target.value)}
             required
           ></Form.Control>
-          <Button
-            onClick={() => login()}
-            variant="light"
-            className={styles.loginForm}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              width: '100%',
+            }}
           >
-            Log In
-          </Button>
-          <Button
-            onClick={() => signUp()}
-            variant="light"
-            className={styles.signupForm}
-          >
-            Sign Up
-          </Button>
+            <Button
+              onClick={() => login()}
+              variant="light"
+              className={styles.loginForm}
+            >
+              Log In
+            </Button>
+            <Button
+              onClick={() => signUp()}
+              variant="light"
+              className={styles.signupForm}
+            >
+              Sign Up
+            </Button>
+          </div>
         </Form>
         <Button
           onClick={db.signInAnonymously}
           className={styles.anonymousAuthButton}
         >
-          <i className="fas fa-user-slash" style={{ fontSize: 'xx-large' }}></i>
-          <span style={{ fontSize: 'x-large' }}>{'  '}Stay Anonymous</span>
+          <i className={[`fas fa-user-slash ${styles.authLogin}`]}></i>
+          <span className={styles.authLogin}>{'  '}Stay Anonymous</span>
         </Button>
         <span style={{ fontSize: 'smaller' }}>
           (you will only be allowed to view--no posting, commenting or liking)

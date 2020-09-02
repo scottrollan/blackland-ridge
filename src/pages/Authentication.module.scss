@@ -23,21 +23,30 @@
   padding: 4rem 3rem;
   border-radius: 1rem;
   background-color: white;
+  overflow-y: auto;
+  max-height: 98%;
   z-index: 888;
-  @media screen and (max-width: $breakpoint-medium) {
+  @media screen and (max-width: $breakpoint-small) {
     width: 95%;
+    overflow-y: scroll;
     padding: 15px;
+  }
+}
+.loginWrapper::-webkit-scrollbar-thumb {
+  border-radius: 1rem;
+}
+.loginWrapper * {
+  font-size: x-large;
+  @media (pointer: coarse) {
+    @media screen and (max-width: $breakpoint-medium) {
+      font-size: calc(2vh + 2vw);
+    }
   }
 }
 .header {
   margin: 0 0 1.5rem 0;
 }
-.button span {
-  font-size: x-large;
-  @media (pointer: coarse) {
-    font-size: xx-small;
-  }
-}
+
 .anonymousAuthButton,
 .twitterAuthButton,
 .facebookAuthButton,
@@ -46,12 +55,12 @@
   max-width: 420px;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   color: white;
   border-radius: 0.5rem;
   margin: 0.5rem 0;
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
 }
 
 .twitterAuthButton {
@@ -83,7 +92,7 @@
 }
 form {
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
   margin: 0 0 1rem;
   text-align: left;
   border: 1px solid var(--button-color);
@@ -91,17 +100,19 @@ form {
   padding: 20px;
 }
 .input {
-  width: 100%;
+  max-width: 100%;
   margin: 0.5rem 0;
+  border-radius: 10px;
 }
 .signupForm,
 .loginForm {
-  margin-right: 1rem;
   background-color: var(--button-color);
   color: white;
   border: 1px solid var(--button-color);
+  border-radius: 10px;
 }
 .signupForm {
+  margin: 0;
   background-color: white;
   color: var(--button-color);
 }
