@@ -11,12 +11,15 @@ import styles from './App.module.scss';
 export const UserContext = React.createContext();
 
 const App = () => {
-  const { thisUser, loading } = useAuth();
+  const { thisUser, loading, isLoggedIn } = useAuth();
 
   return (
     <div className={styles.App}>
       <Router>
-        <Navbar userName={thisUser ? thisUser.displayName : null} />
+        <Navbar
+          isLoggedIn={isLoggedIn}
+          userName={thisUser ? thisUser.displayName : null}
+        />
         <Switch>
           <UserContext.Provider value={thisUser}>
             <Route path="/" exact component={Home}></Route>
@@ -25,7 +28,7 @@ const App = () => {
         </Switch>
       </Router>
       <Loading loading={loading} />
-      <Authentication user={thisUser} />
+      <Authentication user={(thisUser, isLoggedIn)} />
     </div>
   );
 };

@@ -7,7 +7,7 @@ import IncorrectPassword from '../components/IncorrectPassword';
 import ResetPassword from '../components/ResetPassword';
 import styles from './Authentication.module.scss';
 
-const Authentication = ({ user }) => {
+const Authentication = ({ user, isLoggedIn }) => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 

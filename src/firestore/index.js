@@ -82,8 +82,8 @@ export const checkAuth = (cb) => {
   return auth.onAuthStateChanged(cb);
 };
 
-firebase.auth().onAuthStateChanged((firebaseUser) => {
-  if (firebaseUser) {
-  } else {
-  }
-});
+// firebase.auth().onAuthStateChanged((firebaseUser) => {
+//   if (firebaseUser) {
+//   } else {
+//   }
+// });

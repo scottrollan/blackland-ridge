@@ -4,17 +4,20 @@ import * as db from '../firestore';
 const useAuth = () => {
   const [thisUser, setThisUser] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
   React.useEffect(() => {
     return db.checkAuth((user) => {
-      setLoading(false);
-      setThisUser(user);
+      if (user) {
+        setLoading(false);
+        setThisUser(user);
+        setIsLoggedIn(true);
+        console.log(user);
+      }
     });
   }, []);
 
-  return { thisUser, loading };
+  return { thisUser, loading, isLoggedIn };
 };
-
-//TWitter Bearer token: AAAAAAAAAAAAAAAAAAAAAJfzHAEAAAAAu6YOOOA0%2FSF4hT%2Ba5AJhYUhOklU%3DvOApaxhayB6NNEUrDrp1PweXoLJ6dBwNKXWFCLKnkW7tQPzOsU
 
 export default useAuth;
