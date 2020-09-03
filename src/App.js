@@ -12,14 +12,11 @@ export const UserContext = React.createContext();
 
 const App = () => {
   const { thisUser, loading, isLoggedIn } = useAuth();
-
+  console.log(isLoggedIn);
   return (
     <div className={styles.App}>
       <Router>
-        <Navbar
-          isLoggedIn={isLoggedIn}
-          userName={thisUser ? thisUser.displayName : null}
-        />
+        <Navbar isLoggedIn={isLoggedIn} user={thisUser} />
         <Switch>
           <UserContext.Provider value={thisUser}>
             <Route path="/" exact component={Home}></Route>

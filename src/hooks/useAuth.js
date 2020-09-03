@@ -7,11 +7,12 @@ const useAuth = () => {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
   React.useEffect(() => {
-    return db.checkAuth((user) => {
+    db.checkAuth((user) => {
       if (user) {
         setLoading(false);
         setThisUser(user);
         setIsLoggedIn(true);
+        console.log(user);
       }
     });
   }, []);
