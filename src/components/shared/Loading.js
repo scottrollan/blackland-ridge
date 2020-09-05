@@ -9,7 +9,7 @@ const Loading = ({ loading }) => {
       style={{ display: loading ? 'flex' : 'none' }}
     >
       <div className={styles.fadeIn}>
-        <Spinner animation="border" variant="secondary" />{' '}
+        <Spinner animation="border" variant="light" />{' '}
       </div>
     </div>
   );

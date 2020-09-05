@@ -18,9 +18,9 @@ var firebaseConfig = {
 const firebaseApp = !firebase.apps.length
   ? firebase.initializeApp(firebaseConfig)
   : firebase.app();
-const db = firebaseApp.firestore();
+// const db = firebaseApp.firestore();
 const auth = firebaseApp.auth();
-const storage = firebaseApp.storage();
+// const storage = firebaseApp.storage();
 
 export const signInWithGoogle = async () => {
   const provider = new firebase.auth.GoogleAuthProvider();
@@ -49,6 +49,7 @@ export const signInUserWithEmail = async (email, password) => {
     } else if (e.code === '"auth/too-many-requests"') {
       $('#tooManyAttempts').css('display', 'flex');
     } else {
+      console.log(promise);
       $('#welcome').show();
       $('#logoutBtn').show();
     }
@@ -56,9 +57,8 @@ export const signInUserWithEmail = async (email, password) => {
   // return promise;
 };
 export const createUserWithEmail = async (email, password) => {
-  const promise = await auth.createUserWithEmailAndPassword(email, password);
-  // promise.catch((err) => console.log(err.message));
-  return promise;
+  let promise = await auth.createUserWithEmailAndPassword(email, password);
+  console.log(promise);
 };
 export const signInAnonymously = async () => {
   // const provider = new firebase.anonymousAuthProvider();
@@ -70,7 +70,7 @@ export const signInAnonymously = async () => {
       $('#logoutBtn').hide();
     }
   });
-  window.location.reload();
+  // window.location.reload();
 };
 
 export const signOut = async () => {

@@ -13,18 +13,6 @@
 }
 
 .alertDiv > div {
-  text-align: center;
-  width: 45%;
-  border-radius: 10px;
-  background: linear-gradient(
-    to left,
-    #ffffff,
-    rgba(255, 255, 255, 0.9) 10%,
-    rgba(255, 255, 255, 0.9) 50%,
-    rgba(255, 255, 255, 0.9) 90%,
-    #fff 100%
-  );
-  padding: 2vh 10px;
   z-index: 999;
 }
 

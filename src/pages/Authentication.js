@@ -1,19 +1,22 @@
 import React from 'react';
 import * as db from '../firestore';
-import $ from 'jquery';
-import { Form, Button } from 'react-bootstrap';
+// import $ from 'jquery';
+import { Button, Modal } from 'react-bootstrap';
+import UserNameModal from '../components/UserNameModal';
 import UserNotFound from '../components/UserNotFound';
 import IncorrectPassword from '../components/IncorrectPassword';
 import ResetPassword from '../components/ResetPassword';
 import styles from './Authentication.module.scss';
 
-const Authentication = ({ user, isLoggedIn }) => {
+const Authentication = ({ isLoggedIn }) => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [selectedName, setSelectedName] = React.useState('');
+  const [usernameShow, setUsernameShow] = React.useState(false);
 
   const login = async () => {
     if (
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.toLowerCase())
+      /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email.toLowerCase())
     ) {
       db.signInUserWithEmail(email, password);
     } else {
@@ -23,12 +26,10 @@ const Authentication = ({ user, isLoggedIn }) => {
   };
   const signUp = () => {
     if (
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
-        email.toLowerCase()
-      ) &&
+      /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email.toLowerCase()) &&
       password.length > 6
     ) {
-      db.createUserWithEmail(email, password);
+      setUsernameShow(true);
     } else if (password.length < 6) {
       alert('Password must be at least 6 characters long.');
     } else {
@@ -37,20 +38,25 @@ const Authentication = ({ user, isLoggedIn }) => {
     }
   };
 
-  $('#welcome').hide();
-  $('#logoutBtn').show();
+  const finishSignUp = () => {
+    db.createUserWithEmail(email, password);
+  };
+
+  // React.useEffect(() => {
+  //   setUsernameShow(false);
+  // }, []);
 
   return (
-    <div
-      className={styles.authentication}
-      id="authentication"
-      style={{ display: user ? 'none' : 'flex' }}
-    >
+    <Modal id="firebaseui-auth-container" scrollable show={!isLoggedIn}>
       <UserNotFound />
       <IncorrectPassword />
       <ResetPassword />
-      <div id="firebaseui-auth-container" className={styles.loginWrapper}>
-        <div className={styles.header}>Sign in to Blackland Ridge</div>
+      <Modal.Header style={{ justifyContent: 'center' }}>
+        <Modal.Title style={{ textAlign: 'center' }}>
+          Sign in to Blackland Ridge
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body className={styles.modalBody}>
         <Button
           onClick={db.signInWithFacebook}
           className={styles.facebookAuthButton}
@@ -76,9 +82,8 @@ const Authentication = ({ user, isLoggedIn }) => {
           <span className={styles.authLogin}>{'   '}Sign in with Twitter</span>
         </Button>
         <h5 style={{ marginTop: '1rem' }}>or sign in with your email</h5>
-
-        <Form>
-          <Form.Control
+        <div className={styles.form}>
+          <input
             className={styles.input}
             type="email"
             id="email"
@@ -86,8 +91,8 @@ const Authentication = ({ user, isLoggedIn }) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-          ></Form.Control>
-          <Form.Control
+          ></input>
+          <input
             className={styles.input}
             type="password"
             id="password"
@@ -95,7 +100,7 @@ const Authentication = ({ user, isLoggedIn }) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-          ></Form.Control>
+          ></input>
           <div
             style={{
               display: 'flex',
@@ -117,8 +122,14 @@ const Authentication = ({ user, isLoggedIn }) => {
             >
               Sign Up
             </Button>
+            <UserNameModal
+              signUp={finishSignUp}
+              nameInput={selectedName}
+              setName={setSelectedName}
+              show={usernameShow}
+            />
           </div>
-        </Form>
+        </div>
         <Button
           onClick={db.signInAnonymously}
           className={styles.anonymousAuthButton}
@@ -129,8 +140,8 @@ const Authentication = ({ user, isLoggedIn }) => {
         <span style={{ fontSize: 'smaller' }}>
           (you will only be allowed to view--no posting, commenting or liking)
         </span>
-      </div>
-    </div>
+      </Modal.Body>
+    </Modal>
   );
 };
 export default Authentication;
