@@ -25,18 +25,18 @@ const auth = firebaseApp.auth();
 export const signInWithGoogle = async () => {
   const provider = new firebase.auth.GoogleAuthProvider();
   await auth.signInWithPopup(provider);
-  // window.location.reload();
+  window.location.reload();
 };
 export const signInWithFacebook = async () => {
   const provider = new firebase.auth.FacebookAuthProvider();
   await auth.signInWithPopup(provider);
 
-  // window.location.reload();
+  window.location.reload();
 };
 export const signInWithTwitter = async () => {
   const provider = new firebase.auth.TwitterAuthProvider();
   await auth.signInWithPopup(provider);
-  // window.location.reload();
+  window.location.reload();
 };
 export const signInUserWithEmail = async (email, password) => {
   let promise;
@@ -55,7 +55,7 @@ export const signInUserWithEmail = async (email, password) => {
       $('#logoutBtn').show();
     }
   }
-  // return promise;
+  return promise;
 };
 export const createUserWithEmail = async (email, password) => {
   let promise;
@@ -92,7 +92,7 @@ export const signInAnonymously = async () => {
       $('#logoutBtn').hide();
     }
   });
-  // window.location.reload();
+  window.location.reload();
 };
 
 export const signOut = async () => {

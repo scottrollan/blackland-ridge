@@ -5,21 +5,37 @@ import $ from 'jquery';
 import * as db from '../../firestore';
 import styles from './NavBar.module.scss';
 
-const NavBar = ({ userName, isLoggedIn }) => {
-  let displayName = null;
-  if (userName) {
-    displayName = userName;
+const NavBar = ({ userName, user }) => {
+  let isLoggedIn;
+  if (user) {
+    isLoggedIn = true;
   }
+
+  const isAnonymous = user.isAnonymous;
+
+  // let displayName = null;
+  // if (userName) {
+  //   displayName = userName;
+  // }
 
   const logout = () => {
     db.signOut();
   };
-  if (!userName) {
+
+  if (isAnonymous) {
     $('#logoutBtn').text('Login to Post');
   } else {
     $('#logoutBtn').text('Logout');
   }
 
+  console.log(
+    'isAnon: ',
+    isAnonymous,
+    'loggedin: ',
+    isLoggedIn,
+    'name: ',
+    userName
+  );
   // React.useEffect(() => {
   //   logWhat();
   // }, []);
@@ -30,9 +46,9 @@ const NavBar = ({ userName, isLoggedIn }) => {
         <span
           id="welcome"
           className={styles.welcome}
-          style={{ display: isLoggedIn ? 'inherit' : 'none' }}
+          style={{ display: isLoggedIn || isAnonymous ? 'inherit' : 'none' }}
         >
-          Welcome{displayName ? `, ${displayName}.` : '!'}
+          Welcome{isAnonymous ? '!' : `, ${userName}!`}
           <Button
             id="logoutBtn"
             className={styles.logoutBtn}
@@ -45,7 +61,7 @@ const NavBar = ({ userName, isLoggedIn }) => {
           id="loginBtn"
           className={styles.loginBtn}
           onClick={() => $('#authentication').css('display', 'flex')}
-          style={{ display: isLoggedIn ? 'none' : 'inherit' }}
+          style={{ display: isLoggedIn || isAnonymous ? 'none' : 'inherit' }}
         >
           Login
         </Button>

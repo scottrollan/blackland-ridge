@@ -48,7 +48,7 @@ const Authentication = ({ isLoggedIn, isAnonymous, show }) => {
   };
 
   return (
-    <Modal id="firebaseui-auth-container" scrollable show={show} size="lg">
+    <Modal id="firebaseui-auth-container" show={show} size="lg">
       <ErrorMessage
         errorMessage={errorMessage}
         tryAgainBtn={tryAgainBtn}

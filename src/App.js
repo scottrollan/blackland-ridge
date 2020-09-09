@@ -41,7 +41,7 @@ const App = () => {
   return (
     <div className={styles.App}>
       <Router>
-        <Navbar isLoggedIn={isLoggedIn} userName={userName} />
+        <Navbar user={thisUser} userName={userName} />
         <Switch>
           <UserContext.Provider value={thisUser}>
             <Route path="/" exact component={Home}></Route>
