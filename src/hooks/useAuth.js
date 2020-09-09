@@ -20,23 +20,60 @@ const useAuth = () => {
   const [userEmail, setUserEmail] = useState('');
   const [userAddress, setUserAddress] = useState('');
   const [userPhotoURL, setUserPhotoURL] = useState('');
-  const [showAuth, setShowAuth] = useState(true);
-  let isAnonymous;
-  let isLoggedIn;
+  const [isNewUser, setIsNewUser] = useState(false);
 
   React.useEffect(() => {
     let response;
-
+    let isAnonymous = false;
     db.checkAuth(async (user) => {
       if (user) {
         setThisUser(user);
-        isLoggedIn = true;
         isAnonymous = await user.isAnonymous;
         if (!isAnonymous) {
           try {
             response = await Client.fetch(
               `*[_type == "profile" && "${user.uid}" in uid]`
             );
+            if (response.length === 0) {
+              setIsNewUser(true);
+              //user not in Sanity cms
+              let uidArray = [];
+              uidArray.push(user.uid);
+
+              let name = 'Neighbor';
+              if (user.displayName) {
+                name = user.displayName;
+              } else if (user.email) {
+                const emailName = user.email.split('@')[0];
+                name = emailName;
+              }
+              let email = '';
+              if (user.email) {
+                email = user.email;
+              }
+              let phone = '';
+              if (user.phoneNumber) {
+                phone = user.phoneNumber;
+              }
+              let photoURL = '';
+              if (user.photoURL) {
+                photoURL = user.photoURL;
+              }
+              const newUser = {
+                _type: 'profile',
+                uid: uidArray,
+                name,
+                email,
+                phone,
+                photoURL,
+                address: '',
+              };
+              try {
+                response = await Client.create(newUser);
+              } catch (error) {
+                console.log('Create Failed: ', error.message);
+              }
+            }
             setUserName(response[0].name);
             setUserPhoneNumber(response[0].phone);
             setUserEmail(response[0].email);
@@ -45,8 +82,6 @@ const useAuth = () => {
           } catch (error) {
             console.log(error.message);
           }
-        } else {
-          setShowAuth(false);
         }
       }
     });
@@ -59,9 +94,7 @@ const useAuth = () => {
     userEmail,
     userAddress,
     userPhotoURL,
-    isLoggedIn,
-    isAnonymous,
-    showAuth,
+    isNewUser,
   };
 };
 

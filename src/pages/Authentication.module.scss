@@ -10,6 +10,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
+  max-height: 100vh;
   z-index: 990;
   background-color: var(--overlay);
   justify-content: center;
@@ -25,6 +26,7 @@
   background-position: center;
   background-size: cover;
   width: 50%;
+  height: auto;
   margin: 0;
   @media screen and (max-width: $breakpoint-medium) {
     display: none;
@@ -32,6 +34,7 @@
 }
 .wordsHalf {
   width: 50%;
+  height: auto;
   margin: 0;
   @media screen and (max-width: $breakpoint-medium) {
     width: 100%;
@@ -46,6 +49,7 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  overflow-y: auto;
 }
 .anonymousAuthButton,
 .twitterAuthButton,
@@ -64,9 +68,20 @@
   margin: 0.5rem 0;
   padding: 0.5rem 1rem;
   font-size: large;
+  @media (pointer: coarse) {
+    @media screen and (max-width: $breakpoint-large) {
+      font-size: normal;
+    }
+  }
 }
+
 i {
   font-size: x-large;
+  @media (pointer: coarse) {
+    @media screen and (max-width: $breakpoint-large) {
+      font-size: large;
+    }
+  }
 }
 
 .twitterAuthButton {
@@ -112,6 +127,11 @@ i {
   padding-left: 1rem;
   border-radius: 10px;
   font-size: large;
+  @media (pointer: coarse) {
+    @media screen and (max-width: $breakpoint-large) {
+      font-size: normal;
+    }
+  }
 }
 .signupForm,
 .loginForm {

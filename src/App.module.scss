@@ -1,3 +1,5 @@
+@import './styles/custom-properties.scss';
+
 body {
   margin: 0;
   font-family: 'Playfair Display', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
@@ -14,6 +16,8 @@ body {
   min-width: 100vw;
   min-height: 100vh;
   text-align: center;
+  background-color: var(--default-background);
+  color: var(--default-font-color);
 }
 
 @media (prefers-reduced-motion: no-preference) {

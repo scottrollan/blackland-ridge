@@ -5,8 +5,6 @@ const NotHome = () => {
   return (
     <div>
       <h1 style={{ fontWeight: '900' }}>Not Home</h1>
-
-      <Profile show={true} />
     </div>
   );
 };

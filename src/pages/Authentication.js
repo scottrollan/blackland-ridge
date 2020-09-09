@@ -9,7 +9,7 @@ import UserAlreadyExists from '../components/UserAlreadyExists';
 import ResetPassword from '../components/ResetPassword';
 import styles from './Authentication.module.scss';
 
-const Authentication = ({ isLoggedIn, isAnonymous, show }) => {
+const Authentication = ({ user }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('Error!');
@@ -48,7 +48,7 @@ const Authentication = ({ isLoggedIn, isAnonymous, show }) => {
   };
 
   return (
-    <Modal id="firebaseui-auth-container" show={show} size="lg">
+    <Modal id="firebaseui-auth-container" show={user ? false : true} size="lg">
       <ErrorMessage
         errorMessage={errorMessage}
         tryAgainBtn={tryAgainBtn}

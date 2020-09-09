@@ -6,7 +6,6 @@ import Authentication from './pages/Authentication';
 import Loading from './components/shared/Loading';
 import Home from './pages/Home';
 import NotHome from './pages/NotHome';
-import UserNameModal from './components/UserNameModal';
 import Profile from './components/Profile';
 import styles from './App.module.scss';
 import $ from 'jquery';
@@ -23,9 +22,7 @@ const App = () => {
     userEmail,
     userAddress,
     userPhotoURL,
-    isLoggedIn,
-    isAnonymous,
-    showAuth,
+    isNewUser,
   } = useAuth();
 
   // const finishSignUp = () => {
@@ -58,25 +55,15 @@ const App = () => {
       </Button>
       <Loading />
       <UserContext.Provider value={thisUser}>
-        <Authentication
-          show={showAuth}
-          isLoggedIn={isLoggedIn}
-          isAnonymous={isAnonymous}
-        />
-        {/* <UserNameModal
-          signup={finishSignUp}
-          nameInput={selectedName}
-          setName={setSelectedName}
-          show={usernameShow}
-        />
+        <Authentication user={thisUser} />
         <Profile
-          show={isLoggedIn}
+          show={isNewUser}
           userName={userName}
           userPhoneNumber={userPhoneNumber}
           userEmail={userEmail}
           userAddress={userAddress}
           userPhotoURL={userPhotoURL}
-        /> */}
+        />
       </UserContext.Provider>
     </div>
   );

@@ -28,14 +28,9 @@ const NavBar = ({ userName, user }) => {
     $('#logoutBtn').text('Logout');
   }
 
-  console.log(
-    'isAnon: ',
-    isAnonymous,
-    'loggedin: ',
-    isLoggedIn,
-    'name: ',
-    userName
-  );
+  const collapseNavbar = () => {
+    $('.navbar-toggler').click();
+  };
   // React.useEffect(() => {
   //   logWhat();
   // }, []);
@@ -48,7 +43,7 @@ const NavBar = ({ userName, user }) => {
           className={styles.welcome}
           style={{ display: isLoggedIn || isAnonymous ? 'inherit' : 'none' }}
         >
-          Welcome{isAnonymous ? '!' : `, ${userName}!`}
+          Welcome{userName === '' ? '!' : `, ${userName}!`}
           <Button
             id="logoutBtn"
             className={styles.logoutBtn}
@@ -71,11 +66,19 @@ const NavBar = ({ userName, user }) => {
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto"></Nav>
         <Nav>
-          <Link to="/" className={[`nav-link ${styles.navLink}`]}>
+          <Link
+            to="/"
+            className={[`nav-link ${styles.navLink}`]}
+            onClick={() => collapseNavbar()}
+          >
             Home
           </Link>
 
-          <Link to="/notHome" className={[`nav-link ${styles.navLink}`]}>
+          <Link
+            to="/notHome"
+            className={[`nav-link ${styles.navLink}`]}
+            onClick={() => collapseNavbar()}
+          >
             Not Home
           </Link>
         </Nav>
