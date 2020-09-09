@@ -1,6 +1,7 @@
 @import '../../styles/custom-properties.scss';
 
 .alertDiv {
+  display: none;
   position: fixed;
   top: 0;
   left: 0;

@@ -1,0 +1,21 @@
+@import '../styles/custom-properties.scss';
+
+.inputRow {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.5rem;
+  flex-wrap: nowrap;
+}
+.inputRow label,
+.label {
+  width: 35%;
+  text-align: right;
+  padding-right: 1rem;
+}
+.inputRow input,
+.inputRow select,
+.input {
+  width: 60%;
+}

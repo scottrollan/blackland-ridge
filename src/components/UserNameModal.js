@@ -1,11 +1,10 @@
 import React from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
-// import $ from 'jquery';
 
 const UserNameModal = ({ show, nameInput, setName, signUp }) => {
   return (
     <div>
-      <Modal show={show} style={{ zIndex: 9999 }} id="userNameModal">
+      <Modal show={show} style={{ zIndex: 999 }} id="userNameModal">
         <Modal.Header>Set a User Name</Modal.Header>
         <Modal.Body>
           <Form onSubmit={signUp}>

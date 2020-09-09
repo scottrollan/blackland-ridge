@@ -1,10 +1,13 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import $ from 'jquery';
+import * as db from '../firestore';
 import styles from './FadeInMessage.module.scss';
 
 const IncorrectPassword = () => {
-  const resetPassword = () => {
+  const resetPassword = (email) => {
+    console.log(email);
+    db.sendResetPassword(email);
     $('#incorrectPassword').hide();
   };
 
@@ -18,7 +21,10 @@ const IncorrectPassword = () => {
         >
           Try Again
         </Button>
-        <Button variant="danger" onClick={() => resetPassword()}>
+        <Button
+          variant="danger"
+          onClick={() => resetPassword($('#email').val())}
+        >
           Reset Password
         </Button>
       </div>

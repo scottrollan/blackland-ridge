@@ -30,6 +30,7 @@ export const signInWithGoogle = async () => {
 export const signInWithFacebook = async () => {
   const provider = new firebase.auth.FacebookAuthProvider();
   await auth.signInWithPopup(provider);
+
   // window.location.reload();
 };
 export const signInWithTwitter = async () => {
@@ -57,16 +58,37 @@ export const signInUserWithEmail = async (email, password) => {
   // return promise;
 };
 export const createUserWithEmail = async (email, password) => {
-  let promise = await auth.createUserWithEmailAndPassword(email, password);
-  console.log(promise);
+  let promise;
+  try {
+    promise = await auth.createUserWithEmailAndPassword(email, password);
+    firebase.auth().onAuthStateChanged((user) => {
+      return user;
+    });
+  } catch (error) {
+    if (error.code === 'auth/email-already-in-use') {
+      $(`#userAlreadyExists`).css('display', 'flex');
+    } else {
+      alert(error.message);
+    }
+  }
+  return promise;
 };
+
+export const sendResetPassword = async (emailAddress) => {
+  try {
+    auth.sendPasswordResetEmail(emailAddress).then(() => {
+      // Email sent.
+      $('#resetPassword').css('display', 'flex');
+    });
+  } catch (error) {
+    alert(error.message);
+  }
+};
+
 export const signInAnonymously = async () => {
-  // const provider = new firebase.anonymousAuthProvider();
   await firebase.auth().signInAnonymously();
   firebase.auth().onAuthStateChanged((user) => {
     if (user) {
-      $('#logoutBtn').show();
-    } else {
       $('#logoutBtn').hide();
     }
   });
@@ -82,8 +104,14 @@ export const checkAuth = (cb) => {
   return auth.onAuthStateChanged(cb);
 };
 
-// firebase.auth().onAuthStateChanged((firebaseUser) => {
-//   if (firebaseUser) {
-//   } else {
-//   }
-// });
+// export const fetchUserDetails = () => {
+//   firebase.auth().onAuthStateChanged((firebaseUser) => {
+//     if (firebaseUser) {
+//       const userName = firebaseUser.displayName;
+//       const userEmail = firebaseUser.email;
+//       const userPhoneNumber = firebaseUser.phoneNuember;
+//       const userPhotoURL = firebaseUser.photoURL;
+//       return { userName, userEmail, userPhoneNumber, userPhotoURL }
+//     }
+//   });
+// };

@@ -5,16 +5,16 @@ import $ from 'jquery';
 import * as db from '../../firestore';
 import styles from './NavBar.module.scss';
 
-const NavBar = ({ user, isLoggedIn }) => {
+const NavBar = ({ userName, isLoggedIn }) => {
   let displayName = null;
-  if (user) {
-    displayName = user.displayName;
+  if (userName) {
+    displayName = userName;
   }
 
   const logout = () => {
     db.signOut();
   };
-  if (!displayName) {
+  if (!userName) {
     $('#logoutBtn').text('Login to Post');
   } else {
     $('#logoutBtn').text('Logout');
@@ -30,14 +30,13 @@ const NavBar = ({ user, isLoggedIn }) => {
         <span
           id="welcome"
           className={styles.welcome}
-          // style={{ display: isLoggedIn ? 'inherit' : 'none' }}
+          style={{ display: isLoggedIn ? 'inherit' : 'none' }}
         >
           Welcome{displayName ? `, ${displayName}.` : '!'}
           <Button
             id="logoutBtn"
             className={styles.logoutBtn}
             onClick={() => logout()}
-            // style={{ display: user ? 'flex' : 'none' }}
           >
             Logout
           </Button>
@@ -48,7 +47,7 @@ const NavBar = ({ user, isLoggedIn }) => {
           onClick={() => $('#authentication').css('display', 'flex')}
           style={{ display: isLoggedIn ? 'none' : 'inherit' }}
         >
-          Login, yo.
+          Login
         </Button>
       </Navbar.Brand>
 

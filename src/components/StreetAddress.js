@@ -1,0 +1,142 @@
+import React from 'react';
+import styles from './Profile.module.scss';
+
+const StreetAddress = ({ userAddress, onChange }) => {
+  return (
+    <>
+      <label htmlFor="streetAddress">Street Address:</label>
+      <select required id="streetAddress" onChange={onChange}>
+        <option value={null}>Select Your Address</option>
+        <option value="4160BD">4160 Blackland Drive</option>
+        <option value="4161BD">4161 Blackland Drive</option>
+        <option value="4170BD">4170 Blackland Drive</option>
+        <option value="4171BD">4171 Blackland Drive</option>
+        <option value="4180BD">4180 Blackland Drive</option>
+        <option value="4181BD">4181 Blackland Drive</option>
+        <option value="4191BD">4191 Blackland Drive</option>
+        <option value="4200BD">4200 Blackland Drive</option>
+        <option value="4201BD">4201 Blackland Drive</option>
+        <option value="4210BD">4210 Blackland Drive</option>
+        <option value="4211BD">4211 Blackland Drive</option>
+        <option value="4223BD">4223 Blackland Drive</option>
+        <option value="4230BD">4230 Blackland Drive</option>
+        <option value="4235BD">4235 Blackland Drive</option>
+        <option value="4240BD">4240 Blackland Drive</option>
+        <option value="4243BD">4243 Blackland Drive</option>
+        <option value="4250BD">4250 Blackland Drive</option>
+        <option value="4251BD">4251 Blackland Drive</option>
+        <option value="4259BD">4259 Blackland Drive</option>
+        <option value="4267BD">4267 Blackland Drive</option>
+        <option value="4270BD">4270 Blackland Drive</option>
+        <option value="4275BD">4275 Blackland Drive</option>
+        <option value="4280BD">4280 Blackland Drive</option>
+        <option value="4283BD">4283 Blackland Drive</option>
+        <option value="4300BD">4300 Blackland Drive</option>
+        <option value="4307BD">4307 Blackland Drive</option>
+        <option value="4309BD">4309 Blackland Drive</option>
+        <option value="4260BW">4260 Blackland Way</option>
+        <option value="4261BW">4261 Blackland Way</option>
+        <option value="4272BW">4272 Blackland Way</option>
+        <option value="4273BW">4273 Blackland Way</option>
+        <option value="4285BW">4285 Blackland Way</option>
+        <option value="4297BW">4297 Blackland Way</option>
+        <option value="4309BW">4309 Blackland Way</option>
+        <option value="4310BW">4310 Blackland Way</option>
+        <option value="4321BW">4321 Blackland Way</option>
+        <option value="4330BW">4330 Blackland Way</option>
+        <option value="4333BW">4333 Blackland Way</option>
+        <option value="4345BW">4345 Blackland Way</option>
+        <option value="89LC">89 Lakeshore Circle NE</option>
+        <option value="94LC">94 Lakeshore Circle NE</option>
+        <option value="95LC">95 Lakeshore Circle NE</option>
+        <option value="104LC">104 Lakeshore Circle NE</option>
+        <option value="105LC">105 Lakeshore Circle NE</option>
+        <option value="114LC">114 Lakeshore Circle NE</option>
+        <option value="4LD">4 Lakeshore Dr NE</option>
+        <option value="8LD">8 Lakeshore Dr NE</option>
+        <option value="12LD">12 Lakeshore Dr NE</option>
+        <option value="22LD">22 Lakeshore Dr NE</option>
+        <option value="32LD">32 Lakeshore Dr NE</option>
+        <option value="33LD">33 Lakeshore Dr NE</option>
+        <option value="42LD">42 Lakeshore Dr NE</option>
+        <option value="43LD">43 Lakeshore Dr NE</option>
+        <option value="52LD">52 Lakeshore Dr NE</option>
+        <option value="53LD">53 Lakeshore Dr NE</option>
+        <option value="62LD">62 Lakeshore Dr NE</option>
+        <option value="67LD">67 Lakeshore Dr NE</option>
+        <option value="72LD">72 Lakeshore Dr NE</option>
+        <option value="82LD">82 Lakeshore Dr NE</option>
+        <option value="83LD">83 Lakeshore Dr NE</option>
+        <option value="85LD">85 Lakeshore Dr NE</option>
+        <option value="92LD">92 Lakeshore Dr NE</option>
+        <option value="103LD">103 Lakeshore Dr NE</option>
+        <option value="112LD">112 Lakeshore Dr NE</option>
+        <option value="122LD">122 Lakeshore Dr NE</option>
+        <option value="123LD">123 Lakeshore Dr NE</option>
+        <option value="132LD">132 Lakeshore Dr NE</option>
+        <option value="133LD">133 Lakeshore Dr NE</option>
+        <option value="3725LD">3725 Lakeshore Dr NE</option>
+        <option value="3744LD">3744 Lakeshore Dr NE</option>
+        <option value="3745LD">3745 Lakeshore Dr NE</option>
+        <option value="3765LD">3765 Lakeshore Dr NE</option>
+        <option value="3776LD">3776 Lakeshore Dr NE</option>
+        <option value="3785LD">3785 Lakeshore Dr NE</option>
+        <option value="3804LD">3804 Lakeshore Dr NE</option>
+        <option value="3805LD">3805 Lakeshore Dr NE</option>
+        <option value="3825LD">3825 Lakeshore Dr NE</option>
+        <option value="3845LD">3845 Lakeshore Dr NE</option>
+        <option value="1OFMR">1 Old Fuller Mill Rd NE</option>
+        <option value="3OFMR">3 Old Fuller Mill Rd NE</option>
+        <option value="20OFMR">20 Old Fuller Mill Rd NE</option>
+        <option value="46OFMR">46 Old Fuller Mill Rd NE</option>
+        <option value="47OFMR">47 Old Fuller Mill Rd NE</option>
+        <option value="48OFMR">48 Old Fuller Mill Rd NE</option>
+        <option value="49OFMR">49 Old Fuller Mill Rd NE</option>
+        <option value="50OFMR">50 Old Fuller Mill Rd NE</option>
+        <option value="51OFMR">51 Old Fuller Mill Rd NE</option>
+        <option value="52OFMR">52 Old Fuller Mill Rd NE</option>
+        <option value="53OFMR">53 Old Fuller Mill Rd NE</option>
+        <option value="54OFMR">54 Old Fuller Mill Rd NE</option>
+        <option value="55OFMR">55 Old Fuller Mill Rd NE</option>
+        <option value="56OFMR">56 Old Fuller Mill Rd NE</option>
+        <option value="57OFMR">57 Old Fuller Mill Rd NE</option>
+        <option value="58OFMR">58 Old Fuller Mill Rd NE</option>
+        <option value="59OFMR">59 Old Fuller Mill Rd NE</option>
+        <option value="60OFMR">60 Old Fuller Mill Rd NE</option>
+        <option value="61OFMR">61 Old Fuller Mill Rd NE</option>
+        <option value="62OFMR">62 Old Fuller Mill Rd NE</option>
+        <option value="63OFMR">63 Old Fuller Mill Rd NE</option>
+        <option value="64OFMR">64 Old Fuller Mill Rd NE</option>
+        <option value="66OFMR">66 Old Fuller Mill Rd NE</option>
+        <option value="22OSR">22 Old Stonemill Rd NE</option>
+        <option value="23OSR">23 Old Stonemill Rd NE</option>
+        <option value="32OSR">32 Old Stonemill Rd NE</option>
+        <option value="33OSR">33 Old Stonemill Rd NE</option>
+        <option value="42OSR">42 Old Stonemill Rd NE</option>
+        <option value="43OSR">43 Old Stonemill Rd NE</option>
+        <option value="52OSR">52 Old Stonemill Rd NE</option>
+        <option value="53OSR">53 Old Stonemill Rd NE</option>
+        <option value="62OSR">62 Old Stonemill Rd NE</option>
+        <option value="63OSR">63 Old Stonemill Rd NE</option>
+        <option value="72OSR">72 Old Stonemill Rd NE</option>
+        <option value="73OSR">73 Old Stonemill Rd NE</option>
+        <option value="76OSR">76 Old Stonemill Rd NE</option>
+        <option value="79OSR">79 Old Stonemill Rd NE</option>
+        <option value="80OSR">80 Old Stonemill Rd NE</option>
+        <option value="83OSR">83 Old Stonemill Rd NE</option>
+        <option value="84OSR">84 Old Stonemill Rd NE</option>
+        <option value="87OSR">87 Old Stonemill Rd NE</option>
+        <option value="88OSR">88 Old Stonemill Rd NE</option>
+        <option value="91OSR">91 Old Stonemill Rd NE</option>
+        <option value="92OSR">92 Old Stonemill Rd NE</option>
+        <option value="24WBC">24 W Blackland Ct NE</option>
+        <option value="35WBC">35 W Blackland Ct NE</option>
+        <option value="48WBC">48 W Blackland Ct NE</option>
+        <option value="55WBC">55 W Blackland Ct NE</option>
+        <option value="60WBC">60 W Blackland Ct NE</option>
+      </select>
+    </>
+  );
+};
+
+export default StreetAddress;

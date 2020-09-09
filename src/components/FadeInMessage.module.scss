@@ -19,9 +19,14 @@
   border-radius: 10px;
   background-color: #ffffff;
   padding: 2vh 10px;
+  font-size: x-large;
   z-index: 1000;
 }
-
+.buttonRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
 .fadeIn {
   animation: fade ease 0.5s;
   -webkit-animation: fade ease 0.5s;
