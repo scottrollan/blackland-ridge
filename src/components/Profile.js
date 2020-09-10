@@ -23,12 +23,45 @@ const Profile = ({
   const [email, setEmail] = useState(user ? user.email : '');
   const [photoURL, setPhotoURL] = useState(user ? user.photoURL : '');
   const [streetAddress, setStreetAddress] = useState('');
+  const [directory, setDirectory] = useState(false);
+  const [notifications, setNotifications] = useState(false);
 
   const submitProfile = async () => {
-    console.log(uid, name, phone, email, photoURL, streetAddress);
+    console.log(
+      uid,
+      name,
+      phone,
+      email,
+      photoURL,
+      streetAddress,
+      directory,
+      notifications
+    );
+    alert('woop. there it is.');
   };
 
-  const setProfile = () => {
+  const setD = () => {
+    const dir = $('#includeInDirectory');
+    switch (dir.is(':checked')) {
+      case true:
+        setDirectory(true);
+        break;
+      default:
+        setDirectory(false);
+    }
+  };
+  const setN = () => {
+    const noti = $('#receiveNotifications');
+    switch (noti.is(':checked')) {
+      case true:
+        setNotifications(true);
+        break;
+      default:
+        setNotifications(false);
+    }
+  };
+
+  const grabProfile = () => {
     if (user.uid) {
       setUid(user.uid);
     }
@@ -74,85 +107,111 @@ const Profile = ({
   $('[type="tel"]').keyup(phoneMask);
 
   useEffect(() => {
-    setProfile();
+    grabProfile();
   }, []);
 
   return (
-    <div id="profileModal">
-      <Modal show={show} id="profile">
-        <Modal.Header>Set Up Your Profile</Modal.Header>
+    // <div id="profileModal" style={{ zIndex: '1000' }}>
+    <Modal show={show} id="profile">
+      <Modal.Header>Set Up Your Profile</Modal.Header>
 
-        <Modal.Body>
-          <div id="profileSetup">
-            <h3>One final step...</h3>
-            <Button variant="info" onClick={() => setProfile()}>
-              Finish My Profile!
-            </Button>
+      <Modal.Body>
+        <div id="profileSetup" className={styles.profileSetup}>
+          <h3>One final step...</h3>
+          <Button variant="info" onClick={() => grabProfile()}>
+            Finish My Profile!
+          </Button>
+        </div>
+        <form
+          id="profileForm"
+          className={styles.profileForm}
+          onSubmit={submitProfile}
+        >
+          <div className={styles.inputRow}>
+            <label htmlFor="nameInput">User Name:</label>
+            <input
+              id="nameInput"
+              required
+              type="input"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="ex: Judy Patel"
+            ></input>
           </div>
-          <form id="profileForm" onSubmit={submitProfile}>
-            <div className={styles.inputRow}>
-              <label htmlFor="nameInput">User Name:</label>
-              <input
-                id="nameInput"
-                required
-                type="input"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="ex: Judy Patel"
-              ></input>
-            </div>
-            <div className={styles.inputRow}>
-              <label htmlFor="emailInput">Email Address:</label>
-              <input
-                id="emailInput"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="username@email.com"
-              ></input>
-            </div>
-            <div className={styles.inputRow}>
-              <label htmlFor="phoneInput">Phone Number:</label>
-              <input
-                type="tel"
-                id="phoneInput"
-                placeholder="(770)555-1234"
-                value={phone}
-                onInput={phoneMask}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </div>
-            <div
-              className={styles.inputRow}
-              style={{ display: userAddress ? 'none' : 'flex' }}
-            >
-              <StreetAddress
-                onChange={(e) => setStreetAddress(e.target.value)}
-                userAddress={streetAddress}
-              />
-            </div>
-            <div
-              className={styles.inputRow}
-              style={{ display: userAddress ? 'flex' : 'none' }}
-            >
-              <span className={styles.label}>Street Address:</span>
-              <span className={styles.input}>{streetAddress}</span>
-            </div>
-            <div className={styles.inputRow}>
-              <img
-                src={photoURL}
-                alt="Upload an Image"
-                style={{ height: '80px' }}
-              />
-            </div>
-            <Button type="submit">Save Profile</Button>
-            <Button variant="warning" onClick={() => db.signOut()}>
-              Logout
-            </Button>
-          </form>
-        </Modal.Body>
-      </Modal>
-    </div>
+          <div className={styles.inputRow}>
+            <label htmlFor="emailInput">Email Address:</label>
+            <input
+              id="emailInput"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="username@email.com"
+            ></input>
+          </div>
+          <div className={styles.inputRow}>
+            <label htmlFor="phoneInput">Phone Number:</label>
+            <input
+              type="tel"
+              id="phoneInput"
+              placeholder="(770)555-1234"
+              value={phone}
+              onInput={phoneMask}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+          </div>
+          <div
+            className={styles.inputRow}
+            style={{ display: userAddress ? 'none' : 'flex' }}
+          >
+            <StreetAddress
+              onChange={(e) => setStreetAddress(e.target.value)}
+              userAddress={streetAddress}
+            />
+          </div>
+          <div
+            className={styles.inputRow}
+            style={{ display: userAddress ? 'flex' : 'none' }}
+          >
+            <span className={styles.label}>Street Address:</span>
+            <span className={styles.input}>{streetAddress}</span>
+          </div>
+          <div className={styles.inputRow}>
+            <img
+              src={photoURL}
+              alt="Upload an Image"
+              style={{ height: '80px' }}
+            />
+          </div>
+          <div className={styles.checkboxRow}>
+            <label htmlFor="includeInDirectory">
+              Include me in the neighborhood Directory:
+            </label>
+            <input
+              type="checkbox"
+              id="includeInDirectory"
+              value="directory"
+              onClick={() => setD()}
+            />
+          </div>
+          <div className={styles.checkboxRow}>
+            <label htmlFor="receiveNotifications">
+              Send me occassional notifications:
+            </label>
+            <input
+              type="checkbox"
+              id="receiveNotifications"
+              value="notifications"
+              onClick={() => setN()}
+            />
+          </div>
+          <Button type="submit">Save Profile</Button>
+          {/* <Button variant="warning" onClick={() => db.signOut()}>
+            Logout
+          </Button> */}
+        </form>
+      </Modal.Body>
+    </Modal>
+    // </div>
   );
 };
 

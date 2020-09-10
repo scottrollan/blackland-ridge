@@ -1,5 +1,17 @@
 @import '../styles/custom-properties.scss';
 
+.profileSetup {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.profileForm {
+  display: none;
+}
+
 .inputRow {
   width: 100%;
   display: flex;
@@ -18,4 +30,24 @@
 .inputRow select,
 .input {
   width: 60%;
+}
+
+.checkboxRow {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.5rem;
+  flex-wrap: nowrap;
+}
+.checkboxRow label,
+.label {
+  width: 75%;
+  text-align: right;
+  padding-right: 1rem;
+}
+.checkboxRow input,
+.checkboxRow select,
+.input {
+  width: 20%;
 }

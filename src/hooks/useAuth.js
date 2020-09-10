@@ -21,6 +21,7 @@ const useAuth = () => {
   const [userAddress, setUserAddress] = useState('');
   const [userPhotoURL, setUserPhotoURL] = useState('');
   const [isNewUser, setIsNewUser] = useState(false);
+  const [missingAddress, setMissingAddress] = useState(false);
 
   React.useEffect(() => {
     let response;
@@ -29,14 +30,17 @@ const useAuth = () => {
       if (user) {
         setThisUser(user);
         isAnonymous = await user.isAnonymous;
+        if (!user.address) {
+          setMissingAddress(true);
+        }
         if (!isAnonymous) {
           try {
             response = await Client.fetch(
               `*[_type == "profile" && "${user.uid}" in uid]`
             );
             if (response.length === 0) {
-              setIsNewUser(true);
               //user not in Sanity cms
+              setIsNewUser(true);
               let uidArray = [];
               uidArray.push(user.uid);
 
@@ -95,6 +99,7 @@ const useAuth = () => {
     userAddress,
     userPhotoURL,
     isNewUser,
+    missingAddress,
   };
 };
 

@@ -8,9 +8,6 @@ import Home from './pages/Home';
 import NotHome from './pages/NotHome';
 import Profile from './components/Profile';
 import styles from './App.module.scss';
-import $ from 'jquery';
-import { Button } from 'react-bootstrap';
-import * as db from './firestore';
 
 export const UserContext = React.createContext();
 
@@ -23,17 +20,8 @@ const App = () => {
     userAddress,
     userPhotoURL,
     isNewUser,
+    missingAddress,
   } = useAuth();
-
-  // const finishSignUp = () => {
-  //   //add input from modal as user.displayName
-  //   setUsernameShow(true);
-  // };
-
-  const logMeOut = () => {
-    $('#authentication').css('display', 'flex');
-    db.signOut();
-  };
 
   return (
     <div className={styles.App}>
@@ -46,18 +34,13 @@ const App = () => {
           </UserContext.Provider>
         </Switch>
       </Router>
-      <Button
-        id="logoutBtn"
-        className={styles.loginBtn}
-        onClick={() => logMeOut()}
-      >
-        Logout
-      </Button>
+
       <Loading />
       <UserContext.Provider value={thisUser}>
         <Authentication user={thisUser} />
         <Profile
-          show={isNewUser}
+          // show={isNewUser || missingAddress}
+          show={missingAddress}
           userName={userName}
           userPhoneNumber={userPhoneNumber}
           userEmail={userEmail}
