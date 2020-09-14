@@ -9,3 +9,7 @@ export const Client = sanityClient({
   useCdn: false, // `false` if you want to ensure fresh data
   ignoreBrowserTokenWarning: true,
 });
+
+export const fetchEvents = () => {
+  Client.fetch("*[_type == 'event'] | order(start)");
+};

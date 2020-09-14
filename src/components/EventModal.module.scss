@@ -1,0 +1,30 @@
+@import '../styles/custom-properties.scss';
+
+.modalButton {
+  background-color: transparent;
+  border: none;
+  color: var(--color-pallette-accent);
+  display: inherit;
+
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: var(--color-pallette-accent);
+    border: inherit;
+    box-shadow: inherit;
+    color: var(--white);
+  }
+}
+.mImage {
+  float: right;
+  height: 5rem;
+  width: auto;
+}
+.mFooter {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: nowrap;
+}
+.footerNotes {
+  line-height: 1.2;
+}

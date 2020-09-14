@@ -30,35 +30,35 @@ const NavBar = () => {
   };
 
   return (
-    <Navbar className={styles.navBar} collapseOnSelect expand="lg" fixed="top">
-      <Navbar.Brand>
-        <span
-          id="welcome"
-          className={styles.welcome}
-          style={{ display: isLoggedIn || isAnonymous ? 'inherit' : 'none' }}
-        >
-          Welcome, {isAnonymous ? 'Neighbor!' : `${thisUser.name}!`}
-          <Button
-            id="logoutBtn"
-            className={styles.logoutBtn}
-            onClick={() => logout()}
-          >
-            Logout
-          </Button>
-        </span>
-        <Button
-          id="loginBtn"
-          className={styles.loginBtn}
-          onClick={() => $('#authentication').css('display', 'flex')}
-          style={{ display: isLoggedIn || isAnonymous ? 'none' : 'inherit' }}
-        >
-          Login
-        </Button>
-      </Navbar.Brand>
+    <Navbar className={styles.navBar} collapseOnSelect expand="lg">
+      <Navbar.Brand></Navbar.Brand>
 
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
-        <Nav className="mr-auto"></Nav>
+        <Nav className="mr-auto">
+          <span
+            id="welcome"
+            className={[`nav-link ${styles.navLink} ${styles.welcome}`]}
+            style={{ display: isLoggedIn || isAnonymous ? 'inherit' : 'none' }}
+          >
+            Welcome, {isAnonymous ? 'Neighbor!' : `${thisUser.name}!`}
+            <Button
+              id="logoutBtn"
+              className={styles.logoutBtn}
+              onClick={() => logout()}
+            >
+              Logout
+            </Button>
+          </span>
+          <Button
+            id="loginBtn"
+            className={styles.loginBtn}
+            onClick={() => $('#authentication').css('display', 'flex')}
+            style={{ display: isLoggedIn || isAnonymous ? 'none' : 'inherit' }}
+          >
+            Login
+          </Button>
+        </Nav>
         <Nav>
           <Link
             to="/"
@@ -69,11 +69,11 @@ const NavBar = () => {
           </Link>
 
           <Link
-            to="/notHome"
+            to="/calendar"
             className={[`nav-link ${styles.navLink}`]}
             onClick={() => collapseNavbar()}
           >
-            Not Home
+            Calendar
           </Link>
         </Nav>
       </Navbar.Collapse>

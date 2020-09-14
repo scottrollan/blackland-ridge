@@ -1,21 +1,24 @@
 @import '../../styles/custom-properties.scss';
 
 .navBar {
-  min-height: var(--nav-height);
   width: 100vw;
   max-width: 100vw;
-  background-color: var(--default-background);
-  z-index: 9;
+  background-color: var(--white);
   font-family: 'Roboto', sans-serif;
+  border: 8px solid var(--color-pallette-dark);
+  border-bottom: none;
+  color: var(--default-font-color) !important;
 }
 
 .loginBtn,
 .logoutBtn {
   margin-left: 1rem;
+  @include purple-button;
 }
 
 .navLink {
-  font-size: xx-large;
+  font-size: x-large;
+  color: var(--default-font-color) !important;
 }
 
 button,

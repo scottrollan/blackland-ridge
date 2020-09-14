@@ -11,13 +11,33 @@ body {
 .App {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
   min-width: 100vw;
   min-height: 100vh;
   text-align: center;
   background-color: var(--default-background);
+  background: url('./assets/mossy.jpg') left no-repeat;
+  background-size: cover;
   color: var(--default-font-color);
+  z-index: 0;
+}
+// .App > div {
+//   min-height: 100%;
+// }
+
+.backgroundOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: linear-gradient(
+    292deg,
+    var(--color-pallette-dark) 50%,
+    transparent calc(50% + 2px)
+  );
+  border: 8px solid var(--color-pallette-dark);
+  z-index: 0;
 }
 
 @media (prefers-reduced-motion: no-preference) {

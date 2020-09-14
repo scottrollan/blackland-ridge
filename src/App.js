@@ -5,7 +5,7 @@ import Navbar from './components/shared/Navbar';
 import Authentication from './pages/Authentication';
 import Loading from './components/shared/Loading';
 import Home from './pages/Home';
-import NotHome from './pages/NotHome';
+import Calendar from './pages/Calendar';
 import Profile from './components/Profile';
 import styles from './App.module.scss';
 
@@ -13,15 +13,16 @@ export const UserContext = React.createContext();
 
 const App = () => {
   const thisUser = useAuth();
-  console.log(thisUser);
   return (
     <div className={styles.App}>
+      <div className={styles.backgroundOverlay}></div>
+
       <UserContext.Provider value={thisUser}>
         <Router>
           <Navbar />
           <Switch>
             <Route path="/" exact component={Home}></Route>
-            <Route path="/notHome" component={NotHome}></Route>
+            <Route path="/calendar" component={Calendar}></Route>
           </Switch>
         </Router>
 
