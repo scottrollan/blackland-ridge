@@ -179,7 +179,7 @@ button {
 }
 
 button:hover {
-  background: rgba(29, 146, 254, 0.4);
+  background: var(--overlay-dark);
 }
 
 .cal .days {
