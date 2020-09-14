@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { UserContext } from '../App';
 import * as db from '../firestore';
 import { Button, Modal } from 'react-bootstrap';
 import $ from 'jquery';
@@ -9,18 +10,17 @@ import UserAlreadyExists from '../components/UserAlreadyExists';
 import ResetPassword from '../components/ResetPassword';
 import styles from './Authentication.module.scss';
 
-const Authentication = ({ user }) => {
+const Authentication = () => {
+  const user = useContext(UserContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('Error!');
-  const [tryAgainBtn, setTryAgainBtn] = useState('inherit');
+  const tryAgainBtn = useState('inherit');
   const [tryAgainText, setTryAgainText] = useState('Try Again');
   const [resetBtn, setResetBtn] = useState('none'); //what display: is
 
   const login = async () => {
-    if (
-      /^\w+([.-]*\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email.toLowerCase())
-    ) {
+    if (/\S+@\S+/.test(email.toLowerCase())) {
       db.signInUserWithEmail(email, password);
     } else {
       setErrorMessage('Email format must be: user@email.com');
@@ -30,14 +30,13 @@ const Authentication = ({ user }) => {
     }
   };
   const signUp = async () => {
-    if (
-      /^\w+([.-]*\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email.toLowerCase()) &&
-      password.length > 6
-    ) {
+    if (/\S+@\S+/.test(String(email).toLowerCase()) && password.length > 6) {
       const user = await db.createUserWithEmail(email, password);
+      return user;
     } else if (password.length < 6) {
       setErrorMessage('Password must be at least 6 characters long.');
       setTryAgainText('OK, Enter a Longer Password');
+
       $('#errorMessage').css('display', 'flex');
     } else {
       setErrorMessage('Email format must be: user@email.com');

@@ -3,93 +3,109 @@ import { UserContext } from '../App';
 import { Button, Modal } from 'react-bootstrap';
 import $ from 'jquery';
 import * as db from '../firestore';
-// import useFetchProfile from '../hooks/useFetchProfile';
+import { Client } from '../api/sanityClient';
 import StreetAddress from '../components/StreetAddress';
+import ErrorMessage from '../components/ErrorMessage';
 import styles from './Profile.module.scss';
 
-const Profile = ({
-  show,
-  userName,
-  userPhoneNumber,
-  userEmail,
-  userAddress,
-  userPhotoURL,
-}) => {
-  const user = useContext(UserContext);
+const Profile = ({ show }) => {
+  const thisUser = useContext(UserContext);
+  //////state for inputs//////
+  const [name, setName] = useState(thisUser.name ? thisUser.name : '');
+  const [phone, setPhone] = useState(thisUser.phone ? thisUser.phone : '');
+  const [email, setEmail] = useState(thisUser.email ? thisUser.email : '');
+  const [photoURL, setPhotoURL] = useState(
+    thisUser.photoURL ? thisUser.photURL : ''
+  );
+  const [address, setAddress] = useState(
+    thisUser.address ? thisUser.address : ''
+  );
+  const [directory, setDirectory] = useState(thisUser.includeInDirectory);
+  const [notifications, setNotifications] = useState(
+    thisUser.receiveNotifications
+  );
+  //////state for error message popup////////
+  const [errorMessage, setErrorMessage] = useState('');
+  const [tryAgainBtn, setTryAgainBtn] = useState(true);
+  const [tryAgainText, setTryAgainText] = useState('Try Again');
+  const [resetBtn, setResetBtn] = useState(false);
 
-  const [uid, setUid] = useState(user ? user.uid : '');
-  const [name, setName] = useState(user ? user.displayName : '');
-  const [phone, setPhone] = useState(user ? user.phoneNumber : '');
-  const [email, setEmail] = useState(user ? user.email : '');
-  const [photoURL, setPhotoURL] = useState(user ? user.photoURL : '');
-  const [streetAddress, setStreetAddress] = useState('');
-  const [directory, setDirectory] = useState(false);
-  const [notifications, setNotifications] = useState(false);
-
+  //////send state variables to sanity///////
   const submitProfile = async () => {
-    console.log(
-      uid,
+    const userObj = {
       name,
       phone,
       email,
       photoURL,
-      streetAddress,
-      directory,
-      notifications
-    );
-    alert('woop. there it is.');
+      address,
+      includeInDirectory: directory,
+      receiveNotifications: notifications,
+    };
+
+    const r = await Client.patch(thisUser._id)
+      .set(userObj)
+      .commit()
+      .catch((err) => {
+        console.log('Error: ', err.message);
+      });
+
+    if (
+      r.address &&
+      r.name &&
+      ((r.includeInDirectory && r.phone && r.email) || !r.includeInDirectory)
+    ) {
+      userObj['profileComplete'] = true;
+    } else {
+      userObj['profileComplete'] = false;
+    }
   };
 
   const setD = () => {
-    const dir = $('#includeInDirectory');
-    switch (dir.is(':checked')) {
-      case true:
-        setDirectory(true);
-        break;
-      default:
-        setDirectory(false);
+    if ($('#includeInDirectory').prop('checked') === true) {
+      setDirectory(true);
+    } else {
+      setDirectory(false);
     }
   };
   const setN = () => {
-    const noti = $('#receiveNotifications');
-    switch (noti.is(':checked')) {
-      case true:
-        setNotifications(true);
-        break;
-      default:
-        setNotifications(false);
+    if ($('#receiveNotifications').prop('checked') === true) {
+      setNotifications(true);
+    } else {
+      setNotifications(false);
     }
   };
 
   const grabProfile = () => {
-    if (user.uid) {
-      setUid(user.uid);
+    if (thisUser.name) {
+      setName(thisUser.name);
     }
-    if (userName) {
-      setName(userName);
-    } else if (user.displayName) {
-      setName(user.displayName);
+    if (thisUser.email) {
+      setEmail(thisUser.email);
     }
-    if (userEmail) {
-      setEmail(userEmail);
-    } else if (user.email) {
-      setEmail(user.email);
+    if (thisUser.phone) {
+      setPhone(thisUser.phone);
     }
-    if (userPhoneNumber) {
-      setPhone(userPhoneNumber);
-    } else if (user.phoneNumber) {
-      setPhone(user.phoneNumber);
+    if (thisUser.photoURL) {
+      setPhotoURL(thisUser.photoURL);
     }
-    if (userPhotoURL) {
-      setPhotoURL(userPhotoURL);
-    } else if (user.photoURL) {
-      setPhotoURL(user.photoURL);
+    if (thisUser.address) {
+      setAddress(thisUser.address);
     }
-    if (userAddress) {
-      setStreetAddress(userAddress);
+    if (thisUser.receiveNotifications) {
+      $('#receiveNotifications').prop('checked', true);
+    } else {
+      $('#receiveNotifications').prop('checked', false);
     }
-    $('#profileSetup').hide();
-    $('#profileForm').show();
+    if (thisUser.includeInDirectory) {
+      $('#includeInDirectory').prop('checked', true);
+    } else {
+      $('#includeInDirectory').prop('checked', false);
+    }
+    if (thisUser && !thisUser.profileComplete) {
+      //if no username or address has not been set, show the profile form to complete
+      $('#profileSetup').hide();
+      $('#profileForm').show();
+    }
   };
 
   const phoneMask = () => {
@@ -111,8 +127,13 @@ const Profile = ({
   }, []);
 
   return (
-    // <div id="profileModal" style={{ zIndex: '1000' }}>
     <Modal show={show} id="profile">
+      <ErrorMessage
+        errorMessage={errorMessage}
+        tryAgainBtn={tryAgainBtn}
+        tryAgainText={tryAgainText}
+        resetBtn={resetBtn}
+      />
       <Modal.Header>Set Up Your Profile</Modal.Header>
 
       <Modal.Body>
@@ -122,11 +143,7 @@ const Profile = ({
             Finish My Profile!
           </Button>
         </div>
-        <form
-          id="profileForm"
-          className={styles.profileForm}
-          onSubmit={submitProfile}
-        >
+        <form id="profileForm" className={styles.profileForm}>
           <div className={styles.inputRow}>
             <label htmlFor="nameInput">User Name:</label>
             <input
@@ -161,26 +178,22 @@ const Profile = ({
           </div>
           <div
             className={styles.inputRow}
-            style={{ display: userAddress ? 'none' : 'flex' }}
+            style={{ display: thisUser.address ? 'none' : 'flex' }}
           >
             <StreetAddress
-              onChange={(e) => setStreetAddress(e.target.value)}
-              userAddress={streetAddress}
+              onChange={(e) => setAddress(e.target.value)}
+              userAddress={address}
             />
           </div>
           <div
             className={styles.inputRow}
-            style={{ display: userAddress ? 'flex' : 'none' }}
+            style={{ display: thisUser.address ? 'flex' : 'none' }}
           >
             <span className={styles.label}>Street Address:</span>
-            <span className={styles.input}>{streetAddress}</span>
+            <span className={styles.input}>{address}</span>
           </div>
           <div className={styles.inputRow}>
-            <img
-              src={photoURL}
-              alt="Upload an Image"
-              style={{ height: '80px' }}
-            />
+            <img src={photoURL} alt="profile" style={{ height: '80px' }} />
           </div>
           <div className={styles.checkboxRow}>
             <label htmlFor="includeInDirectory">
@@ -204,14 +217,11 @@ const Profile = ({
               onClick={() => setN()}
             />
           </div>
-          <Button type="submit">Save Profile</Button>
-          {/* <Button variant="warning" onClick={() => db.signOut()}>
-            Logout
-          </Button> */}
+          <Button onClick={() => submitProfile()}>Save Profile</Button>
+          <Button onClick={() => db.signOut()}>Logout</Button>
         </form>
       </Modal.Body>
     </Modal>
-    // </div>
   );
 };
 

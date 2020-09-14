@@ -12,41 +12,24 @@ import styles from './App.module.scss';
 export const UserContext = React.createContext();
 
 const App = () => {
-  const {
-    thisUser,
-    userName,
-    userPhoneNumber,
-    userEmail,
-    userAddress,
-    userPhotoURL,
-    isNewUser,
-    missingAddress,
-  } = useAuth();
-
+  const thisUser = useAuth();
+  console.log(thisUser);
   return (
     <div className={styles.App}>
-      <Router>
-        <Navbar user={thisUser} userName={userName} />
-        <Switch>
-          <UserContext.Provider value={thisUser}>
+      <UserContext.Provider value={thisUser}>
+        <Router>
+          <Navbar />
+          <Switch>
             <Route path="/" exact component={Home}></Route>
             <Route path="/notHome" component={NotHome}></Route>
-          </UserContext.Provider>
-        </Switch>
-      </Router>
+          </Switch>
+        </Router>
 
-      <Loading />
-      <UserContext.Provider value={thisUser}>
-        <Authentication user={thisUser} />
+        <Loading />
         <Profile
-          // show={isNewUser || missingAddress}
-          show={missingAddress}
-          userName={userName}
-          userPhoneNumber={userPhoneNumber}
-          userEmail={userEmail}
-          userAddress={userAddress}
-          userPhotoURL={userPhotoURL}
+          show={thisUser.isAnonymous || thisUser.profileComplete ? false : true}
         />
+        <Authentication />
       </UserContext.Provider>
     </div>
   );

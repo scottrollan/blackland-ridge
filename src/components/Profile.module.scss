@@ -5,7 +5,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .profileForm {
@@ -15,7 +15,7 @@
 .inputRow {
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   margin: 0.5rem;
   flex-wrap: nowrap;
@@ -40,14 +40,11 @@
   margin: 0.5rem;
   flex-wrap: nowrap;
 }
-.checkboxRow label,
-.label {
+.checkboxRow label {
   width: 75%;
   text-align: right;
   padding-right: 1rem;
 }
-.checkboxRow input,
-.checkboxRow select,
-.input {
+.checkboxRow input {
   width: 20%;
 }

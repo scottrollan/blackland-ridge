@@ -1,4 +1,4 @@
-const SANITY_KEY = process.env.REACT_APP_SANITY_KEY;
+// const SANITY_KEY = process.env.REACT_APP_SANITY_KEY;
 
 const sanityClient = require('@sanity/client');
 export const Client = sanityClient({

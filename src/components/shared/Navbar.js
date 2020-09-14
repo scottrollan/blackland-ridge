@@ -1,22 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { UserContext } from '../../App';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import $ from 'jquery';
 import * as db from '../../firestore';
 import styles from './NavBar.module.scss';
 
-const NavBar = ({ userName, user }) => {
+const NavBar = () => {
+  const thisUser = useContext(UserContext);
   let isLoggedIn;
-  if (user) {
+  if (thisUser) {
     isLoggedIn = true;
   }
 
-  const isAnonymous = user.isAnonymous;
-
-  // let displayName = null;
-  // if (userName) {
-  //   displayName = userName;
-  // }
+  const isAnonymous = thisUser.isAnonymous;
 
   const logout = () => {
     db.signOut();
@@ -31,9 +28,6 @@ const NavBar = ({ userName, user }) => {
   const collapseNavbar = () => {
     $('.navbar-toggler').click();
   };
-  // React.useEffect(() => {
-  //   logWhat();
-  // }, []);
 
   return (
     <Navbar className={styles.navBar} collapseOnSelect expand="lg" fixed="top">
@@ -43,7 +37,7 @@ const NavBar = ({ userName, user }) => {
           className={styles.welcome}
           style={{ display: isLoggedIn || isAnonymous ? 'inherit' : 'none' }}
         >
-          Welcome{userName === '' ? '!' : `, ${userName}!`}
+          Welcome, {isAnonymous ? 'Neighbor!' : `${thisUser.name}!`}
           <Button
             id="logoutBtn"
             className={styles.logoutBtn}

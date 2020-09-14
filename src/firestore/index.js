@@ -30,7 +30,6 @@ export const signInWithGoogle = async () => {
 export const signInWithFacebook = async () => {
   const provider = new firebase.auth.FacebookAuthProvider();
   await auth.signInWithPopup(provider);
-
   window.location.reload();
 };
 export const signInWithTwitter = async () => {
@@ -71,6 +70,7 @@ export const createUserWithEmail = async (email, password) => {
       alert(error.message);
     }
   }
+  console.log(promise.user);
   return promise;
 };
 
@@ -90,6 +90,7 @@ export const signInAnonymously = async () => {
   firebase.auth().onAuthStateChanged((user) => {
     if (user) {
       $('#logoutBtn').hide();
+      console.log('User from firestore: ', user);
     }
   });
   window.location.reload();
@@ -103,15 +104,3 @@ export const signOut = async () => {
 export const checkAuth = (cb) => {
   return auth.onAuthStateChanged(cb);
 };
-
-// export const fetchUserDetails = () => {
-//   firebase.auth().onAuthStateChanged((firebaseUser) => {
-//     if (firebaseUser) {
-//       const userName = firebaseUser.displayName;
-//       const userEmail = firebaseUser.email;
-//       const userPhoneNumber = firebaseUser.phoneNuember;
-//       const userPhotoURL = firebaseUser.photoURL;
-//       return { userName, userEmail, userPhoneNumber, userPhotoURL }
-//     }
-//   });
-// };
