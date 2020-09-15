@@ -1,0 +1,50 @@
+@import '../styles/custom-properties.scss';
+
+.directory {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  z-index: 10;
+  background: var(--color-pallette-light);
+  border: 8px solid var(--color-pallette-dark);
+  border-top: none;
+}
+.largerScreens {
+  // @media (pointer: coarse) {
+  @media screen and (max-width: $breakpoint-large) {
+    display: none;
+  }
+  // }
+}
+.smallerScreens {
+  display: none;
+  // @media (pointer: coarse) {
+  @media screen and (max-width: $breakpoint-large) {
+    display: flex;
+    justify-content: center;
+  }
+  // }
+}
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 1rem 5rem;
+}
+
+.row div {
+  width: 15%;
+  flex-grow: 1;
+  color: var(--color-pallette-purple);
+  font-size: large;
+  text-align: left;
+}
+.address {
+  width: 30%;
+  flex-grow: 2;
+}
+
+.row button {
+  @include rectangle-out;
+}

@@ -8,18 +8,17 @@ import styles from './NavBar.module.scss';
 
 const NavBar = () => {
   const thisUser = useContext(UserContext);
+
   let isLoggedIn;
   if (thisUser) {
     isLoggedIn = true;
   }
 
-  const isAnonymous = thisUser.isAnonymous;
-
   const logout = () => {
     db.signOut();
   };
 
-  if (isAnonymous) {
+  if (isLoggedIn && thisUser.isAnonymous) {
     $('#logoutBtn').text('Login to Post');
   } else {
     $('#logoutBtn').text('Logout');
@@ -39,9 +38,17 @@ const NavBar = () => {
           <span
             id="welcome"
             className={[`nav-link ${styles.navLink} ${styles.welcome}`]}
-            style={{ display: isLoggedIn || isAnonymous ? 'inherit' : 'none' }}
+            style={{
+              display:
+                isLoggedIn || (isLoggedIn && thisUser.isAnonymous)
+                  ? 'inherit'
+                  : 'none',
+            }}
           >
-            Welcome, {isAnonymous ? 'Neighbor!' : `${thisUser.name}!`}
+            Welcome,{' '}
+            {!isLoggedIn || (isLoggedIn && thisUser.isAnonymous)
+              ? 'Neighbor!'
+              : `${thisUser.name}!`}
             <Button
               id="logoutBtn"
               className={styles.logoutBtn}
@@ -54,7 +61,12 @@ const NavBar = () => {
             id="loginBtn"
             className={styles.loginBtn}
             onClick={() => $('#authentication').css('display', 'flex')}
-            style={{ display: isLoggedIn || isAnonymous ? 'none' : 'inherit' }}
+            style={{
+              display:
+                isLoggedIn || (isLoggedIn && thisUser.isAnonymous)
+                  ? 'none'
+                  : 'inherit',
+            }}
           >
             Login
           </Button>

@@ -11,18 +11,16 @@ import styles from './Profile.module.scss';
 const Profile = ({ show }) => {
   const thisUser = useContext(UserContext);
   //////state for inputs//////
-  const [name, setName] = useState(thisUser.name ? thisUser.name : '');
-  const [phone, setPhone] = useState(thisUser.phone ? thisUser.phone : '');
-  const [email, setEmail] = useState(thisUser.email ? thisUser.email : '');
-  const [photoURL, setPhotoURL] = useState(
-    thisUser.photoURL ? thisUser.photURL : ''
+  const [name, setName] = useState(thisUser ? thisUser.name : '');
+  const [phone, setPhone] = useState(thisUser ? thisUser.phone : '');
+  const [email, setEmail] = useState(thisUser ? thisUser.email : '');
+  const [photoURL, setPhotoURL] = useState(thisUser ? thisUser.photURL : '');
+  const [address, setAddress] = useState(thisUser ? thisUser.address : '');
+  const [directory, setDirectory] = useState(
+    thisUser ? thisUser.includeInDirectory : false
   );
-  const [address, setAddress] = useState(
-    thisUser.address ? thisUser.address : ''
-  );
-  const [directory, setDirectory] = useState(thisUser.includeInDirectory);
   const [notifications, setNotifications] = useState(
-    thisUser.receiveNotifications
+    thisUser ? thisUser.receiveNotifications : false
   );
   //////state for error message popup////////
   const [errorMessage, setErrorMessage] = useState('');
@@ -178,7 +176,7 @@ const Profile = ({ show }) => {
           </div>
           <div
             className={styles.inputRow}
-            style={{ display: thisUser.address ? 'none' : 'flex' }}
+            style={{ display: thisUser && thisUser.address ? 'none' : 'flex' }}
           >
             <StreetAddress
               onChange={(e) => setAddress(e.target.value)}
@@ -187,7 +185,7 @@ const Profile = ({ show }) => {
           </div>
           <div
             className={styles.inputRow}
-            style={{ display: thisUser.address ? 'flex' : 'none' }}
+            style={{ display: thisUser && thisUser.address ? 'flex' : 'none' }}
           >
             <span className={styles.label}>Street Address:</span>
             <span className={styles.input}>{address}</span>

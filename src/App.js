@@ -6,6 +6,7 @@ import Authentication from './pages/Authentication';
 import Loading from './components/shared/Loading';
 import Home from './pages/Home';
 import Calendar from './pages/Calendar';
+import Directory from './pages/Directory';
 import Profile from './components/Profile';
 import styles from './App.module.scss';
 
@@ -23,12 +24,17 @@ const App = () => {
           <Switch>
             <Route path="/" exact component={Home}></Route>
             <Route path="/calendar" component={Calendar}></Route>
+            <Route path="/directory" component={Directory}></Route>
           </Switch>
         </Router>
 
         <Loading />
         <Profile
-          show={thisUser.isAnonymous || thisUser.profileComplete ? false : true}
+          show={
+            thisUser && (thisUser.isAnonymous || !thisUser.profileComplete)
+              ? false
+              : true
+          }
         />
         <Authentication />
       </UserContext.Provider>
