@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { UserContext } from '../../App';
-import { Navbar, Nav, Button } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import $ from 'jquery';
 import * as db from '../../firestore';
@@ -87,6 +87,25 @@ const NavBar = () => {
           >
             Calendar
           </Link>
+          <NavDropdown
+            title="The Neighborhood"
+            id="collasible-nav-dropdown"
+            className={styles.navLink}
+          >
+            <NavDropdown.Item>
+              <Link
+                to="/directory"
+                className="nav-link"
+                onClick={() => collapseNavbar()}
+              >
+                Directory
+              </Link>
+            </NavDropdown.Item>
+            <NavDropdown.Item>Another action</NavDropdown.Item>
+            <NavDropdown.Item>Pay Your Dues</NavDropdown.Item>
+            {/* <NavDropdown.Divider /> */}
+            <NavDropdown.Item>Referrals</NavDropdown.Item>
+          </NavDropdown>
         </Nav>
       </Navbar.Collapse>
     </Navbar>
