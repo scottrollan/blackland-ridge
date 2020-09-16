@@ -18,13 +18,14 @@ const useAuth = () => {
   const [thisUser, setThisUser] = useState('');
 
   React.useEffect(() => {
-    db.checkAuth(async (user) => {
-      if (user && !user.isAnonymous) {
-        //if not anonymous
-        const sanityUser = await sanityLogin(user);
-        setThisUser(sanityUser); //then set User to user stored in Sanity
+    db.checkAuth(async (u) => {
+      const user = await u;
+      console.log(user);
+      if (!user) {
+        console.log('there is no user');
       } else {
-        setThisUser(user);
+        const sanityUser = await sanityLogin(user);
+        setThisUser(sanityUser); //then set User to user stored in Sanity//
       }
     });
   }, []);

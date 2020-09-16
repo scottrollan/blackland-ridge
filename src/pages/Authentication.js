@@ -10,8 +10,8 @@ import UserAlreadyExists from '../components/UserAlreadyExists';
 import ResetPassword from '../components/ResetPassword';
 import styles from './Authentication.module.scss';
 
-const Authentication = () => {
-  const user = useContext(UserContext);
+const Authentication = ({ show }) => {
+  // const user = useContext(UserContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('Error!');
@@ -47,7 +47,7 @@ const Authentication = () => {
   };
 
   return (
-    <Modal id="firebaseui-auth-container" show={user ? false : true} size="lg">
+    <Modal id="firebaseui-auth-container" show={show} size="lg">
       <ErrorMessage
         errorMessage={errorMessage}
         tryAgainBtn={tryAgainBtn}
@@ -141,14 +141,15 @@ const Authentication = () => {
                 </Button>
               </div>
             </div>
-            <Button
+            {/* <Button
               onClick={db.signInAnonymously}
               className={styles.anonymousAuthButton}
             >
               <i className={[`fas fa-user-slash ${styles.authLogin}`]}></i>
               <span className={styles.authLogin}>{'  '}Stay Anonymous</span>
-            </Button>
-            <span
+            </Button> */}
+            <Button onClick={() => db.signOut()}>Log off!</Button>
+            {/* <span
               style={{
                 fontSize: 'smaller',
                 width: '90%',
@@ -157,7 +158,7 @@ const Authentication = () => {
             >
               (you will only be allowed to view--no posting, commenting or
               liking)
-            </span>
+            </span> */}
           </Modal.Body>
         </div>
       </div>

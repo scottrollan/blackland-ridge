@@ -13,6 +13,7 @@ import styles from './App.module.scss';
 export const UserContext = React.createContext();
 
 const App = () => {
+  const [showLogin, setShowLogin] = React.useState(false);
   const thisUser = useAuth();
   return (
     <div className={styles.App}>
@@ -20,7 +21,7 @@ const App = () => {
 
       <UserContext.Provider value={thisUser}>
         <Router>
-          <Navbar />
+          <Navbar loginShow={(tf) => setShowLogin(tf)} />
           <Switch>
             <Route path="/" exact component={Home}></Route>
             <Route path="/calendar" component={Calendar}></Route>
@@ -29,14 +30,8 @@ const App = () => {
         </Router>
 
         <Loading />
-        <Profile
-          show={
-            thisUser && (thisUser.isAnonymous || !thisUser.profileComplete)
-              ? false
-              : true
-          }
-        />
-        <Authentication />
+        <Profile />
+        <Authentication show={showLogin} />
       </UserContext.Provider>
     </div>
   );

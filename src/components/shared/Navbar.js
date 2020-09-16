@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { UserContext } from '../../App';
 import { Navbar, Nav, NavDropdown, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -6,23 +6,18 @@ import $ from 'jquery';
 import * as db from '../../firestore';
 import styles from './NavBar.module.scss';
 
-const NavBar = () => {
+const NavBar = ({ loginShow }) => {
   const thisUser = useContext(UserContext);
 
-  let isLoggedIn;
-  if (thisUser) {
-    isLoggedIn = true;
-  }
-
-  const logout = () => {
-    db.signOut();
+  const logInOut = () => {
+    if (thisUser) {
+      db.signOut();
+      loginShow(false);
+    }
+    if (!thisUser) {
+      loginShow(true);
+    }
   };
-
-  if (isLoggedIn && thisUser.isAnonymous) {
-    $('#logoutBtn').text('Login to Post');
-  } else {
-    $('#logoutBtn').text('Logout');
-  }
 
   const collapseNavbar = () => {
     $('.navbar-toggler').click();
@@ -38,38 +33,16 @@ const NavBar = () => {
           <span
             id="welcome"
             className={[`nav-link ${styles.navLink} ${styles.welcome}`]}
-            style={{
-              display:
-                isLoggedIn || (isLoggedIn && thisUser.isAnonymous)
-                  ? 'inherit'
-                  : 'none',
-            }}
           >
-            Welcome,{' '}
-            {!isLoggedIn || (isLoggedIn && thisUser.isAnonymous)
-              ? 'Neighbor!'
-              : `${thisUser.name}!`}
+            Welcome, {thisUser.name ? `${thisUser.name}!` : 'Neighbor!'}
             <Button
-              id="logoutBtn"
+              id="logBtn"
               className={styles.logoutBtn}
-              onClick={() => logout()}
+              onClick={() => logInOut()}
             >
-              Logout
+              {thisUser ? 'Logout' : 'Login or Sign Up'}
             </Button>
           </span>
-          <Button
-            id="loginBtn"
-            className={styles.loginBtn}
-            onClick={() => $('#authentication').css('display', 'flex')}
-            style={{
-              display:
-                isLoggedIn || (isLoggedIn && thisUser.isAnonymous)
-                  ? 'none'
-                  : 'inherit',
-            }}
-          >
-            Login
-          </Button>
         </Nav>
         <Nav>
           <Link
@@ -80,31 +53,49 @@ const NavBar = () => {
             Home
           </Link>
 
-          <Link
-            to="/calendar"
-            className={[`nav-link ${styles.navLink}`]}
-            onClick={() => collapseNavbar()}
-          >
-            Calendar
-          </Link>
           <NavDropdown
             title="The Neighborhood"
             id="collasible-nav-dropdown"
             className={styles.navLink}
           >
-            <NavDropdown.Item>
-              <Link
-                to="/directory"
-                className="nav-link"
-                onClick={() => collapseNavbar()}
-              >
-                Directory
-              </Link>
-            </NavDropdown.Item>
-            <NavDropdown.Item>Another action</NavDropdown.Item>
-            <NavDropdown.Item>Pay Your Dues</NavDropdown.Item>
+            {/* <NavDropdown.Item> */}
+            <Link
+              to="/calendar"
+              className="dropdown-item"
+              onClick={() => collapseNavbar()}
+            >
+              Calendar
+            </Link>
+            <Link
+              to="/directory"
+              className="dropdown-item"
+              onClick={() => collapseNavbar()}
+            >
+              Directory
+            </Link>
+            {/* </NavDropdown.Item> */}
+            <Link
+              to="/"
+              className="dropdown-item"
+              onClick={() => collapseNavbar()}
+            >
+              Homes For Sale
+            </Link>
+            <Link
+              to="/"
+              className="dropdown-item"
+              onClick={() => collapseNavbar()}
+            >
+              Pay Your Dues
+            </Link>
             {/* <NavDropdown.Divider /> */}
-            <NavDropdown.Item>Referrals</NavDropdown.Item>
+            <Link
+              to="/"
+              className="dropdown-item"
+              onClick={() => collapseNavbar()}
+            >
+              Referrals
+            </Link>
           </NavDropdown>
         </Nav>
       </Navbar.Collapse>

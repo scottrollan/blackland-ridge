@@ -8,8 +8,9 @@ import StreetAddress from '../components/StreetAddress';
 import ErrorMessage from '../components/ErrorMessage';
 import styles from './Profile.module.scss';
 
-const Profile = ({ show }) => {
+const Profile = () => {
   const thisUser = useContext(UserContext);
+  const [show, setShow] = useState(false);
   //////state for inputs//////
   const [name, setName] = useState(thisUser ? thisUser.name : '');
   const [phone, setPhone] = useState(thisUser ? thisUser.phone : '');
@@ -74,6 +75,7 @@ const Profile = ({ show }) => {
   };
 
   const grabProfile = () => {
+    console.log('thisUser: ', thisUser);
     if (thisUser.name) {
       setName(thisUser.name);
     }
@@ -99,11 +101,11 @@ const Profile = ({ show }) => {
     } else {
       $('#includeInDirectory').prop('checked', false);
     }
-    if (thisUser && !thisUser.profileComplete) {
-      //if no username or address has not been set, show the profile form to complete
-      $('#profileSetup').hide();
-      $('#profileForm').show();
-    }
+    // if (thisUser && !thisUser.profileComplete) {
+    //if no username or address has not been set, show the profile form to complete
+    $('#profileSetup').hide();
+    $('#profileForm').show();
+    // }
   };
 
   const phoneMask = () => {
@@ -120,8 +122,14 @@ const Profile = ({ show }) => {
 
   $('[type="tel"]').keyup(phoneMask);
 
+  const showHandler = () => {
+    if (thisUser && !thisUser.isAnonymous && !thisUser.profileComplete) {
+      setShow(true);
+    }
+  };
+
   useEffect(() => {
-    grabProfile();
+    showHandler();
   }, []);
 
   return (

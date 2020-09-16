@@ -87,12 +87,9 @@ export const sendResetPassword = async (emailAddress) => {
 
 export const signInAnonymously = async () => {
   await firebase.auth().signInAnonymously();
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      $('#logoutBtn').hide();
-      console.log('User from firestore: ', user);
-    }
-  });
+  // firebase.auth().onAuthStateChanged((user) => {
+
+  // });
   window.location.reload();
 };
 

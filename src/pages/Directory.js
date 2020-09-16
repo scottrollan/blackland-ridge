@@ -57,9 +57,9 @@ const Directory = () => {
       </div>
       {neighborList.map((n) => {
         return (
-          <div>
+          <div key={n._id}>
             <div className={styles.largerScreens}>
-              <div key={n._id} className={styles.row}>
+              <div className={styles.row}>
                 <div>{n.name}</div>
                 <div className={styles.address}>{n.address}</div>
                 <div>{n.phone}</div>
