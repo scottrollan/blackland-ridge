@@ -15,13 +15,14 @@ export const UserContext = React.createContext();
 const App = () => {
   const [showLogin, setShowLogin] = React.useState(false);
   const thisUser = useAuth();
+
   return (
     <div className={styles.App}>
       <div className={styles.backgroundOverlay}></div>
 
       <UserContext.Provider value={thisUser}>
         <Router>
-          <Navbar loginShow={(tf) => setShowLogin(tf)} />
+          <Navbar loginShow={(trueFalse) => setShowLogin(trueFalse)} />
           <Switch>
             <Route path="/" exact component={Home}></Route>
             <Route path="/calendar" component={Calendar}></Route>

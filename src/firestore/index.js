@@ -43,17 +43,15 @@ export const signInUserWithEmail = async (email, password) => {
     promise = await auth.signInWithEmailAndPassword(email, password);
   } catch (e) {
     if (e.code === 'auth/wrong-password') {
-      $('#incorrectPassword').css('display', 'flex');
+      return 'incorrectPassword';
     } else if (e.code === 'auth/user-not-found') {
-      $('#userNotFound').css('display', 'flex');
+      return 'userNotFound';
     } else if (e.code === '"auth/too-many-requests"') {
-      $('#tooManyAttempts').css('display', 'flex');
-    } else {
-      console.log(promise);
-      $('#welcome').show();
-      $('#logoutBtn').show();
+      return 'tooManyAttempts';
     }
   }
+  window.location.reload();
+
   return promise;
 };
 export const createUserWithEmail = async (email, password) => {
@@ -65,12 +63,11 @@ export const createUserWithEmail = async (email, password) => {
     });
   } catch (error) {
     if (error.code === 'auth/email-already-in-use') {
-      $(`#userAlreadyExists`).css('display', 'flex');
+      return 'userAlreadyExists';
     } else {
       alert(error.message);
     }
   }
-  console.log(promise.user);
   return promise;
 };
 

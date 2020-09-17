@@ -1,12 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { UserContext } from '../App';
 import * as db from '../firestore';
 import { Button, Modal } from 'react-bootstrap';
 import $ from 'jquery';
 import ErrorMessage from '../components/ErrorMessage';
-import UserNotFound from '../components/UserNotFound';
-import IncorrectPassword from '../components/IncorrectPassword';
-import UserAlreadyExists from '../components/UserAlreadyExists';
 import ResetPassword from '../components/ResetPassword';
 import styles from './Authentication.module.scss';
 
@@ -21,18 +18,46 @@ const Authentication = ({ show }) => {
 
   const login = async () => {
     if (/\S+@\S+/.test(email.toLowerCase())) {
-      db.signInUserWithEmail(email, password);
+      const returned = await db.signInUserWithEmail(email, password);
+      if (returned === 'incorrectPassword') {
+        setErrorMessage('Incorrect Password');
+        setTryAgainText('OK, Try Again');
+        setResetBtn('block');
+        $('#errorMessage').css('display', 'flex');
+      }
+      if (returned === 'userNotFound') {
+        setErrorMessage('That User Account Was Not Found');
+        setTryAgainText('Try Again or Sign Up');
+        setResetBtn('none');
+        $('#errorMessage').css('display', 'flex');
+      }
+      if (returned === 'tooManyAttempts') {
+        setErrorMessage(
+          'Too many unsuccessful login attempts. Please try again later.'
+        );
+        setTryAgainText('Close');
+        setResetBtn('none');
+        $('#errorMessage').css('display', 'flex');
+      }
     } else {
       setErrorMessage('Email format must be: user@email.com');
       setTryAgainText('OK, Enter a Valid Email Address');
       $('#errorMessage').css('display', 'flex');
+      setResetBtn('none');
       return false;
     }
   };
   const signUp = async () => {
     if (/\S+@\S+/.test(String(email).toLowerCase()) && password.length > 6) {
-      const user = await db.createUserWithEmail(email, password);
-      return user;
+      const returned = await db.createUserWithEmail(email, password);
+      if (returned === 'userAlreadyExists') {
+        setErrorMessage('That User Already Exists');
+        setTryAgainText('Try Again');
+        setResetBtn('block');
+        $('#errorMessage').css('display', 'flex');
+      }
+      // console.log(user);
+      // return user;
     } else if (password.length < 6) {
       setErrorMessage('Password must be at least 6 characters long.');
       setTryAgainText('OK, Enter a Longer Password');
@@ -47,17 +72,19 @@ const Authentication = ({ show }) => {
   };
 
   return (
-    <Modal id="firebaseui-auth-container" show={show} size="lg">
+    <Modal
+      id="firebaseui-auth-container"
+      show={show}
+      size="lg"
+      style={{ marginTop: '80px' }}
+    >
       <ErrorMessage
         errorMessage={errorMessage}
         tryAgainBtn={tryAgainBtn}
         tryAgainText={tryAgainText}
         resetBtn={resetBtn}
       />
-      <UserNotFound />
-      <IncorrectPassword />
       <ResetPassword />
-      <UserAlreadyExists />
       <div className={styles.split}>
         <div className={styles.imageHalf}></div>
         <div className={styles.wordsHalf}>
