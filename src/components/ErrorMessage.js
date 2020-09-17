@@ -11,7 +11,6 @@ const ErrorMessage = ({
   resetBtn,
 }) => {
   const resetPassword = (email) => {
-    console.log(email);
     db.sendResetPassword(email);
     $('#errorMessage').hide();
   };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UserContext } from '../App';
+// import { UserContext } from '../App';
 import * as db from '../firestore';
 import { Button, Modal } from 'react-bootstrap';
 import $ from 'jquery';
@@ -56,7 +56,6 @@ const Authentication = ({ show }) => {
         setResetBtn('block');
         $('#errorMessage').css('display', 'flex');
       }
-      // console.log(user);
       // return user;
     } else if (password.length < 6) {
       setErrorMessage('Password must be at least 6 characters long.');
@@ -70,6 +69,11 @@ const Authentication = ({ show }) => {
       return false;
     }
   };
+  // React.useEffect(() => {
+  //   return () => {
+  //     profileComplete();
+  //   };
+  // });
 
   return (
     <Modal
@@ -168,24 +172,6 @@ const Authentication = ({ show }) => {
                 </Button>
               </div>
             </div>
-            {/* <Button
-              onClick={db.signInAnonymously}
-              className={styles.anonymousAuthButton}
-            >
-              <i className={[`fas fa-user-slash ${styles.authLogin}`]}></i>
-              <span className={styles.authLogin}>{'  '}Stay Anonymous</span>
-            </Button> */}
-            <Button onClick={() => db.signOut()}>Log off!</Button>
-            {/* <span
-              style={{
-                fontSize: 'smaller',
-                width: '90%',
-                textAlign: 'center',
-              }}
-            >
-              (you will only be allowed to view--no posting, commenting or
-              liking)
-            </span> */}
           </Modal.Body>
         </div>
       </div>

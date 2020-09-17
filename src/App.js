@@ -14,7 +14,21 @@ export const UserContext = React.createContext();
 
 const App = () => {
   const [showLogin, setShowLogin] = React.useState(false);
+  const [showProfile, setShowProfile] = React.useState(false);
   const thisUser = useAuth();
+
+  React.useEffect(() => {
+    if (
+      thisUser &&
+      (!thisUser.address ||
+        thisUser.address === '' ||
+        !thisUser.name ||
+        thisUser.name === '')
+    ) {
+      setShowProfile(true);
+      // window.location.reload();
+    }
+  }, []);
 
   return (
     <div className={styles.App}>

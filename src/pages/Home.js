@@ -8,7 +8,7 @@ export default function Home() {
         <span className={styles.blackland}>Blackland Ridge</span>
         <div className={styles.headingButtonRow}>
           <span>Classifieds</span>
-          <span>Messages</span>
+          <span>Discussion Board</span>
           <span>Calendar</span>
         </div>
       </div>

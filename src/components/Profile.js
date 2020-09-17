@@ -7,36 +7,51 @@ import { Client } from '../api/sanityClient';
 import StreetAddress from '../components/StreetAddress';
 import ErrorMessage from '../components/ErrorMessage';
 import styles from './Profile.module.scss';
+import imageUrlBuilder from '@sanity/image-url';
 
 const Profile = () => {
   const thisUser = useContext(UserContext);
-  const [show, setShow] = useState(false);
+
+  const builder = imageUrlBuilder(Client);
+
+  const urlFor = (source) => {
+    return builder.image(source);
+  };
+
   //////state for inputs//////
-  const [name, setName] = useState(thisUser ? thisUser.name : '');
-  const [phone, setPhone] = useState(thisUser ? thisUser.phone : '');
-  const [email, setEmail] = useState(thisUser ? thisUser.email : '');
-  const [photoURL, setPhotoURL] = useState(thisUser ? thisUser.photURL : '');
-  const [address, setAddress] = useState(thisUser ? thisUser.address : '');
-  const [directory, setDirectory] = useState(
-    thisUser ? thisUser.includeInDirectory : false
-  );
-  const [notifications, setNotifications] = useState(
-    thisUser ? thisUser.receiveNotifications : false
-  );
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [photoURL, setPhotoURL] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [imageRef, setImageRef] = useState('');
+  const [address, setAddress] = useState('Select Your Address');
+  const [directory, setDirectory] = useState(false);
+  const [notifications, setNotifications] = useState(false);
   //////state for error message popup////////
   const [errorMessage, setErrorMessage] = useState('');
-  const [tryAgainBtn, setTryAgainBtn] = useState(true);
+  const [tryAgainBtn, setTryAgainBtn] = useState('block');
   const [tryAgainText, setTryAgainText] = useState('Try Again');
-  const [resetBtn, setResetBtn] = useState(false);
+  const [resetBtn, setResetBtn] = useState('none');
 
   //////send state variables to sanity///////
   const submitProfile = async () => {
+    const imageObj = {
+      _type: 'image',
+      asset: {
+        _ref: imageRef,
+        _type: 'reference',
+      },
+    };
+    const image = imageObj;
+    image['_type'] = 'image';
     const userObj = {
       name,
       phone,
       email,
       photoURL,
       address,
+      image,
       includeInDirectory: directory,
       receiveNotifications: notifications,
     };
@@ -74,8 +89,8 @@ const Profile = () => {
     }
   };
 
-  const grabProfile = () => {
-    console.log('thisUser: ', thisUser);
+  const grabProfile = async () => {
+    console.log(thisUser.image);
     if (thisUser.name) {
       setName(thisUser.name);
     }
@@ -87,25 +102,29 @@ const Profile = () => {
     }
     if (thisUser.photoURL) {
       setPhotoURL(thisUser.photoURL);
+    } else {
+      const imageObj = await thisUser.image;
+      setPhotoURL(urlFor(imageObj).url());
     }
+    console.log(photoURL);
     if (thisUser.address) {
       setAddress(thisUser.address);
     }
     if (thisUser.receiveNotifications) {
+      setNotifications(true);
       $('#receiveNotifications').prop('checked', true);
     } else {
       $('#receiveNotifications').prop('checked', false);
     }
     if (thisUser.includeInDirectory) {
+      setNotifications(true);
       $('#includeInDirectory').prop('checked', true);
     } else {
       $('#includeInDirectory').prop('checked', false);
     }
-    // if (thisUser && !thisUser.profileComplete) {
-    //if no username or address has not been set, show the profile form to complete
+
     $('#profileSetup').hide();
-    $('#profileForm').show();
-    // }
+    $('#profileForm').css('display', 'flex');
   };
 
   const phoneMask = () => {
@@ -122,25 +141,57 @@ const Profile = () => {
 
   $('[type="tel"]').keyup(phoneMask);
 
-  const showHandler = () => {
-    if (thisUser && !thisUser.isAnonymous && !thisUser.profileComplete) {
-      setShow(true);
+  const fileSelect = (e) => {
+    const file = e.target.files[0];
+    const buttonId = e.target.getAttribute('button');
+    setSelectedFile(file);
+    $(`#${buttonId}`).show();
+  };
+
+  const fileUpload = async () => {
+    let imageRes = await Client.assets.upload('image', selectedFile);
+    setPhotoURL(imageRes.url);
+    const newImageRef = imageRes._id;
+    console.log(newImageRef);
+    setImageRef(newImageRef);
+  };
+
+  const saveHandler = () => {
+    console.log(thisUser);
+    switch (true) {
+      case $('#nameInput').val() === '':
+        setErrorMessage('Please Select a User Name');
+        setTryAgainText('Ok, Enter a User Name');
+        setResetBtn('none');
+        $('#errorMessage').css('display', 'flex');
+        break;
+      case address === 'Select Your Address':
+        setErrorMessage('Please Select Your Address to Continue');
+        setTryAgainText('Ok, Select My Address');
+        $('#errorMessage').css('display', 'flex');
+        break;
+      default:
+        submitProfile();
+        break;
     }
   };
 
   useEffect(() => {
-    showHandler();
+    grabProfile();
   }, []);
 
   return (
-    <Modal show={show} id="profile">
+    <Modal
+      show={thisUser && (!thisUser.address || !thisUser.name) ? true : false}
+      id="profile"
+    >
       <ErrorMessage
         errorMessage={errorMessage}
         tryAgainBtn={tryAgainBtn}
         tryAgainText={tryAgainText}
         resetBtn={resetBtn}
       />
-      <Modal.Header>Set Up Your Profile</Modal.Header>
+      <Modal.Header>Profile Setup</Modal.Header>
 
       <Modal.Body>
         <div id="profileSetup" className={styles.profileSetup}>
@@ -150,56 +201,69 @@ const Profile = () => {
           </Button>
         </div>
         <form id="profileForm" className={styles.profileForm}>
-          <div className={styles.inputRow}>
-            <label htmlFor="nameInput">User Name:</label>
-            <input
-              id="nameInput"
-              required
-              type="input"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="ex: Judy Patel"
-            ></input>
-          </div>
-          <div className={styles.inputRow}>
-            <label htmlFor="emailInput">Email Address:</label>
-            <input
-              id="emailInput"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="username@email.com"
-            ></input>
-          </div>
-          <div className={styles.inputRow}>
-            <label htmlFor="phoneInput">Phone Number:</label>
-            <input
-              type="tel"
-              id="phoneInput"
-              placeholder="(770)555-1234"
-              value={phone}
-              onInput={phoneMask}
-              onChange={(e) => setPhone(e.target.value)}
-            />
-          </div>
-          <div
-            className={styles.inputRow}
+          <label htmlFor="nameInput">User Name:</label>
+          <input
+            id="nameInput"
+            required
+            type="input"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="ex: Judy Patel"
+          ></input>
+
+          <label htmlFor="emailInput">Email Address:</label>
+          <input
+            id="emailInput"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="username@email.com"
+          ></input>
+
+          <label htmlFor="phoneInput">Phone Number:</label>
+          <input
+            type="tel"
+            id="phoneInput"
+            placeholder="(770)555-1234"
+            value={phone}
+            onInput={phoneMask}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+
+          <StreetAddress
+            onChange={(e) => setAddress(e.target.value)}
+            userAddress={address}
             style={{ display: thisUser && thisUser.address ? 'none' : 'flex' }}
-          >
-            <StreetAddress
-              onChange={(e) => setAddress(e.target.value)}
-              userAddress={address}
-            />
-          </div>
+          />
+
           <div
-            className={styles.inputRow}
             style={{ display: thisUser && thisUser.address ? 'flex' : 'none' }}
           >
             <span className={styles.label}>Street Address:</span>
             <span className={styles.input}>{address}</span>
           </div>
-          <div className={styles.inputRow}>
+          <div className={styles.photoDiv}>
             <img src={photoURL} alt="profile" style={{ height: '80px' }} />
+            <div className={styles.formFile}>
+              <label className="form-file-label">Upload New Image</label>
+              <input
+                name="file"
+                button="uploadFunctionButton"
+                type="file"
+                onChange={(e) => fileSelect(e)}
+                className="form-control-file"
+              />
+              <button
+                id="uploadFunctionButton"
+                value="image-6cfbe57620cf399cfc417a0ac19af893f539058a-650x433-jpg"
+                type="button"
+                className="btn btn-primary"
+                style={{ display: 'none' }}
+                onClick={() => fileUpload()}
+              >
+                Upload Photo
+              </button>
+            </div>
           </div>
           <div className={styles.checkboxRow}>
             <label htmlFor="includeInDirectory">
@@ -223,8 +287,8 @@ const Profile = () => {
               onClick={() => setN()}
             />
           </div>
-          <Button onClick={() => submitProfile()}>Save Profile</Button>
-          <Button onClick={() => db.signOut()}>Logout</Button>
+          <Button onClick={() => saveHandler()}>Save Profile</Button>
+          {/* <Button onClick={() => db.signOut()}>Logout</Button> */}
         </form>
       </Modal.Body>
     </Modal>

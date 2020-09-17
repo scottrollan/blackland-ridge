@@ -195,7 +195,6 @@ const Calendar = () => {
     const eventsToMap = await Client.fetch(
       "*[_type == 'event'] | order(start)"
     );
-    console.log(events);
     eventsToMap.forEach((e) => {
       const trimDate = new Date(e.start).toString().substring(4, 15);
       const simpleDate = new Date(trimDate);

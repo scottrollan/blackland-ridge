@@ -64,22 +64,11 @@ const sanityLogin = async (user) => {
       email: u.email,
       phone: u.phone,
       photoURL: u.photoURL,
+      image: { ...u.image },
       includeInDirectory: u.includeInDirectory,
       receiveNotifications: u.receiveNotifications,
-      isAnonymous: false,
       address: u.address,
     };
-    switch (true) {
-      case !u.name || !u.address:
-        returnedUser['profileComplete'] = false;
-        break;
-      case u.includeInDirectory && (!u.email || !u.phone):
-        returnedUser['profileComplete'] = false;
-        break;
-      default:
-        returnedUser['profileComplete'] = true;
-        break;
-    }
   } catch (error) {
     console.log(error.message);
   }

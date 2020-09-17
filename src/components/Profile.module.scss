@@ -10,28 +10,24 @@
 
 .profileForm {
   display: none;
+  flex-direction: column;
 }
 
-.inputRow {
+select,
+input {
+  margin-bottom: 1.2rem;
+}
+.photoDiv {
   width: 100%;
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin: 0.5rem;
-  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: space-between;
 }
-.inputRow label,
-.label {
-  width: 35%;
-  text-align: right;
-  padding-right: 1rem;
+.formFile {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-.inputRow input,
-.inputRow select,
-.input {
-  width: 60%;
-}
-
 .checkboxRow {
   width: 100%;
   display: flex;
