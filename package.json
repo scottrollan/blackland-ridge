@@ -23,6 +23,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "react-use-clipboard": "^1.0.0",
+    "robohash-avatars": "^1.0.1",
     "swr": "^0.2.3"
   },
   "scripts": {

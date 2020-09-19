@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../App';
+import GrabProfile from '../functions/GrabProfile';
 import { Button, Modal } from 'react-bootstrap';
 import $ from 'jquery';
 import * as db from '../firestore';
@@ -8,6 +9,7 @@ import StreetAddress from '../components/StreetAddress';
 import ErrorMessage from '../components/ErrorMessage';
 import styles from './Profile.module.scss';
 import imageUrlBuilder from '@sanity/image-url';
+import { randomAvatar } from '../functions/CreateRandomAvatar';
 
 const Profile = () => {
   const thisUser = useContext(UserContext);
@@ -22,7 +24,7 @@ const Profile = () => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
-  const [photoURL, setPhotoURL] = useState(null);
+  const [photoURL, setPhotoURL] = useState(randomAvatar);
   const [selectedFile, setSelectedFile] = useState(null);
   const [imageRef, setImageRef] = useState('');
   const [address, setAddress] = useState('Select Your Address');
@@ -43,35 +45,24 @@ const Profile = () => {
         _type: 'reference',
       },
     };
-    const image = imageObj;
-    image['_type'] = 'image';
+
     const userObj = {
-      name,
-      phone,
-      email,
-      photoURL,
-      address,
-      image,
+      name: name,
+      phone: phone,
+      email: email,
+      photoURL: photoURL,
+      address: address,
+      image: { ...imageObj },
       includeInDirectory: directory,
       receiveNotifications: notifications,
     };
 
-    const r = await Client.patch(thisUser._id)
+    Client.patch(thisUser._id)
       .set(userObj)
       .commit()
       .catch((err) => {
         console.log('Error: ', err.message);
       });
-
-    if (
-      r.address &&
-      r.name &&
-      ((r.includeInDirectory && r.phone && r.email) || !r.includeInDirectory)
-    ) {
-      userObj['profileComplete'] = true;
-    } else {
-      userObj['profileComplete'] = false;
-    }
   };
 
   const setD = () => {
@@ -90,38 +81,28 @@ const Profile = () => {
   };
 
   const grabProfile = async () => {
-    console.log(thisUser.image);
-    if (thisUser.name) {
-      setName(thisUser.name);
-    }
-    if (thisUser.email) {
-      setEmail(thisUser.email);
-    }
-    if (thisUser.phone) {
-      setPhone(thisUser.phone);
-    }
-    if (thisUser.photoURL) {
-      setPhotoURL(thisUser.photoURL);
-    } else {
-      const imageObj = await thisUser.image;
-      setPhotoURL(urlFor(imageObj).url());
-    }
-    console.log(photoURL);
-    if (thisUser.address) {
-      setAddress(thisUser.address);
-    }
-    if (thisUser.receiveNotifications) {
-      setNotifications(true);
-      $('#receiveNotifications').prop('checked', true);
-    } else {
-      $('#receiveNotifications').prop('checked', false);
-    }
-    if (thisUser.includeInDirectory) {
-      setNotifications(true);
-      $('#includeInDirectory').prop('checked', true);
-    } else {
-      $('#includeInDirectory').prop('checked', false);
-    }
+    const [
+      nameGP,
+      phoneGP,
+      emailGP,
+      photoURLGP,
+      imageRefGP,
+      addressGP,
+      directoryGP,
+      notificationsGP,
+    ] = await GrabProfile(thisUser);
+    console.log(
+      'from inside Profile after importing, before setting state imageRef: ',
+      imageRefGP
+    );
+    setName(nameGP);
+    setPhone(phoneGP);
+    setEmail(emailGP);
+    setPhotoURL(photoURLGP);
+    setImageRef(imageRefGP);
+    setAddress(addressGP);
+    setDirectory(directoryGP);
+    setNotifications(notificationsGP);
 
     $('#profileSetup').hide();
     $('#profileForm').css('display', 'flex');
@@ -142,9 +123,9 @@ const Profile = () => {
   $('[type="tel"]').keyup(phoneMask);
 
   const fileSelect = (e) => {
-    const file = e.target.files[0];
+    const image = e.target.files[0];
     const buttonId = e.target.getAttribute('button');
-    setSelectedFile(file);
+    setSelectedFile(image);
     $(`#${buttonId}`).show();
   };
 
@@ -152,12 +133,10 @@ const Profile = () => {
     let imageRes = await Client.assets.upload('image', selectedFile);
     setPhotoURL(imageRes.url);
     const newImageRef = imageRes._id;
-    console.log(newImageRef);
     setImageRef(newImageRef);
   };
 
   const saveHandler = () => {
-    console.log(thisUser);
     switch (true) {
       case $('#nameInput').val() === '':
         setErrorMessage('Please Select a User Name');
@@ -176,9 +155,9 @@ const Profile = () => {
     }
   };
 
-  useEffect(() => {
-    grabProfile();
-  }, []);
+  // useEffect(() => {
+  //   grabProfile();
+  // }, []);
 
   return (
     <Modal
@@ -199,9 +178,12 @@ const Profile = () => {
           <Button variant="info" onClick={() => grabProfile()}>
             Finish My Profile!
           </Button>
+          <Button onClick={() => db.signOut()}>Logout</Button>
         </div>
         <form id="profileForm" className={styles.profileForm}>
-          <label htmlFor="nameInput">User Name:</label>
+          <label htmlFor="nameInput">
+            User Name <span style={{ color: 'var(--google-red' }}>*</span>
+          </label>
           <input
             id="nameInput"
             required
