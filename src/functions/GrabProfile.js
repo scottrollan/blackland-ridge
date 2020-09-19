@@ -37,7 +37,6 @@ const GrabProfile = async (thisUser) => {
         imageRefGP = thisUser.image.asset._ref;
         break;
       case thisUser.photoURL && thisUser.photoURL !== '':
-        console.log('photoURL is firing');
         const photoURL = thisUser.photoURL;
         photoURLGP = photoURL;
         let blob;
@@ -48,8 +47,8 @@ const GrabProfile = async (thisUser) => {
           blob = await response.blob();
         }
         const imageRes = await Client.assets.upload('image', blob);
+        photoURLGP = imageRes.url;
         const newImageRef = imageRes._id;
-        console.log(newImageRef);
         imageRefGP = newImageRef;
 
         break;
@@ -73,7 +72,6 @@ const GrabProfile = async (thisUser) => {
     } else {
       $('#includeInDirectory').prop('checked', false);
     }
-    console.log(imageRefGP);
   } catch (error) {
     console.error(error);
   } finally {
