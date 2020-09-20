@@ -5,7 +5,10 @@ const StreetAddress = ({ onChange }) => {
   return (
     <>
       <label htmlFor="streetAddress" className={styles.label}>
-        Street Address <span style={{ color: 'var(--google-red' }}>*</span>
+        Street Address{' '}
+        <span style={{ color: 'var(--google-red', fontSize: 'small' }}>
+          required
+        </span>
       </label>
       <select
         required

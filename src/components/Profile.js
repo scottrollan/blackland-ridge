@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { UserContext } from '../App';
 import GrabProfile from '../functions/GrabProfile';
 import { Button, Modal } from 'react-bootstrap';
@@ -9,7 +9,6 @@ import StreetAddress from '../components/StreetAddress';
 import ErrorMessage from '../components/ErrorMessage';
 import styles from './Profile.module.scss';
 import imageUrlBuilder from '@sanity/image-url';
-import { randomAvatar } from '../functions/CreateRandomAvatar';
 
 const Profile = () => {
   const thisUser = useContext(UserContext);
@@ -24,7 +23,6 @@ const Profile = () => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
-  const [photoURL, setPhotoURL] = useState(randomAvatar);
   const [selectedFile, setSelectedFile] = useState(null);
   const [imageRef, setImageRef] = useState('');
   const [address, setAddress] = useState('Select Your Address');
@@ -50,7 +48,6 @@ const Profile = () => {
       name: name,
       phone: phone,
       email: email,
-      photoURL: photoURL,
       address: address,
       image: { ...imageObj },
       includeInDirectory: directory,
@@ -85,25 +82,23 @@ const Profile = () => {
       nameGP,
       phoneGP,
       emailGP,
-      photoURLGP,
       imageRefGP,
       addressGP,
       directoryGP,
       notificationsGP,
     ] = await GrabProfile(thisUser);
-    console.log(
-      'from inside Profile after importing, before setting state imageRef: ',
-      imageRefGP
-    );
+
     setName(nameGP);
     setPhone(phoneGP);
     setEmail(emailGP);
-    setPhotoURL(photoURLGP);
     setImageRef(imageRefGP);
     setAddress(addressGP);
     setDirectory(directoryGP);
     setNotifications(notificationsGP);
-
+    console.log(
+      'from inside Profile after importing, before setting state imageRef: ',
+      imageRefGP
+    );
     $('#profileSetup').hide();
     $('#profileForm').css('display', 'flex');
   };
@@ -131,7 +126,7 @@ const Profile = () => {
 
   const fileUpload = async () => {
     let imageRes = await Client.assets.upload('image', selectedFile);
-    setPhotoURL(imageRes.url);
+    $('#profileSetupImage img').attr('src', urlFor(imageRes));
     const newImageRef = imageRes._id;
     setImageRef(newImageRef);
   };
@@ -141,6 +136,7 @@ const Profile = () => {
       case $('#nameInput').val() === '':
         setErrorMessage('Please Select a User Name');
         setTryAgainText('Ok, Enter a User Name');
+        setTryAgainBtn('block');
         setResetBtn('none');
         $('#errorMessage').css('display', 'flex');
         break;
@@ -178,12 +174,18 @@ const Profile = () => {
           <Button variant="info" onClick={() => grabProfile()}>
             Finish My Profile!
           </Button>
-          <Button onClick={() => db.signOut()}>Logout</Button>
+          {/* <Button onClick={() => db.signOut()}>Logout</Button> */}
         </div>
         <form id="profileForm" className={styles.profileForm}>
           <label htmlFor="nameInput">
-            User Name <span style={{ color: 'var(--google-red' }}>*</span>
+            User Name{' '}
+            <span style={{ color: 'var(--google-red', fontSize: 'small' }}>
+              required
+            </span>
           </label>
+          <div style={{ fontSize: 'small' }}>
+            as you want it to appear in the directory (if opted in)
+          </div>
           <input
             id="nameInput"
             required
@@ -225,7 +227,12 @@ const Profile = () => {
             <span className={styles.input}>{address}</span>
           </div>
           <div className={styles.photoDiv}>
-            <img src={photoURL} alt="profile" style={{ height: '80px' }} />
+            <img
+              id="profileSetupImage"
+              src={thisUser.image}
+              alt="profile"
+              style={{ height: '80px', alignSelf: 'center' }}
+            />
             <div className={styles.formFile}>
               <label className="form-file-label">Upload New Image</label>
               <input

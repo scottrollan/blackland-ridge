@@ -18,10 +18,12 @@ input {
   margin-bottom: 1.2rem;
 }
 .photoDiv {
+  background-color: #dedede;
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
+  padding: 0.25rem 0;
 }
 .formFile {
   display: flex;

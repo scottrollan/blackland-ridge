@@ -64,11 +64,7 @@
   &:before {
     border-color: var(--color-pallette-purple);
   }
-  &:hover {
-    background-color: var(--color-pallette-accent);
-    color: var(--white);
-    border-color: var(--color-pallette-accent);
-  }
+
   &:active,
   :visited,
   :focus {
@@ -76,12 +72,18 @@
     color: var(--color-pallette-dark);
     border-color: var(--color-pallette-dark);
   }
+  &:hover {
+    background-color: var(--color-pallette-accent);
+    color: var(--white);
+    border-color: var(--color-pallette-accent);
+  }
 }
 
 @mixin rectangle-out {
   @include hacks();
   position: relative;
   background: var(--color-pallette-purple);
+  border: 1px solid var(--color-pallette-purple);
   @include prefixed(transition-property, color);
   @include prefixed(transition-duration, $mediumDuration);
 
@@ -102,9 +104,10 @@
     @include prefixed(transition-timing-function, ease-out);
   }
 
-  &:hover,
   &:focus,
-  &:active {
+  &:active,
+  &:visited,
+  &:hover {
     color: white;
     background-color: var(--color-pallette-purple);
     border-color: var(--color-pallette-accent);
@@ -112,6 +115,11 @@
     &:before {
       @include prefixed(transform, scale(1));
     }
+  }
+  &:active {
+    background-color: var(--color-pallette-accent);
+    color: var(--white);
+    border-color: var(--color-pallette-accent);
   }
 }
 
