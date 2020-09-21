@@ -3,7 +3,6 @@ import { UserContext } from '../App';
 import GrabProfile from '../functions/GrabProfile';
 import { Button, Modal } from 'react-bootstrap';
 import $ from 'jquery';
-import * as db from '../firestore';
 import { Client } from '../api/sanityClient';
 import StreetAddress from '../components/StreetAddress';
 import ErrorMessage from '../components/ErrorMessage';

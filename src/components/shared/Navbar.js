@@ -70,7 +70,13 @@ const NavBar = ({ loginShow }) => {
               >
                 {thisUser ? 'Logout' : 'Login or Sign Up'}
               </Dropdown.Item>
-              <Dropdown.Item>My Profile</Dropdown.Item>
+              <Link
+                to="/myProfile"
+                className="dropdown-item"
+                onClick={() => collapseNavbar()}
+              >
+                My Profile
+              </Link>
               {/* <Dropdown.Item href="#/action-3"></Dropdown.Item> */}
             </Dropdown.Menu>
           </Dropdown>

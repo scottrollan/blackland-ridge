@@ -14,6 +14,7 @@ const sanityLogin = async (user) => {
     //see if a user with that firebase login id exists in Sanity
     let response = await Client.fetch(
       `*[_type == "profile" && "${firebaseUID}" in uid]{
+        _id,
         name,
         email,
         phone,

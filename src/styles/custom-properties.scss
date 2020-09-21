@@ -21,6 +21,7 @@
   --color-pallette-light: #d3e08f;
   --default-background: #fafafa;
   --white: #fafafa;
+  --page-border: 8px solid var(--color-pallette-dark);
 }
 
 @mixin primary-button {
