@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import $ from 'jquery';
 import { Client } from '../api/sanityClient';
@@ -16,15 +16,19 @@ const reducer = (state, action) => {
       console.log(state);
       return { ...state, name: action.payload };
     case 'setEmail':
-      console.log(action.payload);
       return { ...state, email: action.payload };
     case 'setPhone':
-      console.log(action.payload);
       return { ...state, phone: action.payload };
+    case 'imageUploaded':
+      $('#profileSetupImage').attr('src', action.payload.url);
+      return { ...state, image: action.payload.image };
+    default:
+      return state;
   }
 };
 const ProfileForm = ({ thisUser }) => {
   const [state, dispatch] = useReducer(reducer, { ...thisUser });
+  const [selectedFile, setSelectedFile] = useState(null);
   const phoneMask = () => {
     let num = $('#profilePhoneInput').val().replace(/\D/g, '');
     $('#profilePhoneInput').val(
@@ -37,14 +41,44 @@ const ProfileForm = ({ thisUser }) => {
     );
   };
   $('[type="tel"]').keyup(phoneMask);
+
+  const showAddressNote = () => {
+    $(`#addressNote`).show();
+  };
+
+  const fileSelect = async (e) => {
+    const thisImage = e.target.files[0];
+    setSelectedFile(thisImage);
+    $('#uploadFunctionButton').css('visibility', 'visible');
+  };
+
+  const uploadImage = async () => {
+    try {
+      const response = await Client.assets.upload('image', selectedFile);
+      console.log(response);
+      const newImage = {
+        _type: 'image',
+        asset: {
+          _ref: response._id,
+          _type: 'reference',
+        },
+      };
+      dispatch({
+        type: 'imageUploaded',
+        payload: { url: response.url, image: newImage },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <form
       id="profileForm"
       className={styles.profileForm}
       style={{ display: thisUser ? 'flex' : 'none' }}
     >
-      <h1 className={styles.header}>Profile for {state.name}</h1>
-
+      <h2>My Profile</h2>
       <label htmlFor="profileNameInput">
         User Name{' '}
         <span style={{ color: 'var(--google-red', fontSize: 'small' }}>
@@ -52,7 +86,7 @@ const ProfileForm = ({ thisUser }) => {
         </span>
       </label>
       <div style={{ fontSize: 'small' }}>
-        as you want it to appear in the directory (if opt in)
+        as you want it to appear in the directory (if opted in)
       </div>
       <input
         id="profileNameInput"
@@ -62,67 +96,72 @@ const ProfileForm = ({ thisUser }) => {
         onChange={(e) => dispatch({ type: 'setName', payload: e.target.value })}
         placeholder="John Doe"
       ></input>
-
       <label htmlFor="profileEmailInput">Email Address:</label>
       <input
         id="profileEmailInput"
         type="email"
-        value={thisUser.email}
+        value={state.email}
         onChange={(e) =>
           dispatch({ type: 'setEmail', payload: e.target.value })
         }
         placeholder="username@email.com"
       ></input>
-
       <label htmlFor="profilePhoneInput">Phone Number:</label>
-
       <input
         type="tel"
         id="profilePhoneInput"
         placeholder="(770)555-1234"
-        value={thisUser.phone}
+        value={state.phone}
         onInput={phoneMask}
         onChange={(e) =>
           dispatch({ type: 'setPhone', payload: e.target.value })
         }
       />
-
-      <div>
-        <span>Street Address:</span> <span>{thisUser.address}</span>
-        <div style={{ fontSize: 'small' }}>
-          contact the{' '}
-          <a href="mailto:barry@barryrollanstudio.com?subject=incorrect address on Blackland Ridge">
-            network administrator
-          </a>{' '}
-          if your address is listed incorrectly
-        </div>
+      <label htmlFor="profileAddress">Street Address:</label>
+      <input
+        type="text"
+        id="profileAddress"
+        value={state.address}
+        readOnly
+        onClick={showAddressNote}
+        style={{ marginBottom: '0.5rem' }}
+      />
+      <div
+        id="addressNote"
+        style={{ fontSize: 'x-small', marginBottom: '1rem', display: 'none' }}
+      >
+        contact the{' '}
+        <a href="mailto:barry@barryrollanstudio.com?subject=incorrect address on Blackland Ridge">
+          network administrator
+        </a>{' '}
+        if your address is listed incorrectly
       </div>
       <div className={styles.photoDiv}>
         <img
           id="profileSetupImage"
           src={urlFor(state.image)}
           alt=""
-          style={{ height: '80px', alignSelf: 'center' }}
+          style={{ minHeight: '120px', alignSelf: 'center' }}
         />
-        <div className={styles.formFile}>
+        <div>
           <label className="form-file-label">Upload New Image</label>
           <input
             name="file"
-            button="uploadFunctionButton"
+            // button="uploadFunctionButton"
             type="file"
-            onChange={(e) => dispatch({ type: 'selectFile', payload: e })}
+            onChange={(e) => fileSelect(e)}
             className="form-control-file"
           />
-          <button
+          <Button
             id="uploadFunctionButton"
             value="image-6cfbe57620cf399cfc417a0ac19af893f539058a-650x433-jpg"
             type="button"
-            className="btn btn-primary"
-            style={{ display: 'none' }}
-            onClick={() => dispatch({ type: 'uploadFile' })}
+            style={{ visibility: 'hidden' }}
+            // onClick={() => dispatch({ type: 'uploadFile' })}
+            onClick={uploadImage}
           >
             Upload Photo
-          </button>
+          </Button>
         </div>
       </div>
       <div className={styles.checkboxRow}>

@@ -25,9 +25,9 @@ body {
   z-index: 0;
   overflow-x: hidden;
 }
-// .App > div {
-//   min-height: 100%;
-// }
+.App > div {
+  padding-bottom: 2rem;
+}
 
 .backgroundOverlay {
   position: fixed;
