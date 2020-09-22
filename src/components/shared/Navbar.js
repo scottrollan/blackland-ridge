@@ -29,7 +29,6 @@ const NavBar = ({ loginShow }) => {
   const collapseNavbar = () => {
     $('.navbar-toggler').click();
   };
-
   return (
     <Navbar className={styles.navBar} collapseOnSelect expand="lg">
       <Navbar.Brand>
