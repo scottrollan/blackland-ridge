@@ -1,12 +1,6 @@
 import { Client } from './sanityClient';
 import { randomAvatar } from '../functions/CreateRandomAvatar';
-import imageUrlBuilder from '@sanity/image-url';
 
-const builder = imageUrlBuilder(Client);
-
-const urlFor = (source) => {
-  return builder.image(source);
-};
 const sanityLogin = async (user) => {
   const firebaseUID = user.uid;
   let returnedUser;
@@ -21,8 +15,9 @@ const sanityLogin = async (user) => {
         address,
         receiveNotifications,
         includeInDirectory,
-        image,
-        "imageURL": image.asset->url
+        emailInDirectory,
+        phoneInDirectory,
+        image
       }`
     );
     if (response.length === 0) {
@@ -44,6 +39,7 @@ const sanityLogin = async (user) => {
       if (user.phoneNumber) {
         phone = user.phoneNumber;
       }
+
       let imageRef;
       if (user.photoURL) {
         let response = await fetch(user.photoURL);
@@ -51,6 +47,13 @@ const sanityLogin = async (user) => {
         let userImage = blob;
         let imageResponse = await Client.assets.upload('image', userImage);
         console.log(imageResponse);
+        alert('check console for response to image upload');
+        imageRef = imageResponse._id;
+      } else if (!user.photoURL) {
+        let userImage = randomAvatar;
+        let imageResponse = await Client.assets.upload('image', userImage);
+        console.log(imageResponse);
+        alert('check console for response to image upload');
         imageRef = imageResponse._id;
       }
 
@@ -69,6 +72,8 @@ const sanityLogin = async (user) => {
           },
         },
         includeInDirectory: false,
+        emailInDirectory: false,
+        phoneInDirectory: false,
         receiveNotifications: false,
         address: '',
       };
@@ -77,10 +82,7 @@ const sanityLogin = async (user) => {
       } catch (error) {
         console.log('Create Failed: ', error.message);
       }
-      //add values not used in Sanity
-      returnedUser['isNewUser'] = true;
-      returnedUser['isAnonymous'] = false;
-      returnedUser['profileComplete'] = false;
+
       return returnedUser;
     } else {
       const u = { ...response[0] }; //response.length is NOT 0 (a user exists in Sanity)
@@ -102,6 +104,8 @@ const sanityLogin = async (user) => {
           },
         },
         includeInDirectory: u.includeInDirectory,
+        emailInDirectory: u.emailInDirectory,
+        phoneInDirectory: u.phoneInDirectory,
         receiveNotifications: u.receiveNotifications,
         address: u.address,
       };

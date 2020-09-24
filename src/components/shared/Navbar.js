@@ -2,13 +2,15 @@ import React, { useContext } from 'react';
 import { UserContext } from '../../App';
 import { Client } from '../../api/sanityClient';
 import imageUrlBuilder from '@sanity/image-url';
-import { Navbar, Nav, NavDropdown, Button, Dropdown } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, Dropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import $ from 'jquery';
 import * as db from '../../firestore';
 import styles from './NavBar.module.scss';
 
 const NavBar = ({ loginShow }) => {
+  let history = useHistory();
   const thisUser = useContext(UserContext);
 
   const builder = imageUrlBuilder(Client);
@@ -20,6 +22,7 @@ const NavBar = ({ loginShow }) => {
     if (thisUser) {
       db.signOut();
       loginShow(false);
+      history.push('/');
     }
     if (!thisUser) {
       loginShow(true);
@@ -73,6 +76,7 @@ const NavBar = ({ loginShow }) => {
                 to="/myProfile"
                 className="dropdown-item"
                 onClick={() => collapseNavbar()}
+                style={{ display: thisUser ? 'inherit' : 'none' }}
               >
                 My Profile
               </Link>

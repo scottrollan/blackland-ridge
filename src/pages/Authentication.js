@@ -69,11 +69,6 @@ const Authentication = ({ show }) => {
       return false;
     }
   };
-  // React.useEffect(() => {
-  //   return () => {
-  //     profileComplete();
-  //   };
-  // });
 
   return (
     <Modal

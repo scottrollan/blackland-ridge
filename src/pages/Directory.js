@@ -1,15 +1,25 @@
 import React from 'react';
 import { Client } from '../api/sanityClient';
-import { Button, Dropdown, DropdownButton } from 'react-bootstrap';
+import { Card, Tab, Tabs } from 'react-bootstrap';
+import $ from 'jquery';
+import imageUrlBuilder from '@sanity/image-url';
 import styles from './Directory.module.scss';
+
+const builder = imageUrlBuilder(Client);
+
+const urlFor = (source) => {
+  return builder.image(source);
+};
 
 const Directory = () => {
   const [neighborList, setNeighborList] = React.useState([]);
   const [addressMode, setAddressMode] = React.useState(true);
+
   const getNeighborList = async () => {
     const neighbors = await Client.fetch(
       "*[_type == 'profile'] | order(address)"
     );
+    //sory by street name, then number (so that 4181 Blackland Dr comes before 38 Blackland Way, i.e.)
     neighbors.sort((a, b) =>
       a.address.substring(a.address.indexOf(' ') + 1) +
         a.address.split(' ')[0] >
@@ -18,6 +28,7 @@ const Directory = () => {
         : -1
     );
     setNeighborList([...neighbors]);
+    setAddressMode(true);
   };
 
   const sortByAddress = () => {
@@ -44,6 +55,8 @@ const Directory = () => {
     setNeighborList([...ourNeighbors]);
     setAddressMode(false);
   };
+  $('#addressTab').click(() => sortByAddress());
+  $('#nameTab').click(() => sortByName());
 
   React.useEffect(() => {
     getNeighborList();
@@ -51,39 +64,122 @@ const Directory = () => {
 
   return (
     <div className={styles.directory}>
-      <div className={[`${styles.buttonRow} ${styles.row}`]}>
-        <Button onClick={() => sortByAddress()}>Address</Button>
-        <Button onClick={() => sortByName()}>Name</Button>
-      </div>
-      {neighborList.map((n) => {
-        return (
-          <div key={n._id}>
-            <div className={styles.largerScreens}>
-              <div className={styles.row}>
-                <div>{n.name}</div>
-                <div className={styles.address}>{n.address}</div>
-                <div>{n.phone}</div>
-                <div>
-                  <Button href={`mailto:${n.email}`}>Email</Button>
-                </div>
-              </div>
-            </div>
-            <div className={styles.smallerScreens}>
-              <DropdownButton
-                id="dropdown-item-button"
-                title={addressMode ? `${n.address}` : `${n.name}`}
-                style={{ margin: '0.5rem' }}
-              >
-                <Dropdown.ItemText>
-                  {addressMode ? `${n.name}` : `${n.address}`}
-                </Dropdown.ItemText>
-                <Dropdown.Item>{n.phone}</Dropdown.Item>
-                <Dropdown.Item>{n.email}</Dropdown.Item>
-              </DropdownButton>{' '}
-            </div>
+      <Tabs defaultActiveKey="address">
+        <Tab id="nameTab" eventKey="name" title="Name">
+          <div className={styles.cardGrid}>
+            {neighborList.map((n) => {
+              return (
+                <Card
+                  key={n._id}
+                  className={styles.card}
+                  style={{ display: n.includeInDirectory ? 'inherit' : 'none' }}
+                >
+                  <Card.Header
+                    style={{ display: addressMode ? 'inherit' : 'none' }}
+                  >
+                    {n.address}
+                  </Card.Header>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      width: '100%',
+                    }}
+                  >
+                    <div className={styles.infoDiv}>
+                      <Card.Title>{n.name}</Card.Title>
+
+                      <Card.Text
+                        style={{ display: addressMode ? 'none' : 'inherit' }}
+                      >
+                        {n.address}
+                      </Card.Text>
+                      <Card.Text
+                        style={{
+                          display: n.phoneInDirectory ? 'inherit' : 'none',
+                        }}
+                      >
+                        {n.phone}
+                      </Card.Text>
+                      <Card.Text
+                        style={{
+                          display: n.emailInDirectory ? 'inherit' : 'none',
+                        }}
+                      >
+                        {n.email}
+                      </Card.Text>
+                    </div>
+                    <div>
+                      <img
+                        src={urlFor(n.image)}
+                        alt=""
+                        className={styles.photo}
+                      />
+                    </div>
+                  </div>
+                </Card>
+              );
+            })}
           </div>
-        );
-      })}
+        </Tab>
+        <Tab id="addressTab" eventKey="address" title="Address">
+          <div className={styles.cardGrid}>
+            {neighborList.map((n) => {
+              return (
+                <Card
+                  key={n._id}
+                  className={styles.card}
+                  style={{ display: n.includeInDirectory ? 'inherit' : 'none' }}
+                >
+                  <Card.Header
+                    style={{ display: addressMode ? 'inherit' : 'none' }}
+                  >
+                    {n.address}
+                  </Card.Header>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      width: '100%',
+                    }}
+                  >
+                    <div className={styles.infoDiv}>
+                      <Card.Title>{n.name}</Card.Title>
+
+                      <Card.Text
+                        style={{ display: addressMode ? 'none' : 'inherit' }}
+                      >
+                        {n.address}
+                      </Card.Text>
+                      <Card.Text
+                        style={{
+                          display: n.phoneInDirectory ? 'inherit' : 'none',
+                        }}
+                      >
+                        {n.phone}
+                      </Card.Text>
+                      <Card.Text
+                        style={{
+                          display: n.emailInDirectory ? 'inherit' : 'none',
+                        }}
+                      >
+                        {n.email}
+                      </Card.Text>
+                    </div>
+                    <div>
+                      <img
+                        src={urlFor(n.image)}
+                        alt=""
+                        className={styles.photo}
+                      />
+                    </div>
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+        </Tab>
+      </Tabs>
     </div>
   );
 };

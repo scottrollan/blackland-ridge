@@ -3,7 +3,9 @@ import styles from './Profile.module.scss';
 
 const StreetAddress = ({ onChange }) => {
   return (
-    <>
+    <div
+      style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}
+    >
       <label htmlFor="streetAddress" className={styles.label}>
         Street Address{' '}
         <span style={{ color: 'var(--google-red', fontSize: 'small' }}>
@@ -14,9 +16,9 @@ const StreetAddress = ({ onChange }) => {
         required
         id="streetAddress"
         className={styles.input}
-        onChange={onChange}
+        onChange={(e) => onChange(e)}
       >
-        <option value={null}>Select Your Address</option>
+        <option>Select Your Address</option>
         <option>4160 Blackland Drive</option>
         <option>4161 Blackland Drive</option>
         <option>4170 Blackland Drive</option>
@@ -145,7 +147,7 @@ const StreetAddress = ({ onChange }) => {
         <option>55 W Blackland Ct NE</option>
         <option>60 W Blackland Ct NE</option>
       </select>
-    </>
+    </div>
   );
 };
 

@@ -46,6 +46,18 @@ export default {
       type: 'boolean',
       layout: 'checkbox',
     },
+    {
+      name: 'emailInDirectory',
+      title: 'Display email in Neighborhood Directory?',
+      type: 'boolean',
+      layout: 'checkbox',
+    },
+    {
+      name: 'phoneInDirectory',
+      title: 'Display phone number in Neighborhood Directory?',
+      type: 'boolean',
+      layout: 'checkbox',
+    },
   ],
   preview: {
     select: {
