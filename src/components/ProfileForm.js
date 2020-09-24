@@ -63,7 +63,7 @@ const ProfileForm = ({ thisUser, setError }) => {
 
   const [selectedFile, setSelectedFile] = useState(null);
 
-  const history = useHistory();
+  let history = useHistory();
 
   const phoneMask = () => {
     let num = $('#profilePhoneInput').val().replace(/\D/g, '');
@@ -108,21 +108,26 @@ const ProfileForm = ({ thisUser, setError }) => {
     switch (true) {
       case $('#profileNameInput').val() === '':
         setError('Please Select a User Name', 'Go Back');
+        $('#errorMessage').css('display', 'show');
         break;
       case state.emailInDirectory && $('#profileEmailInput').val() === '':
         setError(
           'Please enter an email address, or uncheck the "Let my neighbors see my email address" box',
           'Go Back'
         );
+        $('#errorMessage').css('display', 'show');
         break;
       case state.phoneInDirectory && $('#profilePhoneInput').val() === '':
         setError(
           'Please enter a phone number, or uncheck the "Let my neighbors see my phone number" box',
           'Go Back'
         );
+        $('#errorMessage').css('display', 'show');
         break;
       case state.address === '' || state.address === 'Select Your Address':
         setError('Please select your address from the menu', 'Go Back');
+        $('#errorMessage').css('display', 'show');
+        break;
       default:
         state['_type'] = 'profile';
         delete state.isNewUser;
@@ -130,7 +135,8 @@ const ProfileForm = ({ thisUser, setError }) => {
           const response = await Client.patch(state._id).set(state).commit();
           console.log(response);
           setError('Your profile has been updated', 'close');
-          history.push('/');
+          $('#errorMessage').css('display', 'show');
+          window.location.reload();
           break;
         } catch (error) {
           console.log(error);
@@ -150,16 +156,16 @@ const ProfileForm = ({ thisUser, setError }) => {
       className={styles.profileForm}
       style={{ display: thisUser ? 'flex' : 'none' }}
     >
-      <h2 style={{ display: state.address ? 'inherit' : 'none' }}>
+      {/* <h2 style={{ display: state.address ? 'inherit' : 'none' }}>
         My Profile
-      </h2>
+      </h2> */}
       <label htmlFor="profileNameInput" style={{ marginBottom: 0 }}>
         User Name{' '}
         <span style={{ color: 'var(--google-red', fontSize: 'small' }}>
           required
         </span>
       </label>
-      <div style={{ fontSize: 'small' }}>
+      <div style={{ fontSize: 'small', textAlign: 'left' }}>
         as you want it to appear in the directory (if opted in)
       </div>
       <input

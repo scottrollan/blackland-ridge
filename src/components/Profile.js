@@ -26,6 +26,8 @@ const Profile = () => {
     <Modal
       show={thisUser && (!thisUser.address || !thisUser.name) ? true : false}
       id="profile"
+      backdrop="static"
+      data-keyboard={false}
     >
       <ErrorMessage
         errorMessage={errorMessage}

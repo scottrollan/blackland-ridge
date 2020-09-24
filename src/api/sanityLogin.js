@@ -47,13 +47,11 @@ const sanityLogin = async (user) => {
         let userImage = blob;
         let imageResponse = await Client.assets.upload('image', userImage);
         console.log(imageResponse);
-        alert('check console for response to image upload');
         imageRef = imageResponse._id;
       } else if (!user.photoURL) {
         let userImage = randomAvatar;
         let imageResponse = await Client.assets.upload('image', userImage);
         console.log(imageResponse);
-        alert('check console for response to image upload');
         imageRef = imageResponse._id;
       }
 

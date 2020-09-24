@@ -7,7 +7,7 @@ import ErrorMessage from '../components/ErrorMessage';
 import ResetPassword from '../components/ResetPassword';
 import styles from './Authentication.module.scss';
 
-const Authentication = ({ show }) => {
+const Authentication = ({ show, thisUser }) => {
   // const user = useContext(UserContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,25 +19,28 @@ const Authentication = ({ show }) => {
   const login = async () => {
     if (/\S+@\S+/.test(email.toLowerCase())) {
       const returned = await db.signInUserWithEmail(email, password);
-      if (returned === 'incorrectPassword') {
-        setErrorMessage('Incorrect Password');
-        setTryAgainText('OK, Try Again');
-        setResetBtn('block');
-        $('#errorMessage').css('display', 'flex');
-      }
-      if (returned === 'userNotFound') {
-        setErrorMessage('That User Account Was Not Found');
-        setTryAgainText('Try Again or Sign Up');
-        setResetBtn('none');
-        $('#errorMessage').css('display', 'flex');
-      }
-      if (returned === 'tooManyAttempts') {
-        setErrorMessage(
-          'Too many unsuccessful login attempts. Please try again later.'
-        );
-        setTryAgainText('Close');
-        setResetBtn('none');
-        $('#errorMessage').css('display', 'flex');
+      switch (returned) {
+        case 'incorrectPassword':
+          setErrorMessage('Incorrect Password');
+          setTryAgainText('OK, Try Again');
+          setResetBtn('block');
+          $('#errorMessage').css('display', 'flex');
+          break;
+        case 'userNotFound':
+          setErrorMessage('That User Account Was Not Found');
+          setTryAgainText('Try Again or Sign Up');
+          setResetBtn('none');
+          $('#errorMessage').css('display', 'flex');
+          break;
+        case 'tooManyAttempts':
+          setErrorMessage(
+            'Too many unsuccessful login attempts. Please try again later.'
+          );
+          setTryAgainText('Close');
+          setResetBtn('none');
+          $('#errorMessage').css('display', 'flex');
+          break;
+        default:
       }
     } else {
       setErrorMessage('Email format must be: user@email.com');

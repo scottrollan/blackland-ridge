@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import useAuth from './hooks/useAuth';
+import $ from 'jquery';
 import Navbar from './components/shared/Navbar';
 import Authentication from './pages/Authentication';
 import Loading from './components/shared/Loading';
@@ -14,8 +15,12 @@ import styles from './App.module.scss';
 export const UserContext = React.createContext();
 
 const App = () => {
-  const [showLogin, setShowLogin] = React.useState(false);
   const thisUser = useAuth();
+  const [showLogin, setShowLogin] = React.useState(false);
+
+  if (thisUser) {
+    $('#firebaseui-auth-container').hide();
+  }
 
   return (
     <div className={styles.App}>
@@ -34,7 +39,7 @@ const App = () => {
 
         <Loading />
         <Profile />
-        <Authentication show={showLogin} />
+        <Authentication show={showLogin} thisUser={thisUser} />
       </UserContext.Provider>
     </div>
   );
