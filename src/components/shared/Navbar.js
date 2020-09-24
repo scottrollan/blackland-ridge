@@ -103,6 +103,7 @@ const NavBar = ({ loginShow }) => {
               to="/calendar"
               className="dropdown-item"
               onClick={() => collapseNavbar()}
+              style={{ display: thisUser ? 'inherit' : 'none' }}
             >
               Calendar
             </Link>
@@ -110,10 +111,10 @@ const NavBar = ({ loginShow }) => {
               to="/directory"
               className="dropdown-item"
               onClick={() => collapseNavbar()}
+              style={{ display: thisUser ? 'inherit' : 'none' }}
             >
               Directory
             </Link>
-            {/* </NavDropdown.Item> */}
             <Link
               to="/"
               className="dropdown-item"
@@ -125,6 +126,7 @@ const NavBar = ({ loginShow }) => {
               to="/"
               className="dropdown-item"
               onClick={() => collapseNavbar()}
+              style={{ display: thisUser ? 'inherit' : 'none' }}
             >
               Pay Your Dues
             </Link>
@@ -136,6 +138,13 @@ const NavBar = ({ loginShow }) => {
             >
               Referrals
             </Link>
+            <div
+              className="dropdown-item"
+              style={{ display: thisUser ? 'none' : 'inherit' }}
+              onClick={() => loginShow(true)}
+            >
+              Login For More
+            </div>
           </NavDropdown>
         </Nav>
       </Navbar.Collapse>

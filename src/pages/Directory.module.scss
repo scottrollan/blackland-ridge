@@ -7,16 +7,12 @@
   --grid-padding: 2rem 5rem;
   --card-margin: 2rem 1rem;
 }
-// @media (pointer: coarse) {
 @media screen and (max-width: $breakpoint-medium) {
   :root {
-    // --card-width: 20rem;
     --card-padding: 0.5rem;
-    // --photo-width: 20%;
     --grid-padding: 1rem;
   }
 }
-// }
 
 .directory {
   min-height: 100vh;

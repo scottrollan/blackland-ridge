@@ -76,6 +76,8 @@ const Authentication = ({ show }) => {
       show={show}
       size="lg"
       style={{ marginTop: '80px' }}
+      backdrop="static"
+      data-keyboard={false}
     >
       <ErrorMessage
         errorMessage={errorMessage}

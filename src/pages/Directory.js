@@ -19,10 +19,12 @@ const Directory = () => {
     const neighbors = await Client.fetch(
       "*[_type == 'profile'] | order(address)"
     );
-    //sory by street name, then number (so that 4181 Blackland Dr comes before 38 Blackland Way, i.e.)
+    //sort by street name, then number (so that 4181 Blackland Dr comes before 38 Blackland Way, i.e.)
     neighbors.sort((a, b) =>
+      a.address &&
       a.address.substring(a.address.indexOf(' ') + 1) +
         a.address.split(' ')[0] >
+        b.addresss &&
       b.address.substring(b.address.indexOf(' ') + 1) + b.address.split(' ')[0]
         ? 1
         : -1
@@ -34,8 +36,10 @@ const Directory = () => {
   const sortByAddress = () => {
     let neighbors = [...neighborList];
     neighbors.sort((a, b) =>
-      a.address.substring(a.address.indexOf(' ') + 1) +
-        a.address.split(' ')[0] >
+      a.address &
+        (a.address.substring(a.address.indexOf(' ') + 1) +
+          a.address.split(' ')[0] >
+          b.address) &&
       b.address.substring(b.address.indexOf(' ') + 1) + b.address.split(' ')[0]
         ? 1
         : -1
@@ -47,8 +51,8 @@ const Directory = () => {
   const sortByName = () => {
     let ourNeighbors = [...neighborList];
     ourNeighbors.sort((a, b) =>
-      a.name.split(' ').pop() + a.name.split(' ')[0] >
-      b.name.split(' ').pop() + b.name.split(' ')[0]
+      a.name.split(' ').pop().concat(a.name.split(' ')[0]) > //DoeJane will come before DoeJohn
+      b.name.split(' ').pop().concat(b.name.split(' ')[0])
         ? 1
         : -1
     );
