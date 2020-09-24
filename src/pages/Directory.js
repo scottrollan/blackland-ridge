@@ -109,13 +109,11 @@ const Directory = () => {
                         {n.email}
                       </Card.Text>
                     </div>
-                    <div>
-                      <img
-                        src={urlFor(n.image)}
-                        alt=""
-                        className={styles.photo}
-                      />
-                    </div>
+                    <img
+                      src={urlFor(n.image)}
+                      alt=""
+                      className={styles.photo}
+                    />
                   </div>
                 </Card>
               );
@@ -166,13 +164,11 @@ const Directory = () => {
                         {n.email}
                       </Card.Text>
                     </div>
-                    <div>
-                      <img
-                        src={urlFor(n.image)}
-                        alt=""
-                        className={styles.photo}
-                      />
-                    </div>
+                    <img
+                      src={urlFor(n.image)}
+                      alt=""
+                      className={styles.photo}
+                    />
                   </div>
                 </Card>
               );

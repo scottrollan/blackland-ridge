@@ -4,7 +4,20 @@
   --card-width: 20rem;
   --card-padding: 1rem;
   --photo-width: 5rem;
+  --grid-padding: 2rem 5rem;
+  --card-margin: 2rem 1rem;
 }
+// @media (pointer: coarse) {
+@media screen and (max-width: $breakpoint-medium) {
+  :root {
+    // --card-width: 20rem;
+    --card-padding: 0.5rem;
+    // --photo-width: 20%;
+    --grid-padding: 1rem;
+  }
+}
+// }
+
 .directory {
   min-height: 100vh;
   display: flex;
@@ -18,7 +31,7 @@
 }
 
 .cardGrid {
-  padding: 2rem 5rem;
+  padding: var(--grid-padding);
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -29,14 +42,16 @@
 .card {
   width: var(--card-width);
   padding: var(--card-padding);
-  margin: 2rem 1rem;
+  margin: var(--card-margin);
   text-align: left;
   box-shadow: 3px 5px 10px var(--color-pallette-dark);
+  overflow: hidden;
 }
 .infoDiv {
   max-width: calc(
     var(--card-width) - (var(--card-padding) * 2) - var(--photo-width)
   );
+  overflow: hidden;
 }
 .photo {
   max-width: var(--photo-width);
