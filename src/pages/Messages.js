@@ -28,15 +28,16 @@ const urlFor = (source) => {
 const Messages = () => {
   const thisUser = useContext(UserContext);
   const [messages, setMessages] = useState([]);
+  const [replies, setReplies] = useState([]);
   const me = thisUser.name;
   const myPic = urlFor(thisUser.image);
 
   const getMessages = async () => {
     const theseMessages = await Client.fetch(
-      "*[_type == 'message' && newThread] | order(_updatedAt desc)"
+      "*[_type == 'message'] | order(_updatedAt desc)"
     );
+
     setMessages(theseMessages);
-    console.log(theseMessages);
   };
 
   const affectReaction = async (reaction, array, color, message) => {
@@ -65,7 +66,7 @@ const Messages = () => {
       $(el).attr('action', 'inc');
     }
     updated = await Client.patch(messageID).set(newParams).commit();
-    console.log(updated);
+    return updated;
   };
 
   useEffect(() => {
@@ -77,6 +78,16 @@ const Messages = () => {
       <h3>Messages</h3>
       {messages.map((m) => {
         let theseResponses = [];
+        let myRefs = [];
+        if (m.responses) {
+          m.responses.forEach((re) => {
+            myRefs = [...myRefs, re._ref];
+          });
+          theseResponses = messages.filter((mess) => myRefs.includes(mess._id));
+          console.log(theseResponses);
+        }
+
+        console.log(myRefs);
         let date = new Date(m._createdAt);
         let originalPostDate =
           date.toLocaleString('default', {
@@ -97,7 +108,11 @@ const Messages = () => {
           numberOfResponses = m.responses.length;
         }
         return (
-          <UICard key={m._id} className={styles.card}>
+          <UICard
+            key={m._id}
+            className={styles.card}
+            style={{ display: m.newThread ? 'inherit' : 'none' }}
+          >
             <div
               style={{
                 display: 'flex',
@@ -109,6 +124,7 @@ const Messages = () => {
                 <img
                   className={styles.media}
                   src={urlFor(m.avatar)}
+                  alt=""
                   style={{ alignSelf: 'center' }}
                 />
                 <figcaption>{m.author}</figcaption>
@@ -242,13 +258,15 @@ const Messages = () => {
                       ></TextField>
                     </div>
                   </form>
-                  <Card className={styles.card}>
-                    <Card.Text>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Suspendisse malesuada lacus ex, sit amet blandit leo
-                      lobortis eget.
-                    </Card.Text>
-                  </Card>
+                  {!myRefs
+                    ? null
+                    : theseResponses.map((resp) => {
+                        return (
+                          <UICard className={styles.card} key={resp._id}>
+                            <Typography>{resp.message}</Typography>
+                          </UICard>
+                        );
+                      })}
                 </AccordionDetails>
               </Accordion>
             </Card.Body>
