@@ -7,6 +7,7 @@
   --caution-yellow: #eed202;
   --caution-orange: #ff6700;
   --overlay-light: rgba(255, 255, 255, 0.5);
+  --overlay-medium: rgba(0, 0, 0, 0.1);
   --overlay: rgba(0, 0, 0, 0.3);
   --overlay-dark: rgba(65, 88, 33, 0.8);
   --button-width: 20rem;
@@ -22,6 +23,7 @@
   --default-background: #fafafa;
   --white: #fafafa;
   --page-border: 8px solid var(--color-pallette-dark);
+  --avatar-size: 130px;
 }
 
 @mixin primary-button {
@@ -84,6 +86,7 @@
   @include hacks();
   position: relative;
   background: var(--color-pallette-purple);
+  color: var(--white);
   border: 1px solid var(--color-pallette-purple);
   @include prefixed(transition-property, color);
   @include prefixed(transition-duration, $mediumDuration);

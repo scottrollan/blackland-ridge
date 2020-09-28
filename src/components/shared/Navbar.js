@@ -100,6 +100,14 @@ const NavBar = ({ loginShow }) => {
           >
             {/* <NavDropdown.Item> */}
             <Link
+              to="/messages"
+              className="dropdown-item"
+              onClick={() => collapseNavbar()}
+              style={{ display: thisUser ? 'inherit' : 'none' }}
+            >
+              Discussion
+            </Link>
+            <Link
               to="/calendar"
               className="dropdown-item"
               onClick={() => collapseNavbar()}

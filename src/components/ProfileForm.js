@@ -1,7 +1,8 @@
 import React, { useReducer, useState } from 'react';
 import StreetAddress from './StreetAddress';
 import * as db from '../firestore';
-import { Button } from 'react-bootstrap';
+import { makeStyles } from '@material-ui/core/styles';
+import { Button, Avatar } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import $ from 'jquery';
 import { Client } from '../api/sanityClient';
@@ -267,7 +268,10 @@ const ProfileForm = ({ thisUser, setError }) => {
           id="profileSetupImage"
           src={urlFor(state.image)}
           alt=""
-          style={{ minHeight: '120px', alignSelf: 'center' }}
+          style={{
+            minHeight: 'var(--avatar-size)',
+            alignSelf: 'center',
+          }}
         />
         <div>
           <label className="form-file-label">Upload New Image</label>
@@ -346,7 +350,13 @@ const ProfileForm = ({ thisUser, setError }) => {
           />
         </div>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          width: '100%',
+        }}
+      >
         <Button onClick={saveHandler}>Save Profile</Button>
         <Button onClick={logout}>Logout</Button>
       </div>

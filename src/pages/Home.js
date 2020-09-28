@@ -12,11 +12,11 @@ export default function Home() {
             <span className={styles.clickable}>Classifieds</span>
           </Link>
           <Link to="/" className={styles.homeLink}>
-            <span className={styles.clickable}>Discussion Board</span>
+            <span className={styles.clickable}>Business Referrals</span>
           </Link>
 
-          <Link to="/calendar" className={styles.homeLink}>
-            <span className={styles.clickable}>Calendar</span>
+          <Link to="/" className={styles.homeLink}>
+            <span className={styles.clickable}>Homes for Sale</span>
           </Link>
         </div>
       </div>

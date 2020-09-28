@@ -24,7 +24,7 @@ const Directory = () => {
       a.address &&
       a.address.substring(a.address.indexOf(' ') + 1) +
         a.address.split(' ')[0] >
-        b.addresss &&
+        b.address &&
       b.address.substring(b.address.indexOf(' ') + 1) + b.address.split(' ')[0]
         ? 1
         : -1
@@ -36,10 +36,10 @@ const Directory = () => {
   const sortByAddress = () => {
     let neighbors = [...neighborList];
     neighbors.sort((a, b) =>
-      a.address &
-        (a.address.substring(a.address.indexOf(' ') + 1) +
-          a.address.split(' ')[0] >
-          b.address) &&
+      a.address &&
+      a.address.substring(a.address.indexOf(' ') + 1) +
+        a.address.split(' ')[0] >
+        b.address &&
       b.address.substring(b.address.indexOf(' ') + 1) + b.address.split(' ')[0]
         ? 1
         : -1

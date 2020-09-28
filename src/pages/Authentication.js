@@ -7,7 +7,7 @@ import ErrorMessage from '../components/ErrorMessage';
 import ResetPassword from '../components/ResetPassword';
 import styles from './Authentication.module.scss';
 
-const Authentication = ({ show, thisUser }) => {
+const Authentication = ({ show }) => {
   // const user = useContext(UserContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

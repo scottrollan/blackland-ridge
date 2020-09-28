@@ -10,6 +10,7 @@ import Calendar from './pages/Calendar';
 import Directory from './pages/Directory';
 import Profile from './components/Profile';
 import MyProfile from './pages/MyProfile';
+import Messages from './pages/Messages';
 import styles from './App.module.scss';
 
 export const UserContext = React.createContext();
@@ -34,6 +35,7 @@ const App = () => {
             <Route path="/calendar" component={Calendar}></Route>
             <Route path="/directory" component={Directory}></Route>
             <Route path="/myProfile" component={MyProfile}></Route>
+            <Route path="/messages" component={Messages}></Route>
           </Switch>
         </Router>
 
