@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Client } from '../api/sanityClient';
 import { reactions } from '../data/reactions';
+import { UserContext } from '../App';
 import {
   Card as UICard,
   CardHeader,
@@ -11,6 +12,7 @@ import {
   AccordionDetails,
   Tooltip,
   Typography,
+  TextField,
 } from '@material-ui/core';
 import { Card } from 'react-bootstrap';
 import $ from 'jquery';
@@ -24,7 +26,10 @@ const urlFor = (source) => {
 };
 
 const Messages = () => {
+  const thisUser = useContext(UserContext);
   const [messages, setMessages] = useState([]);
+  const me = thisUser.name;
+  const myPic = urlFor(thisUser.image);
 
   const getMessages = async () => {
     const theseMessages = await Client.fetch(
@@ -34,14 +39,33 @@ const Messages = () => {
     console.log(theseMessages);
   };
 
-  const toggleReaction = async (reaction, messageID, count) => {
+  const affectReaction = async (reaction, array, color, message) => {
+    const messageID = message._id;
     const el = `#${reaction}Of${messageID}`;
+    const incDec = $(el).attr('action');
+    let newParams = message;
+    let updated = {};
 
-    if ($(el).attr('action') === 'inc') {
+    if (incDec === 'inc') {
+      $(el).css('color', color);
+      newParams[`${reaction}`] = Number(newParams[`${reaction}`]) + 1; //add one to the number of <whatever> reactions
+      if (newParams[`${array}`]) {
+        newParams[`${array}`] = [...newParams[`${array}`], me]; //add user's name to list of reactioners if array already exists
+      } else {
+        newParams[`${array}`] = [me]; //create and add name if array doesn't exist
+      }
       $(el).attr('action', 'dec');
     } else {
+      $(el).css('color', 'var(--overlay-medium)');
+      newParams[`${reaction}`] = Number(newParams[`${reaction}`]) - 1; //subtract one from the number of <whatever> reactions
+      const index = newParams[`${array}`].indexOf(me);
+      if (index > -1) {
+        newParams[`${array}`].splice(index, 1);
+      }
       $(el).attr('action', 'inc');
     }
+    updated = await Client.patch(messageID).set(newParams).commit();
+    console.log(updated);
   };
 
   useEffect(() => {
@@ -99,16 +123,24 @@ const Messages = () => {
 
               <CardActions disableSpacing>
                 {reactions.map((icon) => {
-                  let num = parseInt(m[`${icon.title}`]);
                   return (
                     <i
                       key={`${icon.title}of${m._id}`}
                       id={`${icon.title}Of${m._id}`}
-                      action="inc"
-                      onClick={() => toggleReaction(icon.title, m._id, num)}
-                      className={[`${icon.fontawesome} ${styles.i}`]}
+                      action={
+                        m[`${icon.array}`] && m[`${icon.array}`].includes(me)
+                          ? 'dec'
+                          : 'inc'
+                      } //if reaction array (i.e. likedBy) includes me, then the first click of this button should decrease the likes and remove me from the array (unlike)
+                      onClick={() =>
+                        affectReaction(icon.title, icon.array, icon.color, m)
+                      }
+                      className={[`${icon.fontawesome} ${styles.icon}`]}
                       style={{
-                        color: num > 0 ? icon.color : 'var(--overlay-medium)',
+                        color:
+                          m[`${icon.array}`] && m[`${icon.array}`].includes(me) // if this reaction array (i.e. likedBy) includes me
+                            ? icon.color // color it
+                            : 'var(--overlay-medium)', //otherwise make it gray
                       }}
                     ></i>
                   );
@@ -180,6 +212,36 @@ const Messages = () => {
                   </div>{' '}
                 </AccordionSummary>
                 <AccordionDetails className={styles.repliesDiv}>
+                  <form
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'flex-end',
+                      width: '100%',
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'flex-start',
+                        width: '85%',
+                      }}
+                    >
+                      <img
+                        src={myPic}
+                        alt=""
+                        style={{ borderRadius: '50%', alignSelf: 'center' }}
+                      />
+                      <TextField
+                        id={`replyTo${m._id}`}
+                        label="Reply"
+                        variant="outlined"
+                        position="start"
+                        edge="end"
+                        style={{ marginLeft: '0.5rem', flex: 1 }}
+                      ></TextField>
+                    </div>
+                  </form>
                   <Card className={styles.card}>
                     <Card.Text>
                       Lorem ipsum dolor sit amet, consectetur adipiscing elit.
