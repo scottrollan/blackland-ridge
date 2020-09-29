@@ -137,7 +137,6 @@ const ProfileForm = ({ thisUser, setError }) => {
           console.log(response);
           setError('Your profile has been updated', 'close');
           $('#errorMessage').css('display', 'show');
-          window.location.reload();
           break;
         } catch (error) {
           console.log(error);

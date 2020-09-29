@@ -1,7 +1,9 @@
 import React from 'react';
 import { Client } from '../api/sanityClient';
-import { Card, Tab, Tabs } from 'react-bootstrap';
+import { Card, Tab, Tabs, Button } from 'react-bootstrap';
 import $ from 'jquery';
+import { useHistory } from 'react-router-dom';
+import { UserContext } from '../App';
 import imageUrlBuilder from '@sanity/image-url';
 import styles from './Directory.module.scss';
 
@@ -12,6 +14,10 @@ const urlFor = (source) => {
 };
 
 const Directory = () => {
+  const thisUser = React.useContext(UserContext);
+  const me = thisUser.name;
+  const history = useHistory();
+
   const [neighborList, setNeighborList] = React.useState([]);
   const [addressMode, setAddressMode] = React.useState(true);
 
@@ -21,11 +27,8 @@ const Directory = () => {
     );
     //sort by street name, then number (so that 4181 Blackland Dr comes before 38 Blackland Way, i.e.)
     neighbors.sort((a, b) =>
-      a.address &&
-      a.address.substring(a.address.indexOf(' ') + 1) +
-        a.address.split(' ')[0] >
-        b.address &&
-      b.address.substring(b.address.indexOf(' ') + 1) + b.address.split(' ')[0]
+      a.address.split(' ')[1].concat(a.address.split(' ').shift()) >
+      b.address.split(' ')[1].concat(b.address.split(' ').shift())
         ? 1
         : -1
     );
@@ -36,11 +39,8 @@ const Directory = () => {
   const sortByAddress = () => {
     let neighbors = [...neighborList];
     neighbors.sort((a, b) =>
-      a.address &&
-      a.address.substring(a.address.indexOf(' ') + 1) +
-        a.address.split(' ')[0] >
-        b.address &&
-      b.address.substring(b.address.indexOf(' ') + 1) + b.address.split(' ')[0]
+      a.address.split(' ')[1].concat(a.address.split(' ').shift()) >
+      b.address.split(' ')[1].concat(b.address.split(' ').shift())
         ? 1
         : -1
     );
@@ -49,14 +49,14 @@ const Directory = () => {
   };
 
   const sortByName = () => {
-    let ourNeighbors = [...neighborList];
-    ourNeighbors.sort((a, b) =>
+    let neighbors = [...neighborList];
+    neighbors.sort((a, b) =>
       a.name.split(' ').pop().concat(a.name.split(' ')[0]) > //DoeJane will come before DoeJohn
       b.name.split(' ').pop().concat(b.name.split(' ')[0])
         ? 1
         : -1
     );
-    setNeighborList([...ourNeighbors]);
+    setNeighborList([...neighbors]);
     setAddressMode(false);
   };
   $('#addressTab').click(() => sortByAddress());
@@ -168,11 +168,29 @@ const Directory = () => {
                         {n.email}
                       </Card.Text>
                     </div>
-                    <img
-                      src={urlFor(n.image)}
-                      alt=""
-                      className={styles.photo}
-                    />
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        alignItems: 'flex-end',
+                      }}
+                    >
+                      <img
+                        src={urlFor(n.image)}
+                        alt=""
+                        className={styles.photo}
+                      />
+                      <Button
+                        className={styles.editProfile}
+                        style={{
+                          display: n.name === me ? 'block' : 'none',
+                        }}
+                        onClick={() => history.push('/myProfile')}
+                      >
+                        Edit Profile
+                      </Button>
+                    </div>
                   </div>
                 </Card>
               );

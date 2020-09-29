@@ -1,17 +1,15 @@
 import React from 'react';
 import { Client } from '../api/sanityClient';
-
+import Comment from '../components/Comment';
 import {
   Card as UICard,
   CardHeader,
-  CardMedia,
   CardActions,
   Accordion,
   AccordionSummary,
   AccordionDetails,
   Tooltip,
   Typography,
-  TextField,
 } from '@material-ui/core';
 import { Card } from 'react-bootstrap';
 import imageUrlBuilder from '@sanity/image-url';
@@ -163,36 +161,7 @@ const Message = ({
             </div>{' '}
           </AccordionSummary>
           <AccordionDetails className={styles.repliesDiv}>
-            <form
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                width: '100%',
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'flex-start',
-                  width: '85%',
-                }}
-              >
-                <img
-                  src={myPic}
-                  alt=""
-                  style={{ borderRadius: '50%', alignSelf: 'center' }}
-                />
-                <TextField
-                  id={`replyTo${m._id}`}
-                  label="Reply"
-                  variant="outlined"
-                  position="start"
-                  edge="end"
-                  style={{ marginLeft: '0.5rem', flex: 1 }}
-                ></TextField>
-              </div>
-            </form>
+            <Comment m={m} />
             {!myRefs
               ? null
               : theseResponses.map((resp) => {

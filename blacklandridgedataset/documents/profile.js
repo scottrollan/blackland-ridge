@@ -59,6 +59,9 @@ export default {
       layout: 'checkbox',
     },
   ],
+  initialValue: {
+    address: 'Select Your Address',
+  },
   preview: {
     select: {
       title: 'name',
