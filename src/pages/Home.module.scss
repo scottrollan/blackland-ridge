@@ -5,9 +5,10 @@
   min-height: 80vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   z-index: 10 !important;
+  padding: 4rem 0;
 }
 .heading {
   @include fadeIn;

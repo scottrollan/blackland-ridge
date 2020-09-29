@@ -2,19 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Client } from '../api/sanityClient';
 import { reactions } from '../data/reactions';
 import { UserContext } from '../App';
-import {
-  Card as UICard,
-  CardHeader,
-  CardMedia,
-  CardActions,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Tooltip,
-  Typography,
-  TextField,
-} from '@material-ui/core';
-import { Card } from 'react-bootstrap';
+import Message from '../components/Message';
 import $ from 'jquery';
 import imageUrlBuilder from '@sanity/image-url';
 import styles from './Messages.module.scss';
@@ -28,9 +16,7 @@ const urlFor = (source) => {
 const Messages = () => {
   const thisUser = useContext(UserContext);
   const [messages, setMessages] = useState([]);
-  const [replies, setReplies] = useState([]);
   const me = thisUser.name;
-  const myPic = urlFor(thisUser.image);
 
   const getMessages = async () => {
     const theseMessages = await Client.fetch(
@@ -83,11 +69,10 @@ const Messages = () => {
           m.responses.forEach((re) => {
             myRefs = [...myRefs, re._ref];
           });
-          theseResponses = messages.filter((mess) => myRefs.includes(mess._id));
-          console.log(theseResponses);
+          const revArray = messages.filter((mess) => myRefs.includes(mess._id));
+          theseResponses = revArray.reverse();
         }
 
-        console.log(myRefs);
         let date = new Date(m._createdAt);
         let originalPostDate =
           date.toLocaleString('default', {
@@ -108,169 +93,19 @@ const Messages = () => {
           numberOfResponses = m.responses.length;
         }
         return (
-          <UICard
-            key={m._id}
-            className={styles.card}
-            style={{ display: m.newThread ? 'inherit' : 'none' }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-              }}
-            >
-              <figure>
-                <img
-                  className={styles.media}
-                  src={urlFor(m.avatar)}
-                  alt=""
-                  style={{ alignSelf: 'center' }}
-                />
-                <figcaption>{m.author}</figcaption>
-              </figure>
-              <CardHeader
-                title={m.title}
-                subheader={originalPostDate}
-              ></CardHeader>
-            </div>
-            <Card.Body>
-              <Card.Text>{m.message}</Card.Text>
-
-              <CardActions disableSpacing>
-                {reactions.map((icon) => {
-                  return (
-                    <i
-                      key={`${icon.title}of${m._id}`}
-                      id={`${icon.title}Of${m._id}`}
-                      action={
-                        m[`${icon.array}`] && m[`${icon.array}`].includes(me)
-                          ? 'dec'
-                          : 'inc'
-                      } //if reaction array (i.e. likedBy) includes me, then the first click of this button should decrease the likes and remove me from the array (unlike)
-                      onClick={() =>
-                        affectReaction(icon.title, icon.array, icon.color, m)
-                      }
-                      className={[`${icon.fontawesome} ${styles.icon}`]}
-                      style={{
-                        color:
-                          m[`${icon.array}`] && m[`${icon.array}`].includes(me) // if this reaction array (i.e. likedBy) includes me
-                            ? icon.color // color it
-                            : 'var(--overlay-medium)', //otherwise make it gray
-                      }}
-                    ></i>
-                  );
-                })}
-              </CardActions>
-              <Accordion>
-                <AccordionSummary>
-                  <div className={styles.statsRow}>
-                    <div className={styles.statsReactions}>
-                      {reactions.map((r, index) => {
-                        let num = parseInt(m[`${r.title}`]);
-
-                        return (
-                          <Tooltip
-                            key={`${r.title}${index}`}
-                            placement="right-start"
-                            title={
-                              <React.Fragment>
-                                <Typography color="inherit">
-                                  {r.label}
-                                </Typography>
-                                {m[r.array]
-                                  ? m[r.array].map((by) => {
-                                      return (
-                                        <Typography key={by}>{by}</Typography>
-                                      );
-                                    })
-                                  : null}
-                              </React.Fragment>
-                            }
-                          >
-                            <i
-                              className={[`${r.fontawesome} ${styles.icon}`]}
-                              style={{
-                                color: r.color,
-                                // zIndex: r.length - index,
-                                display: num > 0 ? 'inherit' : 'none',
-                              }}
-                            ></i>
-                          </Tooltip>
-                        );
-                      })}
-
-                      <span
-                        style={{
-                          transform: 'translateY(-10px)',
-                          marginLeft: '12px',
-                        }}
-                      >
-                        {numberOfReactions}
-                      </span>
-                    </div>
-                    <div
-                      className={styles.statsComments}
-                      style={{
-                        display: numberOfResponses ? 'inherit' : 'none',
-                      }}
-                    >
-                      {numberOfResponses} Comments
-                    </div>
-                    <div
-                      className={styles.statsComments}
-                      style={{
-                        display: numberOfResponses ? 'none' : 'block',
-                      }}
-                    >
-                      Comment
-                    </div>
-                  </div>{' '}
-                </AccordionSummary>
-                <AccordionDetails className={styles.repliesDiv}>
-                  <form
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'flex-end',
-                      width: '100%',
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'flex-start',
-                        width: '85%',
-                      }}
-                    >
-                      <img
-                        src={myPic}
-                        alt=""
-                        style={{ borderRadius: '50%', alignSelf: 'center' }}
-                      />
-                      <TextField
-                        id={`replyTo${m._id}`}
-                        label="Reply"
-                        variant="outlined"
-                        position="start"
-                        edge="end"
-                        style={{ marginLeft: '0.5rem', flex: 1 }}
-                      ></TextField>
-                    </div>
-                  </form>
-                  {!myRefs
-                    ? null
-                    : theseResponses.map((resp) => {
-                        return (
-                          <UICard className={styles.card} key={resp._id}>
-                            <Typography>{resp.message}</Typography>
-                          </UICard>
-                        );
-                      })}
-                </AccordionDetails>
-              </Accordion>
-            </Card.Body>
-          </UICard>
+          <Message
+            m={m}
+            originalPostDate={originalPostDate}
+            reactions={reactions}
+            thisUser={thisUser}
+            affectReaction={(title, array, color, message) =>
+              affectReaction(title, array, color, message)
+            }
+            numberOfReactions={numberOfReactions}
+            numberOfResponses={numberOfResponses}
+            myRefs={myRefs}
+            theseResponses={theseResponses}
+          />
         );
       })}
     </div>
