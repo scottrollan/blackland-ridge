@@ -84,6 +84,7 @@ const Messages = () => {
           date.getFullYear();
         let numberOfResponses = 0;
         let numberOfReactions =
+          0 +
           parseInt(m.likes) +
           parseInt(m.loves) +
           parseInt(m.cries) +
@@ -95,13 +96,14 @@ const Messages = () => {
         return (
           <Message
             m={m}
+            key={m._id}
             originalPostDate={originalPostDate}
             reactions={reactions}
             thisUser={thisUser}
             affectReaction={(title, array, color, message) =>
               affectReaction(title, array, color, message)
             }
-            numberOfReactions={numberOfReactions}
+            numberOfReactions={parseInt(numberOfReactions)}
             numberOfResponses={numberOfResponses}
             myRefs={myRefs}
             theseResponses={theseResponses}

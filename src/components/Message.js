@@ -135,11 +135,10 @@ const Message = ({
 
                 <span
                   style={{
-                    transform: 'translateY(-10px)',
                     marginLeft: '12px',
                   }}
                 >
-                  {numberOfReactions}
+                  {numberOfReactions.toString()}
                 </span>
               </div>
               <div

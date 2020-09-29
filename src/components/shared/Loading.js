@@ -6,7 +6,7 @@ const Loading = () => {
   return (
     <div id="loading" className={styles.alertDiv}>
       <div className={styles.fadeIn}>
-        <Spinner animation="border" variant="light" />{' '}
+        <Spinner animation="grow" variant="light" />
       </div>
     </div>
   );

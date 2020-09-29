@@ -1,4 +1,5 @@
 import React from 'react';
+import Loading from './shared/Loading';
 import { UserContext } from '../App';
 import { Client } from '../api/sanityClient';
 import { TextField } from '@material-ui/core';
@@ -11,18 +12,72 @@ const urlFor = (source) => {
   return builder.image(source);
 };
 export default Comment = ({ m }) => {
+  const query = "*[_type == 'message'] | order(_updatedAt desc)";
+  // const params = {ownerId: 'myUserId'}
+
+  const subscription = Client.listen(query).subscribe((update) => {
+    const comment = update.result;
+    console.log(
+      `Someone just replied to ${comment.author}'s post: "${comment.title}"`
+    );
+  });
+
   const thisUser = React.useContext(UserContext);
-  const myPic = urlFor(thisUser.image);
+  const me = thisUser.name;
+  const myImageAsset = thisUser.image;
+  const myPic = urlFor(myImageAsset);
   const messageID = m._id;
 
-  const sendComment = (id) => {
-    console.log('ID: ', id, '    message: ', $(`#replyTo${id}`).val());
-    alert('check console');
+  const sendComment = async (event, id) => {
+    event.preventDefault();
+    $('#loading').css('display', 'flex');
+    const commentContent = $(`#replyTo${id}`).val();
+    const originalMessage = { ...m };
+    let refID;
+    const myComment = {
+      _type: 'message',
+      title: `reply to ${id}`,
+      message: commentContent,
+      author: me,
+      avatar: myImageAsset,
+    };
+    try {
+      const response = await Client.create(myComment);
+      console.log(response);
+      let randomStr = '';
+      const characters =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      for (let i = 0; i < 32; i++) {
+        randomStr += characters.charAt(
+          Math.floor(Math.random() * characters.length)
+        );
+      }
+      refID = response._id;
+      const newMessageRef = {
+        _key: randomStr,
+        _ref: refID,
+        _type: 'reference',
+      };
+      if (originalMessage.responses) {
+        originalMessage.responses = [
+          ...originalMessage.responses,
+          newMessageRef,
+        ];
+      } else if (!originalMessage.responses) {
+        originalMessage['responses'] = [newMessageRef];
+      }
+      const response2 = await Client.patch(id).set(originalMessage).commit();
+      console.log(response2);
+    } catch (error) {
+      console.log('Create Failed: ', error.message);
+    }
+    $(`#replyTo${id}`).val('');
+    $('#loading').css('display', 'none');
   };
 
   return (
     <form
-      onSubmit={() => sendComment(messageID)}
+      onSubmit={(e) => sendComment(e, messageID)}
       style={{
         display: 'flex',
         flexDirection: 'row',
@@ -30,6 +85,7 @@ export default Comment = ({ m }) => {
         width: '100%',
       }}
     >
+      <Loading />
       <div
         style={{
           display: 'flex',
