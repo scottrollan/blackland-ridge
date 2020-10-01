@@ -42,6 +42,7 @@ const NavBar = ({ loginShow }) => {
               : 'https://robohash.org/user?bgset=bg1'
           }
           alt=""
+          style={{ borderRadius: '50%' }}
         />
       </Navbar.Brand>
 

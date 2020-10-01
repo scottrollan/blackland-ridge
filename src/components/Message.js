@@ -31,12 +31,13 @@ const Message = ({
   numberOfResponses,
   myRefs,
   theseResponses,
+  getMessages,
 }) => {
   const me = thisUser.name;
-  const myPic = urlFor(thisUser.image);
   return (
     <UICard
       key={m._id}
+      id={m._id}
       className={styles.card}
       style={{
         display: m.newThread ? 'flex' : 'none',
@@ -160,18 +161,21 @@ const Message = ({
             </div>{' '}
           </AccordionSummary>
           <AccordionDetails className={styles.repliesDiv}>
-            <Comment m={m} />
+            <Comment m={m} newThread={false} getMessages={getMessages} />
             {!myRefs
               ? null
               : theseResponses.map((resp) => {
                   return (
-                    <Card className={styles.responseCard} key={resp._id}>
+                    <div className={styles.responseCard} key={resp._id}>
                       <figure
                         style={{
                           display: 'flex',
                           flexDirection: 'column',
                           justifyContent: 'center',
-                          flexWrap: 'no-wrap',
+                          textAligh: 'center',
+                          width: '15%',
+                          float: 'left',
+                          marginRight: '0.5rem',
                         }}
                       >
                         <img
@@ -180,17 +184,25 @@ const Message = ({
                           alt=""
                           style={{
                             alignSelf: 'center',
-                            justifySelf: 'center',
+                            // justifySelf: 'center',
                             borderRadius: '50%',
                           }}
                         />
-                        <figcaption>{resp.author}</figcaption>
+                        <figcaption
+                          style={{
+                            width: '100%',
+                            alignSelf: 'center',
+                            textAlign: 'center',
+                          }}
+                        >
+                          {resp.author}
+                        </figcaption>
                       </figure>
-                      <Card.Text style={{ marginLeft: '0.5rem', flex: 1 }}>
+                      <span style={{ marginLeft: '0.5rem' }}>
                         {resp.message} {resp._createdAt}
-                      </Card.Text>
+                      </span>
                       {/* <Accordion /> */}
-                    </Card>
+                    </div>
                   );
                 })}
           </AccordionDetails>

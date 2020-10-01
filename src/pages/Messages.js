@@ -2,21 +2,31 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Client } from '../api/sanityClient';
 import { reactions } from '../data/reactions';
 import { UserContext } from '../App';
+import MessagesHeader from '../components/MessagesHeader';
 import Message from '../components/Message';
 import $ from 'jquery';
-import imageUrlBuilder from '@sanity/image-url';
 import styles from './Messages.module.scss';
-
-const builder = imageUrlBuilder(Client);
-
-const urlFor = (source) => {
-  return builder.image(source);
-};
 
 const Messages = () => {
   const thisUser = useContext(UserContext);
   const [messages, setMessages] = useState([]);
   const me = thisUser.name;
+
+  const query = "*[_type == 'message'] | order(_updatedAt desc)";
+  // const params = {ownerId: 'myUserId'}
+
+  const subscription = Client.listen(query).subscribe(async (update) => {
+    const comment = update.result; //returns main (newThread) message (not the response to it)
+
+    $('#alertThis')
+      .text(
+        `Someone just replied or reacted to ${comment.author}'s post: "${comment.title}"`
+      )
+      .css('display', 'flex');
+    setTimeout(() => $('#alertThis').css('display', 'none').text(''), 8400);
+    getMessages();
+    $('#loading').css('display', 'none');
+  });
 
   const getMessages = async () => {
     const theseMessages = await Client.fetch(
@@ -60,8 +70,11 @@ const Messages = () => {
   }, []);
 
   return (
-    <div className={styles.messages}>
-      <h3>Messages</h3>
+    <div
+      className={styles.messages}
+      style={{ display: thisUser ? 'flex' : 'none' }}
+    >
+      <MessagesHeader getMessages={() => getMessages} />
       {messages.map((m) => {
         let theseResponses = [];
         let myRefs = [];
@@ -107,6 +120,7 @@ const Messages = () => {
             numberOfResponses={numberOfResponses}
             myRefs={myRefs}
             theseResponses={theseResponses}
+            getMessages={() => getMessages}
           />
         );
       })}

@@ -1,0 +1,15 @@
+@import '../styles/custom-properties.scss';
+
+.messagesHeader {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 85%;
+  background-color: var(--white);
+  text-align: left;
+  margin: 0.5rem 0;
+  padding: 1rem 2rem;
+  max-width: $breakpoint-medium;
+  border-radius: 0.25rem;
+}

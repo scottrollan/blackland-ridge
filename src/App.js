@@ -12,6 +12,7 @@ import Profile from './components/Profile';
 import MyProfile from './pages/MyProfile';
 import Messages from './pages/Messages';
 import styles from './App.module.scss';
+import fadeStyles from './components/FadeInMessage.module.scss';
 
 export const UserContext = React.createContext();
 
@@ -26,6 +27,12 @@ const App = () => {
   return (
     <div className={styles.App}>
       <div className={styles.backgroundOverlay}></div>
+      <div
+        className={[
+          `${styles.alertThis} ${fadeStyles.fadeIn} ${fadeStyles.fadeOut}`,
+        ]}
+        id="alertThis"
+      ></div>
 
       <UserContext.Provider value={thisUser}>
         <Router>
