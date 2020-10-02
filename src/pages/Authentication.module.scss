@@ -58,11 +58,10 @@
     padding-bottom: 5rem;
   }
 }
-.anonymousAuthButton,
 .twitterAuthButton,
 .facebookAuthButton,
 .googleAuthButton {
-  width: auto;
+  width: 290px;
   max-width: 100%;
   min-height: 3rem;
   display: flex;
