@@ -192,9 +192,12 @@ const Calendar = () => {
 
   const fetchData = async () => {
     let theseEvents = [];
-    const eventsToMap = await Client.fetch(
-      "*[_type == 'event'] | order(start)"
-    );
+    let eventsToMap;
+    try {
+      eventsToMap = await Client.fetch("*[_type == 'event'] | order(start)");
+    } catch (error) {
+      console.log(error);
+    }
     eventsToMap.forEach((e) => {
       const trimDate = new Date(e.start).toString().substring(4, 15);
       const simpleDate = new Date(trimDate);

@@ -1,0 +1,28 @@
+@import '../styles/custom-properties.scss';
+
+.commentForm {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding-left: 0.5rem;
+  @media screen and (max-width: $breakpoint-medium) {
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+}
+
+.commentForm * {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.commentForm img {
+  margin-right: 0.5rem;
+}
+
+.commentForm button {
+  margin-right: 0;
+}

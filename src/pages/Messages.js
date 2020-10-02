@@ -15,25 +15,34 @@ const Messages = () => {
   const query = "*[_type == 'message'] | order(_updatedAt desc)";
   // const params = {ownerId: 'myUserId'}
 
-  const subscription = Client.listen(query).subscribe(async (update) => {
-    const comment = update.result; //returns main (newThread) message (not the response to it)
+  //listening to database updates//
+  let subscription;
+  try {
+    subscription = Client.listen(query).subscribe(async (update) => {
+      const comment = update.result; //returns main (newThread) message (not the response to it)
 
-    $('#alertThis')
-      .text(
-        `Someone just replied or reacted to ${comment.author}'s post: "${comment.title}"`
-      )
-      .css('display', 'flex');
-    setTimeout(() => $('#alertThis').css('display', 'none').text(''), 8400);
-    getMessages();
-    $('#loading').css('display', 'none');
-  });
+      $('#alertThis')
+        .text(
+          `Someone just replied or reacted to ${comment.author}'s post: "${comment.title}"`
+        )
+        .css('display', 'flex');
+      setTimeout(() => $('#alertThis').css('display', 'none').text(''), 8400);
+      getMessages();
+      $('#loading').css('display', 'none');
+    });
+  } catch (error) {
+    console.log(error);
+  }
 
   const getMessages = async () => {
-    const theseMessages = await Client.fetch(
-      "*[_type == 'message'] | order(_updatedAt desc)"
-    );
-
-    setMessages(theseMessages);
+    try {
+      const theseMessages = await Client.fetch(
+        "*[_type == 'message'] | order(_updatedAt desc)"
+      );
+      setMessages(theseMessages);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const affectReaction = async (reaction, array, color, message) => {
@@ -45,7 +54,6 @@ const Messages = () => {
 
     if (incDec === 'inc') {
       $(el).css('color', color);
-      newParams[`${reaction}`] = Number(newParams[`${reaction}`]) + 1; //add one to the number of <whatever> reactions
       if (newParams[`${array}`]) {
         newParams[`${array}`] = [...newParams[`${array}`], me]; //add user's name to list of reactioners if array already exists
       } else {
@@ -54,15 +62,18 @@ const Messages = () => {
       $(el).attr('action', 'dec');
     } else {
       $(el).css('color', 'var(--overlay-medium)');
-      newParams[`${reaction}`] = Number(newParams[`${reaction}`]) - 1; //subtract one from the number of <whatever> reactions
       const index = newParams[`${array}`].indexOf(me);
       if (index > -1) {
         newParams[`${array}`].splice(index, 1);
       }
       $(el).attr('action', 'inc');
     }
-    updated = await Client.patch(messageID).set(newParams).commit();
-    return updated;
+    try {
+      updated = await Client.patch(messageID).set(newParams).commit();
+      return updated;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -96,12 +107,24 @@ const Messages = () => {
           ', ' +
           date.getFullYear();
         let numberOfResponses = 0;
-        let numberOfReactions =
-          0 +
-          parseInt(m.likes) +
-          parseInt(m.loves) +
-          parseInt(m.cries) +
-          parseInt(m.laughs);
+        let likedBy = 0;
+        if (m.likedBy) {
+          likedBy = m.likedBy.length;
+        }
+        let lovedBy = 0;
+        if (m.lovedBy) {
+          lovedBy = m.lovedBy.length;
+        }
+        let laughedBy = 0;
+        if (m.laughedBy) {
+          laughedBy = m.laughedBy.length;
+        }
+        let criedBy = 0;
+        if (m.criedBy) {
+          criedBy = m.criedBy.length;
+        }
+
+        let numberOfReactions = likedBy + lovedBy + criedBy + laughedBy;
 
         if (m.responses) {
           numberOfResponses = m.responses.length;
@@ -111,12 +134,11 @@ const Messages = () => {
             m={m}
             key={m._id}
             originalPostDate={originalPostDate}
-            reactions={reactions}
             thisUser={thisUser}
             affectReaction={(title, array, color, message) =>
               affectReaction(title, array, color, message)
             }
-            numberOfReactions={parseInt(numberOfReactions)}
+            numberOfReactions={numberOfReactions}
             numberOfResponses={numberOfResponses}
             myRefs={myRefs}
             theseResponses={theseResponses}

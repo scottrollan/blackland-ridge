@@ -50,20 +50,10 @@ export default {
       type: 'image',
     },
     {
-      name: 'likes',
-      title: 'Likes',
-      type: 'number',
-    },
-    {
       title: 'Liked By',
       name: 'likedBy',
       type: 'array',
       of: [{ type: 'string' }],
-    },
-    {
-      name: 'loves',
-      title: 'Loves',
-      type: 'number',
     },
     {
       title: 'Loved By',
@@ -72,20 +62,10 @@ export default {
       of: [{ type: 'string' }],
     },
     {
-      name: 'cries',
-      title: 'Cries',
-      type: 'number',
-    },
-    {
       title: 'Cried By',
       name: 'criedBy',
       type: 'array',
       of: [{ type: 'string' }],
-    },
-    {
-      name: 'laughs',
-      title: 'Laughs',
-      type: 'number',
     },
     {
       title: 'Laughed By',
@@ -97,10 +77,6 @@ export default {
   initialValue: {
     newThread: false,
     category: 'General',
-    likes: 0,
-    loves: 0,
-    cries: 0,
-    laughs: 0,
   },
   preview: {
     select: {

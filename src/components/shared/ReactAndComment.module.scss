@@ -1,0 +1,29 @@
+@import '../../styles/custom-properties.scss';
+
+.statsRow {
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--overlay-medium);
+  border-radius: 4px;
+  width: 100%;
+}
+.statsRow div {
+  margin: 0.5rem;
+}
+
+.statsReactions {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  font-size: smaller;
+}
+.statsReactions .icon {
+  margin-right: -6px;
+  background-color: var(--white);
+  padding: 2px;
+  border-radius: 50%;
+  // font-size: small;
+}
+.icon {
+  margin: 0 10px 0 0;
+}

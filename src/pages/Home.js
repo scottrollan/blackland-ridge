@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Home.module.scss';
-import Messages from './Messages';
+// import Messages from './Messages';
 import { Link } from 'react-router-dom';
 
 export default function Home() {
@@ -21,7 +21,7 @@ export default function Home() {
           </Link>
         </div>
       </div>
-      <Messages />
+      {/* <Messages /> */}
     </div>
   );
 }

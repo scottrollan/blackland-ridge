@@ -29,7 +29,7 @@ const App = () => {
       <div className={styles.backgroundOverlay}></div>
       <div
         className={[
-          `${styles.alertThis} ${fadeStyles.fadeIn} ${fadeStyles.fadeOut}`,
+          `${styles.alertThis} ${fadeStyles.fade} ${fadeStyles.fadeOut}`,
         ]}
         id="alertThis"
       ></div>

@@ -12,4 +12,7 @@
   padding: 1rem 2rem;
   max-width: $breakpoint-medium;
   border-radius: 0.25rem;
+  @media screen and (max-width: $breakpoint-medium) {
+    width: 92%;
+  }
 }

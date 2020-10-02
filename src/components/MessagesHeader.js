@@ -11,6 +11,13 @@ const urlFor = (source) => {
   return builder.image(source);
 };
 
+let randomStr = ''; //prepare a new element in the original thread's ref array
+const characters =
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+for (let i = 0; i < 12; i++) {
+  randomStr += characters.charAt(Math.floor(Math.random() * characters.length));
+}
+
 const MessagesHeader = ({ getMessages }) => {
   const thisUser = React.useContext(UserContext);
   const me = thisUser.name;
@@ -18,8 +25,13 @@ const MessagesHeader = ({ getMessages }) => {
   const myPic = urlFor(imageAsset);
   return (
     <div className={styles.messagesHeader}>
-      <h4>New Topic</h4>
-      <Comment m={null} newThread={true} getMessages={getMessages} />
+      <h4>Post a New Message</h4>
+      <Comment
+        m={{ _id: randomStr }}
+        newThread={true}
+        getMessages={getMessages}
+        fieldName="Message"
+      />
     </div>
   );
 };

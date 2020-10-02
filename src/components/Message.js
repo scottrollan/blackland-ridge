@@ -1,5 +1,7 @@
 import React from 'react';
 import { Client } from '../api/sanityClient';
+import { reactions } from '../data/reactions';
+import ReactAndComment from '../components/shared/ReactAndComment';
 import Comment from '../components/Comment';
 import {
   Card as UICard,
@@ -8,8 +10,6 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Tooltip,
-  Typography,
 } from '@material-ui/core';
 import { Card } from 'react-bootstrap';
 import imageUrlBuilder from '@sanity/image-url';
@@ -24,7 +24,6 @@ const urlFor = (source) => {
 const Message = ({
   m,
   originalPostDate,
-  reactions,
   thisUser,
   affectReaction,
   numberOfReactions,
@@ -102,104 +101,67 @@ const Message = ({
         </CardActions>
         <Accordion>
           <AccordionSummary>
-            <div className={styles.statsRow}>
-              <div className={styles.statsReactions}>
-                {reactions.map((r, index) => {
-                  let num = parseInt(m[`${r.title}`]);
-
-                  return (
-                    <Tooltip
-                      key={`${r.title}${index}`}
-                      placement="right-start"
-                      title={
-                        <React.Fragment>
-                          <Typography color="inherit">{r.label}</Typography>
-                          {m[r.array]
-                            ? m[r.array].map((by) => {
-                                return <Typography key={by}>{by}</Typography>;
-                              })
-                            : null}
-                        </React.Fragment>
-                      }
-                    >
-                      <i
-                        className={[`${r.fontawesome} ${styles.icon}`]}
-                        style={{
-                          color: r.color,
-                          // zIndex: r.length - index,
-                          display: num > 0 ? 'inherit' : 'none',
-                        }}
-                      ></i>
-                    </Tooltip>
-                  );
-                })}
-
-                <span
-                  style={{
-                    marginLeft: '12px',
-                  }}
-                >
-                  {numberOfReactions.toString()}
-                </span>
-              </div>
-              <div
-                className={styles.statsComments}
-                style={{
-                  display: numberOfResponses ? 'inherit' : 'none',
-                }}
-              >
-                {numberOfResponses} Comments
-              </div>
-              <div
-                className={styles.statsComments}
-                style={{
-                  display: numberOfResponses ? 'none' : 'block',
-                }}
-              >
-                Comment
-              </div>
-            </div>{' '}
+            <ReactAndComment
+              reactions={reactions}
+              m={m}
+              numberOfReactions={numberOfReactions}
+              numberOfResponses={numberOfResponses}
+            />
           </AccordionSummary>
           <AccordionDetails className={styles.repliesDiv}>
-            <Comment m={m} newThread={false} getMessages={getMessages} />
+            <Comment
+              m={m}
+              newThread={false}
+              getMessages={getMessages}
+              fieldName="Reply"
+            />
             {!myRefs
               ? null
               : theseResponses.map((resp) => {
+                  const date = new Date(resp._createdAt);
+                  let hours = date.getHours();
+                  let ampm = hours >= 12 ? 'PM' : 'AM';
+                  hours = hours % 12; //if hour 0, make it 12
+                  hours = hours ? hours : 12;
+                  let minutes = date.getMinutes();
+                  minutes = minutes < 10 ? '0' + minutes : minutes;
+                  let originalPostDate =
+                    date.toLocaleString('default', {
+                      month: 'long',
+                    }) +
+                    ' ' +
+                    date.getDate() +
+                    ', ' +
+                    date.getFullYear() +
+                    ' - ' +
+                    hours +
+                    ':' +
+                    minutes +
+                    ' ' +
+                    ampm;
+
                   return (
                     <div className={styles.responseCard} key={resp._id}>
-                      <figure
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'center',
-                          textAligh: 'center',
-                          width: '15%',
-                          float: 'left',
-                          marginRight: '0.5rem',
-                        }}
-                      >
+                      <figure>
                         <img
                           className={styles.media}
                           src={urlFor(resp.avatar)}
                           alt=""
-                          style={{
-                            alignSelf: 'center',
-                            // justifySelf: 'center',
-                            borderRadius: '50%',
-                          }}
                         />
                         <figcaption
                           style={{
                             width: '100%',
-                            alignSelf: 'center',
                             textAlign: 'center',
                           }}
                         >
                           {resp.author}
                         </figcaption>
                       </figure>
-                      <span style={{ marginLeft: '0.5rem' }}>
-                        {resp.message} {resp._createdAt}
+                      <span>
+                        {resp.message}{' '}
+                        <div>
+                          <em>{originalPostDate}</em>
+                        </div>
                       </span>
                       {/* <Accordion /> */}
                     </div>

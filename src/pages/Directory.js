@@ -22,18 +22,22 @@ const Directory = () => {
   const [addressMode, setAddressMode] = React.useState(true);
 
   const getNeighborList = async () => {
-    const neighbors = await Client.fetch(
-      "*[_type == 'profile'] | order(address)"
-    );
-    //sort by street name, then number (so that 4181 Blackland Dr comes before 38 Blackland Way, i.e.)
-    neighbors.sort((a, b) =>
-      a.address.split(' ')[1].concat(a.address.split(' ').shift()) >
-      b.address.split(' ')[1].concat(b.address.split(' ').shift())
-        ? 1
-        : -1
-    );
-    setNeighborList([...neighbors]);
-    setAddressMode(true);
+    let neighbors;
+    try {
+      neighbors = await Client.fetch("*[_type == 'profile'] | order(address)");
+      //sort by street name, then number (so that 4181 Blackland Dr comes before 38 Blackland Way, i.e.)
+
+      neighbors.sort((a, b) =>
+        a.address.split(' ')[1].concat(a.address.split(' ').shift()) >
+        b.address.split(' ')[1].concat(b.address.split(' ').shift())
+          ? 1
+          : -1
+      );
+      setNeighborList([...neighbors]);
+      setAddressMode(true);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const sortByAddress = () => {

@@ -45,12 +45,22 @@ const sanityLogin = async (user) => {
         let response = await fetch(user.photoURL);
         let blob = await response.blob();
         let userImage = blob;
-        let imageResponse = await Client.assets.upload('image', userImage);
+        let imageResponse;
+        try {
+          imageResponse = await Client.assets.upload('image', userImage);
+        } catch (error) {
+          console.log(error);
+        }
         console.log(imageResponse);
         imageRef = imageResponse._id;
       } else if (!user.photoURL) {
         let userImage = randomAvatar;
-        let imageResponse = await Client.assets.upload('image', userImage);
+        let imageResponse;
+        try {
+          imageResponse = await Client.assets.upload('image', userImage);
+        } catch (error) {
+          console.log(error);
+        }
         console.log(imageResponse);
         imageRef = imageResponse._id;
       }
