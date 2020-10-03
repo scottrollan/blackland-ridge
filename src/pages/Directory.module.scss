@@ -49,8 +49,17 @@
   );
   overflow: hidden;
 }
+.photoDiv {
+  min-width: 25%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
 .photo {
+  border-radius: 50%;
   max-width: var(--photo-width);
+  align-self: center;
 }
 .editProfile {
   @include rectangle-out;

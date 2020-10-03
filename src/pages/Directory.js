@@ -21,14 +21,15 @@ const Directory = () => {
   const [neighborList, setNeighborList] = React.useState([]);
   const [addressMode, setAddressMode] = React.useState(true);
 
+  let neighbors;
   const getNeighborList = async () => {
-    let neighbors;
     try {
       neighbors = await Client.fetch("*[_type == 'profile'] | order(address)");
+      setNeighborList([...neighbors]);
       //sort by street name, then number (so that 4181 Blackland Dr comes before 38 Blackland Way, i.e.)
-      neighbors.sort((a, b) =>
-        a.address.split(' ')[1].concat(a.address.split(' ').shift()) >
-        b.address.split(' ')[1].concat(b.address.split(' ').shift())
+      neighborList.sort((a, b) =>
+        a.address.split(' ')[1] + a.address.split(' ').shift() >
+        b.address.split(' ')[1] + b.address.split(' ').shift()
           ? 1
           : -1
       );
@@ -41,10 +42,10 @@ const Directory = () => {
   };
 
   const sortByAddress = () => {
-    let neighbors = [...neighborList];
+    neighbors = [...neighborList];
     neighbors.sort((a, b) =>
-      a.address.split(' ')[1].concat(a.address.split(' ').shift()) >
-      b.address.split(' ')[1].concat(b.address.split(' ').shift())
+      a.address.split(' ')[1] + a.address.split(' ').shift() >
+      b.address.split(' ')[1] + b.address.split(' ').shift()
         ? 1
         : -1
     );
@@ -53,10 +54,10 @@ const Directory = () => {
   };
 
   const sortByName = () => {
-    let neighbors = [...neighborList];
+    neighbors = [...neighborList];
     neighbors.sort((a, b) =>
-      a.name.split(' ').pop().concat(a.name.split(' ')[0]) > //DoeJane will come before DoeJohn
-      b.name.split(' ').pop().concat(b.name.split(' ')[0])
+      a.name.split(' ').pop() + a.name.split(' ')[0] > //DoeJane will come before DoeJohn
+      b.name.split(' ').pop() + b.name.split(' ')[0]
         ? 1
         : -1
     );
@@ -117,11 +118,28 @@ const Directory = () => {
                         {n.email}
                       </Card.Text>
                     </div>
-                    <img
-                      src={urlFor(n.image)}
-                      alt=""
-                      className={styles.photo}
-                    />
+                    <div className={styles.photoDiv}>
+                      <a
+                        href={urlFor(n.image)}
+                        target="_blank"
+                        rel="noopenner noreferrer"
+                      >
+                        <img
+                          src={urlFor(n.image)}
+                          alt=""
+                          className={styles.photo}
+                        />
+                      </a>
+                      <Button
+                        className={styles.editProfile}
+                        style={{
+                          display: n.name === me ? 'block' : 'none',
+                        }}
+                        onClick={() => history.push('/myProfile')}
+                      >
+                        Edit Profile
+                      </Button>
+                    </div>
                   </div>
                 </Card>
               );
@@ -145,6 +163,7 @@ const Directory = () => {
                   <div
                     style={{
                       display: 'flex',
+                      flexDirection: 'row',
                       justifyContent: 'space-between',
                       width: '100%',
                     }}
@@ -172,19 +191,20 @@ const Directory = () => {
                         {n.email}
                       </Card.Text>
                     </div>
-                    <div
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        alignItems: 'flex-end',
-                      }}
-                    >
-                      <img
-                        src={urlFor(n.image)}
-                        alt=""
-                        className={styles.photo}
-                      />
+
+                    <div className={styles.photoDiv}>
+                      <a
+                        href={urlFor(n.image)}
+                        target="_blank"
+                        rel="noopenner noreferrer"
+                      >
+                        <img
+                          src={urlFor(n.image)}
+                          alt=""
+                          className={styles.photo}
+                        />
+                      </a>
+
                       <Button
                         className={styles.editProfile}
                         style={{
