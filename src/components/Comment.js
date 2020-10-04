@@ -79,16 +79,12 @@ export default Comment = ({ m, newThread, getMessages, fieldName }) => {
       $('#newThreadTitle').val('');
       $(`#replyTo${messageID}`).val('');
       getMessages();
-      // document.getElementById(`${refID}`).scrollIntoView({
-      //   behavior: 'smooth',
-      // });
     }
   };
   return (
     <form onSubmit={(e) => sendComment(e)} className={styles.commentForm}>
       <Loading />
 
-      <img src={myPic} alt="" style={{ borderRadius: '50%' }} />
       <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
         <TextField
           id="newThreadTitle"
