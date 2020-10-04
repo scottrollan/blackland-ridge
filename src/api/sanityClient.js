@@ -9,3 +9,10 @@ export const Client = sanityClient({
   useCdn: false, // `false` if you want to ensure fresh data
   ignoreBrowserTokenWarning: true,
 });
+
+export const client = sanityClient({
+  projectId: 'oe56ky4i',
+  dataset: 'production',
+  // or leave blank to be anonymous user
+  useCdn: false, // `false` if you want to ensure fresh data
+});

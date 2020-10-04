@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Client } from '../api/sanityClient';
+import { Client, client } from '../api/sanityClient';
 import { reactions } from '../data/reactions';
 import { UserContext } from '../App';
 import MessagesHeader from '../components/MessagesHeader';
@@ -12,14 +12,12 @@ const Messages = () => {
   const [messages, setMessages] = useState([]);
   const me = thisUser.name;
 
-  const query = "*[_type == 'message'] | order(_updatedAt desc)";
-  // const params = {ownerId: 'myUserId'}
-
   //listening to database updates//
-  let subscription;
+  const query = "*[_type == 'message'] | order(_updatedAt desc)";
   try {
-    subscription = Client.listen(query).subscribe(async (update) => {
+    const subscription = client.listen(query).subscribe(async (update) => {
       const comment = update.result; //returns main (newThread) message (not the response to it)
+      console.log(comment);
 
       $('#alertThis')
         .text(

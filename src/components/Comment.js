@@ -5,18 +5,12 @@ import { UserContext } from '../App';
 import { Client } from '../api/sanityClient';
 import { TextField } from '@material-ui/core';
 import $ from 'jquery';
-import imageUrlBuilder from '@sanity/image-url';
 import styles from './Comment.module.scss';
 
-const builder = imageUrlBuilder(Client);
-const urlFor = (source) => {
-  return builder.image(source);
-};
-export default Comment = ({ m, newThread, getMessages, fieldName }) => {
+const Comment = ({ m, newThread, getMessages, fieldName }) => {
   const thisUser = React.useContext(UserContext);
   const me = thisUser.name;
   const myImageAsset = thisUser.image;
-  const myPic = urlFor(myImageAsset);
   const messageTitle = m.title;
   let messageID = m._id; //id of newThread (original) message being replied to
 
@@ -78,7 +72,7 @@ export default Comment = ({ m, newThread, getMessages, fieldName }) => {
     } finally {
       $('#newThreadTitle').val('');
       $(`#replyTo${messageID}`).val('');
-      getMessages();
+      // getMessages();
     }
   };
   return (
@@ -110,3 +104,5 @@ export default Comment = ({ m, newThread, getMessages, fieldName }) => {
     </form>
   );
 };
+
+export default Comment;
