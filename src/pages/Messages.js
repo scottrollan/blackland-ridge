@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Client, client } from '../api/sanityClient';
-import { reactions } from '../data/reactions';
+// import { reactions } from '../data/reactions';
 import { UserContext } from '../App';
 import MessagesHeader from '../components/MessagesHeader';
 import Message from '../components/Message';
@@ -12,26 +12,6 @@ const Messages = () => {
   const [messages, setMessages] = useState([]);
   const me = thisUser.name;
 
-  //listening to database updates//
-  const query = "*[_type == 'message'] | order(_updatedAt desc)";
-  try {
-    const subscription = client.listen(query).subscribe(async (update) => {
-      const comment = update.result; //returns main (newThread) message (not the response to it)
-      console.log(comment);
-
-      $('#alertThis')
-        .text(
-          `Someone just replied or reacted to ${comment.author}'s post: "${comment.title}"`
-        )
-        .css('display', 'flex');
-      setTimeout(() => $('#alertThis').css('display', 'none').text(''), 8400);
-      getMessages();
-      $('#loading').css('display', 'none');
-    });
-  } catch (error) {
-    console.log(error);
-  }
-
   const getMessages = async () => {
     try {
       const theseMessages = await Client.fetch(
@@ -42,6 +22,8 @@ const Messages = () => {
       console.log(error);
     }
   };
+  //listening to database updates//
+  const query = "*[_type == 'message'] | order(_updatedAt desc)";
 
   const affectReaction = async (reaction, array, color, message) => {
     const messageID = message._id;
@@ -76,6 +58,25 @@ const Messages = () => {
 
   useEffect(() => {
     getMessages();
+    let subscription;
+    subscription = client.listen(query).subscribe(async (update) => {
+      const comment = update.result; //returns main (newThread) message (not the response to it)
+      console.log(update);
+
+      $('#alertThis')
+        .text(
+          `Someone just replied or reacted to ${comment.author}'s post: "${comment.title}"`
+        )
+        .css('display', 'flex');
+      setTimeout(() => $('#alertThis').css('display', 'none').text(''), 8400);
+      setTimeout(() => {
+        getMessages();
+        $('#loading').css('display', 'none');
+      }, 1200);
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   return (
