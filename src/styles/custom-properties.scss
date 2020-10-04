@@ -1,5 +1,11 @@
 @import './support-mixins.scss';
 
+///Breakpoints
+$breakpoint-small: 688px;
+$breakpoint-medium: 992px;
+$breakpoint-large: 1312px;
+$breakpoint-extra-large: 1600px;
+
 :root {
   --facebook-blue: #1778f2;
   --twitter-blue: #00acee;
@@ -24,6 +30,11 @@
   --white: #fafafa;
   --page-border: 8px solid var(--color-pallette-dark);
   --avatar-size: 130px;
+  @media (pointer: coarse) {
+    @media screen and (max-width: $breakpoint-medium) {
+      --page-border: 8px solid var(--color-pallette-purple);
+    }
+  }
 }
 
 @mixin primary-button {
@@ -126,12 +137,6 @@
     border-color: var(--color-pallette-accent);
   }
 }
-
-///Breakpoints
-$breakpoint-small: 688px;
-$breakpoint-medium: 992px;
-$breakpoint-large: 1312px;
-$breakpoint-extra-large: 1600px;
 
 @mixin fadeIn {
   animation: fade ease 0.5s;

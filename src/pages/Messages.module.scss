@@ -19,12 +19,12 @@
   }
 }
 .responseCard {
-  margin: 0.5rem 0;
+  // margin: 0.5rem 0;
   padding: 1rem 2rem;
-  width: 85%;
-  border: 1px solid var(--overlay-medium);
-  border-radius: 8px;
-  box-shadow: 1px 1px 1px var(--overlay-medium);
+  width: 100%;
+  border-top: 1px solid var(--overlay-medium);
+  // border-radius: 8px;
+  // box-shadow: 1px 1px 1px var(--overlay-medium);
   text-align: left;
   max-width: $breakpoint-medium;
   @media screen and (max-width: $breakpoint-medium) {
@@ -75,7 +75,7 @@
   }
 }
 .subCard {
-  width: 80%;
+  width: 100%;
   padding: 0 2rem 1rem 2rem;
   text-align: left;
 }

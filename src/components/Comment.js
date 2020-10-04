@@ -17,6 +17,7 @@ export default Comment = ({ m, newThread, getMessages, fieldName }) => {
   const me = thisUser.name;
   const myImageAsset = thisUser.image;
   const myPic = urlFor(myImageAsset);
+  const messageTitle = m.title;
   let messageID = m._id; //id of newThread (original) message being replied to
 
   const sendComment = async (event) => {
@@ -28,7 +29,9 @@ export default Comment = ({ m, newThread, getMessages, fieldName }) => {
     const myComment = {
       //prepare message to sanity database
       _type: 'message',
-      title: newThread ? $('#newThreadTitle').val() : `reply to ${messageID}`, //if newThread, get title from input, else title is "reply to ....."
+      title: newThread
+        ? $('#newThreadTitle').val()
+        : `reply to "${messageTitle}"`, //if newThread, get title from input, else title is "reply to ....."
       message: commentContent,
       author: me,
       avatar: myImageAsset,

@@ -25,6 +25,12 @@ body {
   color: var(--default-font-color);
   z-index: 0;
   overflow-x: hidden;
+  @media (pointer: coarse) {
+    @media screen and (max-width: $breakpoint-medium) {
+      background: none;
+      background-color: var(--color-pallette-purple);
+    }
+  }
 }
 .App > div {
   padding-bottom: 2rem;
@@ -43,6 +49,11 @@ body {
   );
   border: 8px solid var(--color-pallette-dark);
   z-index: 0;
+  @media (pointer: coarse) {
+    @media screen and (max-width: $breakpoint-medium) {
+      display: none;
+    }
+  }
 }
 
 .alertThis {

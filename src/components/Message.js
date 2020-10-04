@@ -163,6 +163,36 @@ const Message = ({
                           <em>{originalPostDate}</em>
                         </div>
                       </span>
+                      {reactions.map((icon) => {
+                        return (
+                          <i
+                            key={`${icon.title}of${m._id}`}
+                            id={`${icon.title}Of${m._id}`}
+                            action={
+                              m[`${icon.array}`] &&
+                              m[`${icon.array}`].includes(me)
+                                ? 'dec'
+                                : 'inc'
+                            } //if reaction array (i.e. likedBy) includes me, then the first click of this button should decrease the likes and remove me from the array (unlike)
+                            onClick={() =>
+                              affectReaction(
+                                icon.title,
+                                icon.array,
+                                icon.color,
+                                m
+                              )
+                            }
+                            className={[`${icon.fontawesome} ${styles.icon}`]}
+                            style={{
+                              color:
+                                m[`${icon.array}`] &&
+                                m[`${icon.array}`].includes(me) // if this reaction array (i.e. likedBy) includes me
+                                  ? icon.color // color it
+                                  : 'var(--overlay-medium)', //otherwise make it gray
+                            }}
+                          ></i>
+                        );
+                      })}
                       {/* <Accordion /> */}
                     </div>
                   );
