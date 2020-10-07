@@ -13,6 +13,8 @@
   width: 85%;
   text-align: left;
   max-width: $breakpoint-medium;
+  background-color: var(--white);
+  border-radius: 0.35rem;
   @media screen and (max-width: $breakpoint-medium) {
     width: 92%;
     padding: 0.5rem 1rem;

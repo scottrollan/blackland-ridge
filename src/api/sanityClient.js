@@ -16,3 +16,22 @@ export const client = sanityClient({
   // or leave blank to be anonymous user
   useCdn: false, // `false` if you want to ensure fresh data
 });
+
+export const fetchMessages = async () => {
+  let response = await Client.fetch(
+    "*[_type == 'message'] | order(_updatedAt desc)"
+  );
+  if (response) {
+    response.forEach((r) => {
+      //prepares array of "paragraphs" for the html parser
+      let compiledHTML = '<span>';
+      r.message.forEach((m) => {
+        const thisP = `<p>${m.children[0].text}</p>`;
+        compiledHTML += thisP;
+      });
+      compiledHTML += '</span>';
+      r.message = compiledHTML;
+    });
+    return response;
+  }
+};

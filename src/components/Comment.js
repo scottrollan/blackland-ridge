@@ -2,12 +2,14 @@ import React from 'react';
 import Loading from './shared/Loading';
 import { Button } from 'react-bootstrap';
 import { UserContext } from '../App';
+import { createRandomString } from '../functions/CreateRandomString';
+import { prepareParagraphs } from '../functions/PrepareParagraphs';
 import { Client } from '../api/sanityClient';
-import { TextField } from '@material-ui/core';
+import { TextField, TextareaAutosize } from '@material-ui/core';
 import $ from 'jquery';
 import styles from './Comment.module.scss';
 
-const Comment = ({ m, newThread, getMessages, fieldName }) => {
+const Comment = ({ m, newThread, fieldName, id }) => {
   const thisUser = React.useContext(UserContext);
   const me = thisUser.name;
   const myImageAsset = thisUser.image;
@@ -17,66 +19,68 @@ const Comment = ({ m, newThread, getMessages, fieldName }) => {
   const sendComment = async (event) => {
     event.preventDefault();
     $('#loading').css('display', 'flex');
-    const commentContent = $(`#replyTo${messageID}`).val(); //grab what was entered in input
-    const originalMessage = { ...m }; //copy original message, including reponses ref array
-    let refID;
-    const myComment = {
-      //prepare message to sanity database
+    const inputTitle =
+      $('#newThreadTitle').val() === ''
+        ? `reply to ${messageTitle}`
+        : $('#newThreadTitle').val();
+    const textArray = $(`#replyTo${messageID}`).val().split('\n');
+    const thisMessage = prepareParagraphs(textArray);
+
+    //prepare input message to send to sanity
+    //if newThread, add inputTitle, if not add title as "reply to <messageTitle>"
+    let post = {
       _type: 'message',
-      title: newThread
-        ? $('#newThreadTitle').val()
-        : `reply to "${messageTitle}"`, //if newThread, get title from input, else title is "reply to ....."
-      message: commentContent,
       author: me,
       avatar: myImageAsset,
+      message: thisMessage,
       newThread: newThread,
+      title: inputTitle,
     };
+    //send message to sanity
+    let response;
+    let responseID;
     try {
-      const response = await Client.create(myComment);
+      response = await Client.create(post);
       console.log(response);
-      if (!newThread) {
-        //If it is not a NEW thread (if it's a reply)
-        let randomStr = ''; //prepare a new element in the original thread's ref array
-        const characters =
-          'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        for (let i = 0; i < 32; i++) {
-          randomStr += characters.charAt(
-            Math.floor(Math.random() * characters.length)
-          );
-        }
-        refID = response._id; //returned from create above
-        const newMessageRef = {
-          //
-          _key: randomStr,
-          _ref: refID,
-          _type: 'reference',
-        };
-        if (originalMessage.responses) {
-          //if the original post already has a responses array (this is not the first response)
-          originalMessage.responses = [
-            //add this reference to that array
-            ...originalMessage.responses,
-            newMessageRef,
-          ];
-        } else if (!originalMessage.responses) {
-          //if this is the first response to original post
-          originalMessage['responses'] = [newMessageRef]; //add a 'responses' array and include this reference
-        }
-        const response2 = await Client.patch(messageID)
-          .set(originalMessage)
-          .commit();
-        return response2;
-      }
+      responseID = response._id;
     } catch (error) {
       console.log('Create Failed: ', error.message);
-    } finally {
-      $('#newThreadTitle').val('');
-      $(`#replyTo${messageID}`).val('');
-      // getMessages();
     }
+    //if not newThread, get new message _id and patch ref array of original message
+    if (!newThread) {
+      const refKey = createRandomString(32);
+      const newRef = {
+        //prepare a new reference for adding to the responses array within original message
+        _key: refKey,
+        _ref: responseID,
+        _type: 'reference',
+      };
+      let newRefArray = [];
+      if (m.responses) {
+        const oldRefArray = m.responses;
+        newRefArray = [...oldRefArray, newRef];
+      } else {
+        newRefArray.push(newRef);
+      }
+      try {
+        const res = await Client.patch(messageID)
+          .set({ responses: newRefArray })
+          .commit();
+        console.log(res);
+      } catch (error) {
+        console.log('Patch failed: ', error.message);
+      }
+    }
+
+    $('#newThreadTitle').val(''); //clear input fields
+    $(`#replyTo${m._id}`).val('');
   };
   return (
-    <form onSubmit={(e) => sendComment(e)} className={styles.commentForm}>
+    <form
+      onSubmit={(e) => sendComment(e)}
+      className={styles.commentForm}
+      id={id}
+    >
       <Loading />
 
       <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
@@ -91,14 +95,16 @@ const Comment = ({ m, newThread, getMessages, fieldName }) => {
             display: newThread ? 'inherit' : 'none',
           }}
         ></TextField>
-        <TextField
+        <TextareaAutosize
           id={`replyTo${m._id}`}
           label={fieldName}
           variant="outlined"
           position="start"
+          className={styles.textArea}
           edge="end"
           required
-        ></TextField>
+          placeholder="Message *"
+        ></TextareaAutosize>
         <Button type="submit">POST</Button>
       </div>
     </form>

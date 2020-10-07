@@ -11,6 +11,7 @@ import {
   AccordionSummary,
   AccordionDetails,
 } from '@material-ui/core';
+import HTMLParser from 'react-html-parser';
 import { Card } from 'react-bootstrap';
 import imageUrlBuilder from '@sanity/image-url';
 import styles from '../pages/Messages.module.scss';
@@ -30,9 +31,9 @@ const Message = ({
   numberOfResponses,
   myRefs,
   theseResponses,
-  getMessages,
 }) => {
   const me = thisUser.name;
+
   return (
     <UICard
       key={m._id}
@@ -72,8 +73,7 @@ const Message = ({
         <CardHeader title={m.title} subheader={originalPostDate}></CardHeader>
       </div>
       <Card.Body>
-        <Card.Text>{m.message}</Card.Text>
-
+        {HTMLParser(m.message)}
         <CardActions disableSpacing>
           {reactions.map((icon) => {
             return (
@@ -109,12 +109,6 @@ const Message = ({
             />
           </AccordionSummary>
           <AccordionDetails className={styles.repliesDiv}>
-            <Comment
-              m={m}
-              newThread={false}
-              getMessages={getMessages}
-              fieldName="Reply"
-            />
             {!myRefs
               ? null
               : theseResponses.map((resp) => {
@@ -156,47 +150,18 @@ const Message = ({
                         >
                           {resp.author}
                         </figcaption>
+                        <em>{originalPostDate}</em>
                       </figure>
-                      <span>
-                        {resp.message}{' '}
-                        <div>
-                          <em>{originalPostDate}</em>
-                        </div>
-                      </span>
-                      {reactions.map((icon) => {
-                        return (
-                          <i
-                            key={`${icon.title}of${m._id}`}
-                            id={`${icon.title}Of${m._id}`}
-                            action={
-                              m[`${icon.array}`] &&
-                              m[`${icon.array}`].includes(me)
-                                ? 'dec'
-                                : 'inc'
-                            } //if reaction array (i.e. likedBy) includes me, then the first click of this button should decrease the likes and remove me from the array (unlike)
-                            onClick={() =>
-                              affectReaction(
-                                icon.title,
-                                icon.array,
-                                icon.color,
-                                m
-                              )
-                            }
-                            className={[`${icon.fontawesome} ${styles.icon}`]}
-                            style={{
-                              color:
-                                m[`${icon.array}`] &&
-                                m[`${icon.array}`].includes(me) // if this reaction array (i.e. likedBy) includes me
-                                  ? icon.color // color it
-                                  : 'var(--overlay-medium)', //otherwise make it gray
-                            }}
-                          ></i>
-                        );
-                      })}
-                      {/* <Accordion /> */}
+                      <span>{HTMLParser(resp.message)}</span>
                     </div>
                   );
                 })}
+            <Comment
+              m={m}
+              newThread={false}
+              fieldName="Reply"
+              id={`commentInput${m._id}`}
+            />
           </AccordionDetails>
         </Accordion>
       </Card.Body>

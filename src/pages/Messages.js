@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Client, client } from '../api/sanityClient';
-// import { reactions } from '../data/reactions';
-import { UserContext } from '../App';
+import { Client, client, fetchMessages } from '../api/sanityClient';
+import { UserContext, MessagesContext } from '../App';
 import MessagesHeader from '../components/MessagesHeader';
 import Message from '../components/Message';
 import $ from 'jquery';
@@ -9,59 +8,63 @@ import styles from './Messages.module.scss';
 
 const Messages = () => {
   const thisUser = useContext(UserContext);
-  const [messages, setMessages] = useState([]);
+  const theseMessages = useContext(MessagesContext);
+  const [messages, setMessages] = useState([...theseMessages]);
   const me = thisUser.name;
-
-  const getMessages = async () => {
-    try {
-      const theseMessages = await Client.fetch(
-        "*[_type == 'message'] | order(_updatedAt desc)"
-      );
-      setMessages(theseMessages);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  //listening to database updates//
-  const query = "*[_type == 'message'] | order(_updatedAt desc)";
 
   const affectReaction = async (reaction, array, color, message) => {
     const messageID = message._id;
     const el = `#${reaction}Of${messageID}`;
     const incDec = $(el).attr('action');
-    let newParams = message;
+    const origMessage = message;
+    let newParams = [];
+    if (origMessage[`${array}`]) {
+      newParams = [...origMessage[`${array}`]]; // = ["Jane", "Joe", "John"]
+    }
     let updated = {};
 
     if (incDec === 'inc') {
       $(el).css('color', color);
-      if (newParams[`${array}`]) {
-        newParams[`${array}`] = [...newParams[`${array}`], me]; //add user's name to list of reactioners if array already exists
+      if (origMessage[`${array}`]) {
+        newParams = [...origMessage[`${array}`], me]; //add user's name to the array of reactioners if array already exists
       } else {
-        newParams[`${array}`] = [me]; //create and add name if array doesn't exist
+        newParams = [me]; //create array and add name if array doesn't exist
       }
       $(el).attr('action', 'dec');
     } else {
       $(el).css('color', 'var(--overlay-medium)');
-      const index = newParams[`${array}`].indexOf(me);
+      const index = origMessage[`${array}`].indexOf(me);
       if (index > -1) {
-        newParams[`${array}`].splice(index, 1);
+        newParams.splice(index, 1);
       }
       $(el).attr('action', 'inc');
     }
     try {
-      updated = await Client.patch(messageID).set(newParams).commit();
+      updated = await Client.patch(messageID)
+        .set({ [`${array}`]: newParams })
+        .commit();
       return updated;
     } catch (error) {
       console.log(error);
     }
   };
 
+  let subscription;
+  const query = "*[_type == 'message'] | order(_updatedAt desc)";
+  subscription = client.listen(query).subscribe(async (update) => {
+    const comment = update.result; //returns main (newThread) message (not the response to it)
+    console.log(comment);
+    const refresh = await fetchMessages();
+    setMessages([...refresh]);
+  });
+
   useEffect(() => {
-    getMessages();
-    let subscription;
+    setMessages([...theseMessages]);
+
     subscription = client.listen(query).subscribe(async (update) => {
       const comment = update.result; //returns main (newThread) message (not the response to it)
-      console.log(update);
+      console.log(comment);
+      setTimeout(() => $('#loading').css('display', 'none'), 3000);
 
       $('#alertThis')
         .text(
@@ -69,22 +72,20 @@ const Messages = () => {
         )
         .css('display', 'flex');
       setTimeout(() => $('#alertThis').css('display', 'none').text(''), 8400);
-      setTimeout(() => {
-        getMessages();
-        $('#loading').css('display', 'none');
-      }, 1200);
+      const response = await fetchMessages();
+      setMessages([...response]);
     });
     return () => {
       subscription.unsubscribe();
     };
-  }, []);
+  }, [theseMessages]);
 
   return (
     <div
       className={styles.messages}
       style={{ display: thisUser ? 'flex' : 'none' }}
     >
-      <MessagesHeader getMessages={() => getMessages} />
+      <MessagesHeader />
       {messages.map((m) => {
         let theseResponses = [];
         let myRefs = [];
@@ -141,7 +142,6 @@ const Messages = () => {
             numberOfResponses={numberOfResponses}
             myRefs={myRefs}
             theseResponses={theseResponses}
-            getMessages={() => getMessages}
           />
         );
       })}

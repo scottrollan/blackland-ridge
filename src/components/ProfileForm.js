@@ -1,8 +1,7 @@
 import React, { useReducer, useState } from 'react';
 import StreetAddress from './StreetAddress';
 import * as db from '../firestore';
-import { makeStyles } from '@material-ui/core/styles';
-import { Button, Avatar } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import $ from 'jquery';
 import { Client } from '../api/sanityClient';

@@ -1,12 +1,9 @@
 import React, { useState, useContext } from 'react';
 import { UserContext } from '../App';
-import { Button, Modal } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import $ from 'jquery';
 import ProfileForm from './ProfileForm';
-import * as db from '../firestore';
-// import StreetAddress from '../components/StreetAddress';
 import ErrorMessage from '../components/ErrorMessage';
-import styles from './Profile.module.scss';
 
 const Profile = () => {
   const thisUser = useContext(UserContext);

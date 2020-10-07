@@ -11,7 +11,8 @@ export default {
     {
       name: 'message',
       title: 'Message',
-      type: 'string',
+      type: 'array',
+      of: [{ type: 'block' }],
     },
     {
       name: 'newThread',

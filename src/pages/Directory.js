@@ -122,7 +122,7 @@ const Directory = () => {
                       <a
                         href={urlFor(n.image)}
                         target="_blank"
-                        rel="noopenner noreferrer"
+                        rel="noopener noreferrer"
                       >
                         <img
                           src={urlFor(n.image)}
