@@ -1,14 +1,16 @@
 import React from 'react';
-import { createRandomString } from '../functions/CreateRandomString';
 import Comment from './Comment';
+import { UserContext } from '../App';
+import { createRandomString } from '../functions/CreateRandomString';
 import styles from './MessagesHeader.module.scss';
 
-let randomStr = createRandomString(12);
+let randomStr = createRandomString(12); //creates a 12-random-character string
 
 const MessagesHeader = () => {
+  const me = React.useContext(UserContext);
+
   return (
     <div className={styles.messagesHeader}>
-      <h4>Post a New Message</h4>
       <Comment m={{ _id: randomStr }} newThread={true} fieldName="Message" />
     </div>
   );

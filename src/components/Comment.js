@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Loading from './shared/Loading';
 import { Button } from 'react-bootstrap';
 import { UserContext } from '../App';
@@ -6,24 +6,31 @@ import { createRandomString } from '../functions/CreateRandomString';
 import { prepareParagraphs } from '../functions/PrepareParagraphs';
 import { Client } from '../api/sanityClient';
 import { TextField, TextareaAutosize } from '@material-ui/core';
+import imageUrlBuilder from '@sanity/image-url';
 import $ from 'jquery';
 import styles from './Comment.module.scss';
 
+const builder = imageUrlBuilder(Client);
+
+const urlFor = (source) => {
+  return builder.image(source);
+};
+
 const Comment = ({ m, newThread, fieldName, id }) => {
+  const [title, setTitle] = useState('');
+  const [message, setMessage] = useState('');
   const thisUser = React.useContext(UserContext);
   const me = thisUser.name;
   const myImageAsset = thisUser.image;
+  const myImage = urlFor(myImageAsset);
   const messageTitle = m.title;
-  let messageID = m._id; //id of newThread (original) message being replied to
+  let messageID = m._id; //id of newThread (original) message being replied to (or created)
 
   const sendComment = async (event) => {
     event.preventDefault();
     $('#loading').css('display', 'flex');
-    const inputTitle =
-      $('#newThreadTitle').val() === ''
-        ? `reply to ${messageTitle}`
-        : $('#newThreadTitle').val();
-    const textArray = $(`#replyTo${messageID}`).val().split('\n');
+    const inputTitle = title === '' ? `reply to ${messageTitle}` : title; // if reply, no original title
+    const textArray = message.split('\n'); //split message text into paragraphs
     const thisMessage = prepareParagraphs(textArray);
 
     //prepare input message to send to sanity
@@ -72,8 +79,8 @@ const Comment = ({ m, newThread, fieldName, id }) => {
       }
     }
 
-    $('#newThreadTitle').val(''); //clear input fields
-    $(`#replyTo${m._id}`).val('');
+    setTitle(''); //clear input fields
+    setMessage('');
   };
   return (
     <form
@@ -83,29 +90,50 @@ const Comment = ({ m, newThread, fieldName, id }) => {
     >
       <Loading />
 
-      <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-        <TextField
-          id="newThreadTitle"
-          label="Title"
-          variant="outlined"
-          position="start"
-          edge="end"
-          required={newThread ? true : false}
+      <div className={styles.comment}>
+        <img src={myImage} alt="" className={styles.avatar} />
+        <div className={styles.inputDiv}>
+          <TextField
+            id={`title${messageID}`}
+            label="Title"
+            variant="outlined"
+            position="start"
+            edge="end"
+            required={newThread ? true : false}
+            style={{
+              display: newThread ? 'inherit' : 'none',
+            }}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          ></TextField>
+          <TextareaAutosize
+            id={`post${m._id}`}
+            className={styles.textArea}
+            label={fieldName}
+            variant="outlined"
+            position="start"
+            edge="end"
+            required
+            placeholder={`${fieldName} *`}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          ></TextareaAutosize>
+        </div>
+        <div
+          className={styles.iconDiv}
           style={{
-            display: newThread ? 'inherit' : 'none',
+            flexDirection: !newThread ? 'row' : null,
+            paddingTop: newThread ? '1rem' : '0',
           }}
-        ></TextField>
-        <TextareaAutosize
-          id={`replyTo${m._id}`}
-          label={fieldName}
-          variant="outlined"
-          position="start"
-          className={styles.textArea}
-          edge="end"
-          required
-          placeholder="Message *"
-        ></TextareaAutosize>
-        <Button type="submit">POST</Button>
+        >
+          <i className={`fal fa-camera-alt ${styles.icon}`}></i>
+          <Button
+            type="submit"
+            style={{ margin: newThread ? '0  0 0.5rem 0' : 'inherit' }}
+          >
+            POST
+          </Button>
+        </div>
       </div>
     </form>
   );

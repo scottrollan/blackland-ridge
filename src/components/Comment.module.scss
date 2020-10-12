@@ -2,13 +2,13 @@
 
 .commentForm {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding-left: 0.5rem;
+  // padding-left: 0.5rem;
   @media screen and (max-width: $breakpoint-medium) {
-    flex-direction: column;
+    // flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
   }
@@ -26,10 +26,52 @@
 .commentForm button {
   margin-right: 0;
 }
-
+.comment {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.avatar {
+  border-radius: 50%;
+}
+.inputDiv {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem;
+}
+.iconDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+}
+.icon {
+  font-size: x-large;
+}
 .textArea {
   padding: 14px;
   font-family: Roboto;
   border: 1px solid var(--overlay);
   border-radius: 0.25rem;
+}
+
+@media screen and (max-width: $breakpoint-medium) {
+  .comment {
+    flex-direction: column;
+  }
+  .avatar {
+    display: none;
+  }
+  .inputDiv {
+    width: 100%;
+    padding: 0;
+  }
+  .iconDiv {
+    flex-direction: row;
+    justify-content: space-around;
+  }
 }
