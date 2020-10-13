@@ -146,6 +146,7 @@ const Comment = ({ m, newThread, fieldName, id }) => {
             position="start"
             edge="end"
             required
+            style={{ height: 'auto' }}
             placeholder={`${fieldName} *`}
             value={message}
             onChange={(e) => setMessage(e.target.value)}

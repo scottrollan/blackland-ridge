@@ -34,7 +34,7 @@ const NavBar = ({ loginShow }) => {
   };
   return (
     <Navbar className={styles.navBar} collapseOnSelect expand="lg">
-      <Navbar.Brand>
+      <Navbar.Brand className={styles.navbarBrand}>
         <img
           src={
             thisUser && thisUser.image
@@ -44,6 +44,34 @@ const NavBar = ({ loginShow }) => {
           alt=""
           style={{ borderRadius: '50%' }}
         />
+        <Dropdown>
+          <Dropdown.Toggle
+            variant="secondary"
+            id="dropdown-basic"
+            className={styles.logBtn}
+          >
+            My Account
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu>
+            <Dropdown.Item
+              id="logBtn"
+              // className={styles.logoutBtn}
+              onClick={() => logInOut()}
+            >
+              {thisUser ? 'Logout' : 'Login or Sign Up'}
+            </Dropdown.Item>
+            <Link
+              to="/myProfile"
+              className="dropdown-item"
+              onClick={() => collapseNavbar()}
+              style={{ display: thisUser ? 'inherit' : 'none' }}
+            >
+              My Profile
+            </Link>
+            {/* <Dropdown.Item href="#/action-3"></Dropdown.Item> */}
+          </Dropdown.Menu>
+        </Dropdown>
       </Navbar.Brand>
 
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -56,34 +84,6 @@ const NavBar = ({ loginShow }) => {
             Welcome,{' '}
             {thisUser && thisUser.name ? `${thisUser.name}!` : 'Neighbor!'}
           </span>
-          <Dropdown>
-            <Dropdown.Toggle
-              variant="secondary"
-              id="dropdown-basic"
-              className={styles.logBtn}
-            >
-              My Account
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              <Dropdown.Item
-                id="logBtn"
-                // className={styles.logoutBtn}
-                onClick={() => logInOut()}
-              >
-                {thisUser ? 'Logout' : 'Login or Sign Up'}
-              </Dropdown.Item>
-              <Link
-                to="/myProfile"
-                className="dropdown-item"
-                onClick={() => collapseNavbar()}
-                style={{ display: thisUser ? 'inherit' : 'none' }}
-              >
-                My Profile
-              </Link>
-              {/* <Dropdown.Item href="#/action-3"></Dropdown.Item> */}
-            </Dropdown.Menu>
-          </Dropdown>
         </Nav>
         <Nav>
           <Link

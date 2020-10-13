@@ -6,7 +6,7 @@ import $ from 'jquery';
 import Navbar from './components/shared/Navbar';
 import Authentication from './pages/Authentication';
 import Loading from './components/shared/Loading';
-import Home from './pages/Home';
+// import Home from './pages/Home';
 import Calendar from './pages/Calendar';
 import Directory from './pages/Directory';
 import Profile from './components/Profile';
@@ -42,11 +42,11 @@ const App = () => {
           <Router>
             <Navbar loginShow={(trueFalse) => setShowLogin(trueFalse)} />
             <Switch>
-              <Route path="/" exact component={Home}></Route>
+              {/* <Route path="/" exact component={Home}></Route> */}
               <Route path="/calendar" component={Calendar}></Route>
               <Route path="/directory" component={Directory}></Route>
               <Route path="/myProfile" component={MyProfile}></Route>
-              <Route path="/messages" component={Messages}></Route>
+              <Route path="/" component={Messages}></Route>
             </Switch>
           </Router>
 

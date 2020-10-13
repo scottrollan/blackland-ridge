@@ -9,13 +9,14 @@
   border-bottom: none;
   color: var(--default-font-color) !important;
 }
-// .nav-bar-brand {
-//   display: flex;
-//   flex-direction: row;
-//   margin-top: 0;
-//   margin-bottom: 0;
-//   padding: 0;
-// }
+.navbarBrand {
+  display: flex;
+  flex-direction: row;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 0;
+  align-items: center;
+}
 img {
   max-height: 3rem;
 }

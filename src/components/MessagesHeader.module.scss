@@ -16,3 +16,21 @@
     width: 92%;
   }
 }
+
+.iconDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+.iconDiv > span {
+  margin: 0 1rem;
+}
+
+.commentDiv {
+  display: none;
+  height: auto;
+}
