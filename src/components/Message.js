@@ -33,7 +33,7 @@ const Message = ({
   theseResponses,
 }) => {
   const me = thisUser.name;
-
+  const messageImage = urlFor(m.image);
   return (
     <UICard
       key={m._id}
@@ -74,6 +74,14 @@ const Message = ({
       </div>
       <Card.Body>
         {HTMLParser(m.message)}
+        <a href={messageImage} target="_blank" rel="noopener noreferrer">
+          <img
+            src={messageImage ? messageImage : null}
+            alt=""
+            className={styles.messageImage}
+          />
+        </a>
+
         <CardActions disableSpacing>
           {reactions.map((icon) => {
             return (
@@ -112,6 +120,7 @@ const Message = ({
             {!myRefs
               ? null
               : theseResponses.map((resp) => {
+                  const respImage = urlFor(resp.image);
                   const date = new Date(resp._createdAt);
                   let hours = date.getHours();
                   let ampm = hours >= 12 ? 'PM' : 'AM';
@@ -153,6 +162,17 @@ const Message = ({
                         <em>{originalPostDate}</em>
                       </figure>
                       <span>{HTMLParser(resp.message)}</span>
+                      <a
+                        href={respImage}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          src={respImage ? respImage : null}
+                          alt=""
+                          className={styles.respImage}
+                        />
+                      </a>
                     </div>
                   );
                 })}

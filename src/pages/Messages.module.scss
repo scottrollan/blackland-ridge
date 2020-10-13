@@ -20,6 +20,12 @@
     padding: 0.5rem 1rem;
   }
 }
+.messageImage {
+  max-width: 25rem;
+  max-height: 25rem;
+  width: auto;
+  height: auto;
+}
 .responseCard {
   // margin: 0.5rem 0;
   padding: 1rem 2rem;
@@ -75,6 +81,12 @@
     width: 100%;
     align-items: center;
   }
+}
+.respImage {
+  max-width: 15rem;
+  max-height: 15rem;
+  width: auto;
+  height: auto;
 }
 .subCard {
   width: 100%;

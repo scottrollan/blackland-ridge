@@ -58,6 +58,12 @@
   border: 1px solid var(--overlay);
   border-radius: 0.25rem;
 }
+.commentImage {
+  max-width: 25rem;
+  max-height: 25rem;
+  width: auto;
+  height: auto;
+}
 
 @media screen and (max-width: $breakpoint-medium) {
   .comment {

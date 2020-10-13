@@ -1,0 +1,16 @@
+@import '../../styles/custom-properties.scss';
+
+.fileUpload {
+  display: flex;
+}
+
+.previewImage {
+  max-width: 15rem;
+  max-height: 15rem;
+  width: auto;
+  height: auto;
+}
+
+.uploadButton {
+  display: none;
+}

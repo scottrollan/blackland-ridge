@@ -1,7 +1,8 @@
 import { createRandomString } from './CreateRandomString';
 
-let thisMessageObj = [];
 export const prepareParagraphs = (textArray) => {
+  let thisMessageObj = [];
+
   textArray.forEach((p) => {
     const parentKey = createRandomString(12);
     const childKey = createRandomString(12);
