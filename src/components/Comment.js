@@ -3,6 +3,7 @@ import Loading from './shared/Loading';
 import FileUpload from './shared/FileUpload';
 import { Button, Spinner } from 'react-bootstrap';
 import { UserContext } from '../App';
+import { LoginContext } from '../App';
 import { createRandomString } from '../functions/CreateRandomString';
 import { prepareParagraphs } from '../functions/PrepareParagraphs';
 import { Client } from '../api/sanityClient';
@@ -18,6 +19,7 @@ const urlFor = (source) => {
 };
 
 const Comment = ({ m, newThread, fieldName, id }) => {
+  const [showLogin, setShowLogin] = React.useContext(LoginContext);
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
   const [selectedFile, setSelectedFile] = useState(null); //image file
@@ -115,60 +117,72 @@ const Comment = ({ m, newThread, fieldName, id }) => {
   };
 
   return (
-    <form
-      onSubmit={(e) => sendComment(e)}
-      className={styles.commentForm}
-      id={id}
-    >
-      <Loading />
-
-      <div className={styles.comment}>
-        <img src={myImage} alt="" className={styles.avatar} />
-        <div className={styles.inputDiv}>
-          <TextField
-            id={`title${messageID}`}
-            label="Title"
-            variant="outlined"
-            position="start"
-            edge="end"
-            required={newThread ? true : false}
-            style={{
-              display: newThread ? 'inherit' : 'none',
-            }}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          ></TextField>
-          <TextareaAutosize
-            id={`post${messageID}`}
-            className={styles.textArea}
-            label={fieldName}
-            variant="outlined"
-            position="start"
-            edge="end"
-            required
-            style={{ height: 'auto' }}
-            placeholder={`${fieldName} *`}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          ></TextareaAutosize>
-        </div>
-        <div
-          className={styles.iconDiv}
-          style={{
-            flexDirection: !newThread ? 'row' : null,
-            paddingTop: newThread ? '1rem' : '0',
-          }}
+    <>
+      <form
+        onSubmit={(e) => sendComment(e)}
+        className={styles.commentForm}
+        id={id}
+      >
+        <Loading />
+        <span
+          style={{ display: thisUser ? 'none' : 'inherit' }}
+          className={styles.setLogin}
+          onClick={() => setShowLogin(true)}
         >
-          <FileUpload newThread={newThread} onFileUpload={onFileUpload} />
-          <Button type="submit">POST</Button>
+          <h5>Login to comment</h5>
+          <i className="fal fa-comment-lines" style={{ fontSize: 48 }}></i>
+        </span>
+        <div
+          className={styles.comment}
+          style={{ display: thisUser ? 'inherit' : 'none' }}
+        >
+          <img src={myImage} alt="" className={styles.avatar} />
+          <div className={styles.inputDiv}>
+            <TextField
+              id={`title${messageID}`}
+              label="Title"
+              variant="outlined"
+              position="start"
+              edge="end"
+              required={newThread ? true : false}
+              style={{
+                display: newThread ? 'inherit' : 'none',
+              }}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            ></TextField>
+            <TextareaAutosize
+              id={`post${messageID}`}
+              className={styles.textArea}
+              label={fieldName}
+              variant="outlined"
+              position="start"
+              edge="end"
+              required
+              style={{ height: 'auto' }}
+              placeholder={`${fieldName} *`}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            ></TextareaAutosize>
+          </div>
+          <div
+            className={styles.iconDiv}
+            style={{
+              flexDirection: !newThread ? 'row' : null,
+              paddingTop: newThread ? '1rem' : '0',
+            }}
+          >
+            <FileUpload newThread={newThread} onFileUpload={onFileUpload} />
+            <Button type="submit">POST</Button>
+          </div>
         </div>
-      </div>
-      <img
-        src={uploadedImage ? uploadedImage : null}
-        alt=""
-        className={styles.commentImage}
-      />
-    </form>
+        <img
+          src={uploadedImage ? uploadedImage : null}
+          alt=""
+          className={styles.commentImage}
+        />
+      </form>
+    </>
   );
 };
 

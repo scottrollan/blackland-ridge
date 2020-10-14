@@ -81,10 +81,7 @@ const Messages = () => {
   }, [theseMessages]);
 
   return (
-    <div
-      className={styles.messages}
-      style={{ display: thisUser ? 'flex' : 'none' }}
-    >
+    <div className={styles.messages}>
       <MessagesHeader />
       {messages.map((m) => {
         let theseResponses = [];

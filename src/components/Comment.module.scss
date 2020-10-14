@@ -6,12 +6,25 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  // padding-left: 0.5rem;
   @media screen and (max-width: $breakpoint-medium) {
-    // flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
   }
+}
+.setLogin {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-pallette-dark);
+  &:hover {
+    cursor: pointer;
+    background-color: var(--color-pallette-purple);
+    color: var(--white);
+  }
+}
+.setLogin i {
+  margin-left: 1rem;
 }
 
 .commentForm * {

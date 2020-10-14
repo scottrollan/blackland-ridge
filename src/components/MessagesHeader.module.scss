@@ -21,11 +21,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-
+  margin: 0;
   &:hover {
     cursor: pointer;
+    background-color: var(--color-pallette-purple);
+    color: var(--white);
   }
 }
+.iconDiv > h5,
 .iconDiv > span {
   margin: 0 1rem;
 }

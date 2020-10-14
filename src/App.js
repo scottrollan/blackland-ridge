@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, createContext } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import useAuth from './hooks/useAuth';
 import useMessages from './hooks/useMessages';
@@ -15,13 +15,14 @@ import Messages from './pages/Messages';
 import styles from './App.module.scss';
 import fadeStyles from './components/FadeInMessage.module.scss';
 
-export const UserContext = React.createContext();
-export const MessagesContext = React.createContext();
+export const UserContext = createContext();
+export const MessagesContext = createContext();
+export const LoginContext = createContext();
 
 const App = () => {
   const thisUser = useAuth();
   let theseMessages = useMessages();
-  const [showLogin, setShowLogin] = React.useState(false);
+  const [showLogin, setShowLogin] = useState(false);
 
   if (thisUser) {
     $('#firebaseui-auth-container').hide();
@@ -39,20 +40,22 @@ const App = () => {
 
       <UserContext.Provider value={thisUser}>
         <MessagesContext.Provider value={theseMessages}>
-          <Router>
-            <Navbar loginShow={(trueFalse) => setShowLogin(trueFalse)} />
-            <Switch>
-              {/* <Route path="/" exact component={Home}></Route> */}
-              <Route path="/calendar" component={Calendar}></Route>
-              <Route path="/directory" component={Directory}></Route>
-              <Route path="/myProfile" component={MyProfile}></Route>
-              <Route path="/" component={Messages}></Route>
-            </Switch>
-          </Router>
+          <LoginContext.Provider value={[showLogin, setShowLogin]}>
+            <Router>
+              <Navbar loginShow={(trueFalse) => setShowLogin(trueFalse)} />
+              <Switch>
+                {/* <Route path="/" exact component={Home}></Route> */}
+                <Route path="/calendar" component={Calendar}></Route>
+                <Route path="/directory" component={Directory}></Route>
+                <Route path="/myProfile" component={MyProfile}></Route>
+                <Route path="/" component={Messages}></Route>
+              </Switch>
+            </Router>
 
-          <Loading />
-          <Profile />
-          <Authentication show={showLogin} thisUser={thisUser} />
+            <Loading />
+            <Profile />
+            <Authentication show={showLogin} thisUser={thisUser} />
+          </LoginContext.Provider>
         </MessagesContext.Provider>
       </UserContext.Provider>
     </div>
