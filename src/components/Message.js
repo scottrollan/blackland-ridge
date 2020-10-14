@@ -2,6 +2,7 @@ import React from 'react';
 import { Client } from '../api/sanityClient';
 import { reactions } from '../data/reactions';
 import ReactAndComment from '../components/shared/ReactAndComment';
+import ReactionIcons from '../components/shared/ReactionIcons';
 import Comment from '../components/Comment';
 import {
   Card as UICard,
@@ -14,7 +15,7 @@ import {
 import HTMLParser from 'react-html-parser';
 import { Card } from 'react-bootstrap';
 import imageUrlBuilder from '@sanity/image-url';
-import styles from '../pages/Messages.module.scss';
+import styles from './Message.module.scss';
 
 const builder = imageUrlBuilder(Client);
 
@@ -34,6 +35,7 @@ const Message = ({
 }) => {
   const me = thisUser.name;
   const messageImage = urlFor(m.image);
+
   return (
     <UICard
       key={m._id}
@@ -44,31 +46,15 @@ const Message = ({
         flexDirection: 'column',
       }}
     >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'flex-start',
-        }}
-      >
-        <figure
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-          }}
-        >
+      <div className={styles.cardOuterDiv}>
+        <figure>
           <img
             className={styles.media}
             src={urlFor(m.avatar)}
             alt=""
-            style={{
-              alignSelf: 'center',
-              justifySelf: 'center',
-              borderRadius: '50%',
-            }}
+            style={{ borderRadius: '50%' }}
           />
-          <figcaption>{m.author}</figcaption>
+          <figcaption>{m.authorName}</figcaption>
         </figure>
         <CardHeader title={m.title} subheader={originalPostDate}></CardHeader>
       </div>
@@ -83,29 +69,7 @@ const Message = ({
         </a>
 
         <CardActions disableSpacing>
-          {reactions.map((icon) => {
-            return (
-              <i
-                key={`${icon.title}of${m._id}`}
-                id={`${icon.title}Of${m._id}`}
-                action={
-                  m[`${icon.array}`] && m[`${icon.array}`].includes(me)
-                    ? 'dec'
-                    : 'inc'
-                } //if reaction array (i.e. likedBy) includes me, then the first click of this button should decrease the likes and remove me from the array (unlike)
-                onClick={() =>
-                  affectReaction(icon.title, icon.array, icon.color, m)
-                }
-                className={[`${icon.fontawesome} ${styles.icon}`]}
-                style={{
-                  color:
-                    m[`${icon.array}`] && m[`${icon.array}`].includes(me) // if this reaction array (i.e. likedBy) includes me
-                      ? icon.color // color it
-                      : 'var(--overlay-medium)', //otherwise make it gray
-                }}
-              ></i>
-            );
-          })}
+          <ReactionIcons m={m} affectReaction={affectReaction} />
         </CardActions>
         <Accordion>
           <AccordionSummary>
@@ -144,35 +108,70 @@ const Message = ({
                     ampm;
 
                   return (
-                    <div className={styles.responseCard} key={resp._id}>
+                    <div
+                      className={styles.responseCard}
+                      key={resp._id}
+                      title={originalPostDate}
+                      style={{
+                        flexDirection:
+                          resp.authorName === me ? 'row-reverse' : 'row',
+                      }}
+                    >
                       <figure>
                         <img
                           className={styles.media}
                           src={urlFor(resp.avatar)}
                           alt=""
                         />
-                        <figcaption
+                      </figure>
+                      <div
+                        className={styles.textArea}
+                        style={{
+                          alignItems:
+                            resp.authorName === me ? 'flex-end' : 'fles-start',
+                        }}
+                      >
+                        <div
+                          className={styles.authorName}
                           style={{
-                            width: '100%',
-                            textAlign: 'center',
+                            display: resp.authorName === me ? 'block' : 'none',
                           }}
                         >
-                          {resp.author}
-                        </figcaption>
-                        <em>{originalPostDate}</em>
-                      </figure>
-                      <span>{HTMLParser(resp.message)}</span>
-                      <a
-                        href={respImage}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <img
-                          src={respImage ? respImage : null}
-                          alt=""
-                          className={styles.respImage}
+                          ME
+                        </div>
+                        <div
+                          className={styles.authorName}
+                          style={{
+                            display: resp.authorName === me ? 'none' : 'block',
+                          }}
+                        >
+                          {resp.authorName.toUpperCase()}
+                        </div>
+                        <div
+                          className={
+                            resp.authorName === me
+                              ? styles.chatBoxMe
+                              : styles.chatBox
+                          }
+                        >
+                          {HTMLParser(resp.message)}
+                        </div>
+                        <a
+                          href={respImage}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <img
+                            src={respImage ? respImage : null}
+                            alt=""
+                            className={styles.respImage}
+                          />
+                        </a>
+                        <ReactionIcons
+                          m={resp}
+                          affectReaction={affectReaction}
                         />
-                      </a>
+                      </div>
                     </div>
                   );
                 })}

@@ -27,6 +27,7 @@ const Comment = ({ m, newThread, fieldName, id }) => {
   const [uploadedImage, setUploadedImage] = useState(null); //url
   const thisUser = React.useContext(UserContext);
   const me = thisUser.name;
+  const myRef = { _ref: thisUser._id, _type: 'reference' };
   const myImageAsset = thisUser.image;
   const myImage = urlFor(myImageAsset);
   const messageTitle = m.title;
@@ -48,6 +49,8 @@ const Comment = ({ m, newThread, fieldName, id }) => {
     const inputTitle = title === '' ? `reply to ${messageTitle}` : title; // if reply, no original title
     let textArray = [];
     textArray = message.split('\n'); //split message text into paragraphs
+    const dateNow = new Date(Date.now());
+    const now = dateNow.toISOString('YYYY-MM-DDTHH:mm:ss.sssZ');
     setUploadedImage(null);
     let thisMessage = '';
     thisMessage = prepareParagraphs(textArray);
@@ -58,8 +61,10 @@ const Comment = ({ m, newThread, fieldName, id }) => {
     //if newThread, add inputTitle, if not add title as "reply to <messageTitle>"
     let post = {
       _type: 'message',
-      author: me,
+      authorName: me,
+      authorRef: myRef,
       avatar: myImageAsset,
+      commentAdded: now,
       message: thisMessage,
       newThread: newThread,
       title: inputTitle,
@@ -107,7 +112,7 @@ const Comment = ({ m, newThread, fieldName, id }) => {
       }
       try {
         const res = await Client.patch(messageID)
-          .set({ responses: newRefArray })
+          .set({ responses: newRefArray, commentAdded: now })
           .commit();
         console.log(res);
       } catch (error) {

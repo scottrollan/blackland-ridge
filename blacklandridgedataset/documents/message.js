@@ -20,14 +20,29 @@ export default {
       type: 'boolean',
     },
     {
-      name: 'author',
-      title: 'User Name',
+      name: 'authorName',
+      title: "Author's Name",
       type: 'string',
+    },
+    {
+      name: 'authorRef',
+      title: 'Author Reference',
+      type: 'reference',
+      to: [{ type: 'profile' }],
     },
     {
       name: 'avatar',
       title: 'User Avatar',
       type: 'image',
+    },
+    {
+      title: 'Last comment date',
+      name: 'commentAdded',
+      type: 'datetime',
+      options: {
+        dateFormat: 'YYYY-MM-DD',
+        timeFormat: 'HH:mm:ss.ss',
+      },
     },
     {
       name: 'responses',

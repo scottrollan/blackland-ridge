@@ -50,7 +50,7 @@ const Messages = () => {
   };
 
   let subscription;
-  const query = "*[_type == 'message'] | order(_updatedAt desc)";
+  const query = "*[_type == 'message'] | order(commentAdded desc)";
   subscription = client.listen(query).subscribe(async (update) => {
     const comment = update.result; //returns main (newThread) message (not the response to it)
     console.log(comment);
@@ -87,11 +87,12 @@ const Messages = () => {
         let theseResponses = [];
         let myRefs = [];
         if (m.responses) {
+          //make an array of message id's (strings)
           m.responses.forEach((re) => {
             myRefs = [...myRefs, re._ref];
           });
-          const revArray = messages.filter((mess) => myRefs.includes(mess._id));
-          theseResponses = revArray.reverse();
+          const revArray = messages.filter((mess) => myRefs.includes(mess._id)); //filter messages that are included in the array created above (filters out !included)
+          theseResponses = revArray.reverse(); // orders them from oldest to newest
         }
 
         let date = new Date(m._createdAt);
@@ -121,7 +122,7 @@ const Messages = () => {
           criedBy = m.criedBy.length;
         }
 
-        let numberOfReactions = likedBy + lovedBy + criedBy + laughedBy;
+        let numberOfReactions = likedBy + lovedBy + criedBy + laughedBy; //total number of reactions
 
         if (m.responses) {
           numberOfResponses = m.responses.length;

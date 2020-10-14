@@ -16,6 +16,8 @@ $breakpoint-extra-large: 1600px;
   --overlay-medium: rgba(0, 0, 0, 0.1);
   --overlay: rgba(0, 0, 0, 0.3);
   --overlay-dark: rgba(65, 88, 33, 0.8);
+  --overlay-darkest: rgba(0, 0, 0, 0.9);
+  --overlay-gray: rgba(88, 88, 88, 0.4);
   --button-width: 20rem;
   --button-height: 3.5rem;
 
@@ -145,6 +147,13 @@ $breakpoint-extra-large: 1600px;
   -o-animation: fade ease 0.5s;
   -ms-animation: fade ease 0.5s;
 }
+@mixin slowFadeIn {
+  animation: longFade ease 2.4s;
+  -webkit-animation: longFade ease 2.4s;
+  -moz-animation: longFade ease 2.4s;
+  -o-animation: longFade ease 2.4s;
+  -ms-animation: longFade ease 2.4s;
+}
 
 @keyframes fade {
   0% {
@@ -194,6 +203,61 @@ $breakpoint-extra-large: 1600px;
   0% {
     opacity: 0;
     transform: translateY(-4rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes longFade {
+  0% {
+    opacity: 0;
+    transform: translateY(-12rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@-moz-keyframes longFade {
+  0% {
+    opacity: 0;
+    transform: translateY(-12rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@-webkit-keyframes longFade {
+  0% {
+    opacity: 0;
+    transform: translateY(-12rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@-o-keyframes longFade {
+  0% {
+    opacity: 0;
+    transform: translateY(-12rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@-ms-keyframes longFade {
+  0% {
+    opacity: 0;
+    transform: translateY(-12rem);
   }
   100% {
     opacity: 1;

@@ -1,0 +1,11 @@
+@import '../../styles/custom-properties.scss';
+
+.iconRow {
+  display: flex;
+}
+.icon {
+  margin: 0 10px 0 0;
+  &:hover {
+    cursor: pointer;
+  }
+}

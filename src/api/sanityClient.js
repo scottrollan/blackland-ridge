@@ -19,7 +19,7 @@ export const client = sanityClient({
 
 export const fetchMessages = async () => {
   let response = await Client.fetch(
-    "*[_type == 'message'] | order(_updatedAt desc)"
+    "*[_type == 'message'] | order(commentAdded desc)"
   );
   if (response) {
     response.forEach((r) => {

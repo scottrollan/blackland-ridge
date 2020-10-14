@@ -1,0 +1,29 @@
+@import '../styles/custom-properties.scss';
+
+.alertDiv {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  z-index: 995;
+  background-color: var(--overlay-darkest);
+  justify-content: center;
+  align-items: center;
+}
+
+.alertDiv > div {
+  text-align: center;
+  width: 45%;
+  border-radius: 10px;
+  background-color: #ffffff;
+  padding: 2vh 10px;
+  font-size: x-large;
+  z-index: 1000;
+  border: 8px solid var(--color-pallette-accent);
+}
+
+.fadeIn {
+  @include slowFadeIn;
+}
