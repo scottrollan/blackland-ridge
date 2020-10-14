@@ -139,7 +139,7 @@ const Comment = ({ m, newThread, fieldName, id }) => {
         </span>
         <div
           className={styles.comment}
-          style={{ display: thisUser ? 'inherit' : 'none' }}
+          // style={{ display: thisUser ? 'inherit' : 'none' }}
         >
           <img src={myImage} alt="" className={styles.avatar} />
           <div className={styles.inputDiv}>
