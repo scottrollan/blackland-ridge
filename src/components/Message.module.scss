@@ -25,11 +25,17 @@
   flex-direction: row;
   justify-content: flex-start;
 }
+.mainAvatar {
+}
 .messageImage {
   max-width: 25rem;
   max-height: 25rem;
   width: auto;
   height: auto;
+  border-radius: 0.5rem;
+  @media screen and (max-width: $breakpoint-medium) {
+    max-width: 100%;
+  }
 }
 .responseCard {
   display: flex;
@@ -43,12 +49,9 @@
   text-align: left;
   max-width: $breakpoint-medium;
   @media screen and (max-width: $breakpoint-medium) {
-    width: 96%;
-    padding: 0.5rem 1rem;
+    width: 98%;
+    padding: 5px;
   }
-}
-.responseCard > figure {
-  margin: 0 0.5rem;
 }
 
 .responseCard * {
@@ -56,13 +59,21 @@
     font-size: small;
   }
 }
+.responseCard > figure {
+  margin: 0 0.5rem;
+  @media screen and (max-width: $breakpoint-medium) {
+    margin: 0 3px;
+    width: 10%;
+  }
+}
 
-.responseCard > figure > img {
+.respAvatar {
   border-radius: 50%;
 }
 .textArea {
   display: flex;
   flex-direction: column;
+  margin: 0.25rem;
 }
 .authorName {
   color: var(--overlay-gray);
@@ -97,6 +108,8 @@
   max-height: 15rem;
   width: auto;
   height: auto;
+  margin: 0.5rem 0;
+  border-radius: 0.5rem;
 }
 .subCard {
   width: 100%;

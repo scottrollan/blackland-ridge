@@ -47,19 +47,21 @@ const Message = ({
       }}
     >
       <div className={styles.cardOuterDiv}>
-        <figure>
+        <figure title={`Orignally posted on ${originalPostDate}`}>
           <img
-            className={styles.media}
+            className={styles.mainAvatar}
             src={urlFor(m.avatar)}
             alt=""
             style={{ borderRadius: '50%' }}
           />
-          <figcaption>{m.authorName}</figcaption>
         </figure>
-        <CardHeader title={m.title} subheader={originalPostDate}></CardHeader>
+        <CardHeader title={m.title}></CardHeader>
       </div>
       <Card.Body>
         {HTMLParser(m.message)}
+        <span style={{ fontSize: 'smaller' }}>
+          - {m.authorName}, {originalPostDate}
+        </span>
         <a href={messageImage} target="_blank" rel="noopener noreferrer">
           <img
             src={messageImage ? messageImage : null}
@@ -71,119 +73,124 @@ const Message = ({
         <CardActions disableSpacing>
           <ReactionIcons m={m} affectReaction={affectReaction} />
         </CardActions>
-        <Accordion>
-          <AccordionSummary>
-            <ReactAndComment
-              reactions={reactions}
-              m={m}
-              numberOfReactions={numberOfReactions}
-              numberOfResponses={numberOfResponses}
-            />
-          </AccordionSummary>
-          <AccordionDetails className={styles.repliesDiv}>
-            {!myRefs
-              ? null
-              : theseResponses.map((resp) => {
-                  const respImage = urlFor(resp.image);
-                  const date = new Date(resp._createdAt);
-                  let hours = date.getHours();
-                  let ampm = hours >= 12 ? 'PM' : 'AM';
-                  hours = hours % 12; //if hour 0, make it 12
-                  hours = hours ? hours : 12;
-                  let minutes = date.getMinutes();
-                  minutes = minutes < 10 ? '0' + minutes : minutes;
-                  let originalPostDate =
-                    date.toLocaleString('default', {
-                      month: 'long',
-                    }) +
-                    ' ' +
-                    date.getDate() +
-                    ', ' +
-                    date.getFullYear() +
-                    ' - ' +
-                    hours +
-                    ':' +
-                    minutes +
-                    ' ' +
-                    ampm;
+      </Card.Body>
 
-                  return (
-                    <div
-                      className={styles.responseCard}
-                      key={resp._id}
-                      title={originalPostDate}
-                      style={{
-                        flexDirection:
-                          resp.authorName === me ? 'row-reverse' : 'row',
-                      }}
+      <Accordion>
+        <AccordionSummary>
+          <ReactAndComment
+            reactions={reactions}
+            m={m}
+            numberOfReactions={numberOfReactions}
+            numberOfResponses={numberOfResponses}
+          />
+        </AccordionSummary>
+        <AccordionDetails className={styles.repliesDiv}>
+          {!myRefs
+            ? null
+            : theseResponses.map((resp) => {
+                const respImage = urlFor(resp.image);
+                const date = new Date(resp._createdAt);
+                let hours = date.getHours();
+                let ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12; //if hour 0, make it 12
+                hours = hours ? hours : 12;
+                let minutes = date.getMinutes();
+                minutes = minutes < 10 ? '0' + minutes : minutes;
+                let originalPostDate =
+                  date.toLocaleString('default', {
+                    month: 'long',
+                  }) +
+                  ' ' +
+                  date.getDate() +
+                  ', ' +
+                  date.getFullYear() +
+                  ' - ' +
+                  hours +
+                  ':' +
+                  minutes +
+                  ' ' +
+                  ampm;
+
+                return (
+                  <div
+                    className={styles.responseCard}
+                    key={resp._id}
+                    title={originalPostDate}
+                    style={{
+                      flexDirection:
+                        resp.authorName === me ? 'row-reverse' : 'row',
+                    }}
+                  >
+                    <a
+                      href={urlFor(resp.avatar)}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <figure>
                         <img
-                          className={styles.media}
+                          className={styles.respAvatar}
                           src={urlFor(resp.avatar)}
                           alt=""
                         />
                       </figure>
+                    </a>
+                    <div
+                      className={styles.textArea}
+                      style={{
+                        alignItems:
+                          resp.authorName === me ? 'flex-end' : 'fles-start',
+                      }}
+                    >
                       <div
-                        className={styles.textArea}
+                        className={styles.authorName}
                         style={{
-                          alignItems:
-                            resp.authorName === me ? 'flex-end' : 'fles-start',
+                          display: resp.authorName === me ? 'block' : 'none',
                         }}
                       >
-                        <div
-                          className={styles.authorName}
-                          style={{
-                            display: resp.authorName === me ? 'block' : 'none',
-                          }}
-                        >
-                          ME
-                        </div>
-                        <div
-                          className={styles.authorName}
-                          style={{
-                            display: resp.authorName === me ? 'none' : 'block',
-                          }}
-                        >
-                          {resp.authorName.toUpperCase()}
-                        </div>
-                        <div
-                          className={
-                            resp.authorName === me
-                              ? styles.chatBoxMe
-                              : styles.chatBox
-                          }
-                        >
-                          {HTMLParser(resp.message)}
-                        </div>
-                        <a
-                          href={respImage}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <img
-                            src={respImage ? respImage : null}
-                            alt=""
-                            className={styles.respImage}
-                          />
-                        </a>
-                        <ReactionIcons
-                          m={resp}
-                          affectReaction={affectReaction}
-                        />
+                        ME
                       </div>
+                      <div
+                        className={styles.authorName}
+                        style={{
+                          display: resp.authorName === me ? 'none' : 'block',
+                        }}
+                      >
+                        {resp.authorName.toUpperCase()}
+                      </div>
+                      <div
+                        className={
+                          resp.authorName === me
+                            ? styles.chatBoxMe
+                            : styles.chatBox
+                        }
+                      >
+                        {HTMLParser(resp.message)}
+                      </div>
+                      <a
+                        href={respImage}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          src={respImage ? respImage : null}
+                          alt=""
+                          className={styles.respImage}
+                        />
+                      </a>
+                      <ReactionIcons m={resp} affectReaction={affectReaction} />
                     </div>
-                  );
-                })}
-            <Comment
-              m={m}
-              newThread={false}
-              fieldName="Reply"
-              id={`commentInput${m._id}`}
-            />
-          </AccordionDetails>
-        </Accordion>
-      </Card.Body>
+                  </div>
+                );
+              })}
+          <Comment
+            m={m}
+            newThread={false}
+            fieldName="Reply"
+            id={`commentInput${m._id}`}
+          />
+        </AccordionDetails>
+      </Accordion>
+      {/* </Card.Body> */}
     </UICard>
   );
 };
