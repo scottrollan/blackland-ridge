@@ -1,0 +1,51 @@
+@import '../styles/custom-properties.scss';
+
+.referrals {
+  z-index: 9;
+  background-color: var(--white);
+  border: var(--page-border);
+  border-bottom: none;
+  min-height: 90vh;
+}
+.referrals a {
+  color: var(--color-pallette-purple);
+}
+.cardDiv {
+  display: flex;
+  justify-content: space-around;
+  @media (pointer: coarse) {
+    @media screen and (max-width: $breakpoint-medium) {
+      flex-direction: column;
+    }
+  }
+}
+.card {
+  max-width: 25rem;
+  margin: 1rem;
+  padding: 0.5rem;
+  border: 2px solid var(--color-pallette-accent);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  @media (pointer: coarse) {
+    @media screen and (max-width: $breakpoint-medium) {
+      min-width: calc(100% - 2rem);
+    }
+  }
+}
+.card * {
+  margin: 0.25rem 0;
+}
+
+.filtered {
+  display: none;
+}
+.moreBtn {
+  margin-left: 0.25rem;
+  padding: 0 3px;
+}
+.footer {
+  display: flex;
+  flex-direction: column;
+  background-color: transparent;
+}

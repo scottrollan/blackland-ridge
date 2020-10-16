@@ -9,6 +9,7 @@ import Loading from './components/shared/Loading';
 import Welcome from './components/Welcome';
 import Calendar from './pages/Calendar';
 import Directory from './pages/Directory';
+import Referrals from './pages/Referrals';
 import Profile from './components/Profile';
 import MyProfile from './pages/MyProfile';
 import Messages from './pages/Messages';
@@ -48,6 +49,7 @@ const App = () => {
                 <Route path="/calendar" component={Calendar}></Route>
                 <Route path="/directory" component={Directory}></Route>
                 <Route path="/myProfile" component={MyProfile}></Route>
+                <Route path="/referrals" component={Referrals}></Route>
                 <Route path="/" component={Messages}></Route>
               </Switch>
             </Router>

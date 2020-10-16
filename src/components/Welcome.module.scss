@@ -22,6 +22,9 @@
   font-size: x-large;
   z-index: 1000;
   border: 8px solid var(--color-pallette-accent);
+  @media screen and (max-width: $breakpoint-medium) {
+    width: 95%;
+  }
 }
 
 .fadeIn {

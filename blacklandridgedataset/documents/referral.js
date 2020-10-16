@@ -9,9 +9,10 @@ export default {
       type: 'string',
     },
     {
-      name: 'subcategory',
       title: 'Business Sub-category',
-      type: 'string',
+      name: 'subcategory',
+      type: 'array',
+      of: [{ type: 'string' }],
     },
     {
       name: 'name',
