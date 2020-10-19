@@ -24,7 +24,7 @@ export default function ReactAndComment({
               title={
                 <React.Fragment>
                   <Typography color="inherit">{r.label}</Typography>
-                  {m[r.array]
+                  {m[r.array] //map the "likedBy's", etc... fro reactions array
                     ? m[r.array].map((by) => {
                         return <Typography key={by}>{by}</Typography>;
                       })
@@ -54,7 +54,7 @@ export default function ReactAndComment({
       <div
         className={styles.statsComments}
         style={{
-          display: numberOfResponses ? 'inherit' : 'none',
+          display: numberOfResponses ? 'inherit' : 'none', //if num of responses not 0
         }}
       >
         {numberOfResponses} Comments
@@ -62,7 +62,7 @@ export default function ReactAndComment({
       <div
         className={styles.statsComments}
         style={{
-          display: numberOfResponses ? 'none' : 'block',
+          display: numberOfResponses ? 'none' : 'block', //if num of response is 0
         }}
       >
         Comment

@@ -41,8 +41,10 @@
   display: none;
 }
 .moreBtn {
-  margin-left: 0.25rem;
-  padding: 0 3px;
+  color: var(--color-pallette-accent);
+  &:hover {
+    cursor: pointer;
+  }
 }
 .footer {
   display: flex;

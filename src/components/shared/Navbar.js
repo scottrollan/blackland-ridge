@@ -145,7 +145,7 @@ const NavBar = () => {
             </Link>
             {/* <NavDropdown.Divider /> */}
             <Link
-              to="/"
+              to="/referrals"
               className="dropdown-item"
               onClick={() => collapseNavbar()}
             >

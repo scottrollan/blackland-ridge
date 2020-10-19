@@ -13,18 +13,21 @@ const Messages = () => {
   const me = thisUser.name;
 
   const affectReaction = async (reaction, array, color, message) => {
+    //from Message.js -> ReactionsIcons.js
+    const origMessage = message;
     const messageID = message._id;
     const el = `#${reaction}Of${messageID}`;
-    const incDec = $(el).attr('action');
-    const origMessage = message;
+    const incDec = $(el).attr('action'); //inc or dec is determined in ReactionsIcons.js
     let newParams = [];
     if (origMessage[`${array}`]) {
-      newParams = [...origMessage[`${array}`]]; // = ["Jane", "Joe", "John"]
+      //if message.likedBy (i.e.) is already there...
+      newParams = [...origMessage[`${array}`]]; // = ["Jane", "Joe", "John"] sets newparams to equal array that already exists
     }
     let updated = {};
 
     if (incDec === 'inc') {
-      $(el).css('color', color);
+      $('.byIcon').hide(); // hide all icons
+      $(el).css('color', color).show(); // but color and show the one selected
       if (origMessage[`${array}`]) {
         newParams = [...origMessage[`${array}`], me]; //add user's name to the array of reactioners if array already exists
       } else {
@@ -32,6 +35,7 @@ const Messages = () => {
       }
       $(el).attr('action', 'dec');
     } else {
+      $('.byIcon').show(); // put all icons above the mask (which is z index 2)
       $(el).css('color', 'var(--overlay-medium)');
       const index = origMessage[`${array}`].indexOf(me);
       if (index > -1) {

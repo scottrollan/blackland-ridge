@@ -18,11 +18,12 @@ const ReactionIcons = ({ m, affectReaction }) => {
               m[`${icon.array}`] && m[`${icon.array}`].includes(me)
                 ? 'dec'
                 : 'inc'
-            } //if reaction array (i.e. likedBy) includes me, then the first click of this button should decrease the likes and remove me from the array (unlike)
+            } //if reaction array (i.e. likedBy) includes me, then the first click of this button should decrease the likes by 1 and remove me from the array (unlike), if me is not already there, then increase the number and add me to the array
             onClick={() =>
               affectReaction(icon.title, icon.array, icon.color, m)
             }
-            className={[`${icon.fontawesome} ${styles.icon}`]}
+            className={[`${icon.fontawesome} ${styles.icon} byIcon`]}
+            disabled
             style={{
               color:
                 m[`${icon.array}`] && m[`${icon.array}`].includes(me) // if this reaction array (i.e. likedBy) includes me

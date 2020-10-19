@@ -55,8 +55,7 @@ export default function Referrals() {
           const cLength = original.split(' ').length;
           let abbreviated = '';
           if (cLength > tolerance) {
-            abbreviated =
-              original.split(' ').slice(0, tolerance).join(' ') + '...';
+            abbreviated = original.split(' ').slice(0, tolerance).join(' ');
           }
           const elID = r.name.split(' ').join('-');
           return (
@@ -68,14 +67,15 @@ export default function Referrals() {
 
               <Card.Text id={elID}>
                 {abbreviated ? abbreviated : original}
-                <Button
-                  className={styles.moreBtn}
-                  variant="secondary"
-                  style={{ display: abbreviated ? 'inherit' : 'none' }}
-                  onClick={() => readMore(`#${elID}`, original)}
-                >
-                  more
-                </Button>
+                <span>
+                  <a
+                    className={styles.moreBtn}
+                    style={{ display: abbreviated ? 'inherit' : 'none' }}
+                    onClick={() => readMore(`#${elID}`, original)}
+                  >
+                    ...more...
+                  </a>
+                </span>
               </Card.Text>
               <Card.Link
                 href={r.link1}

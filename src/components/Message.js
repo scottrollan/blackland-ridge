@@ -57,7 +57,7 @@ const Message = ({
         </figure>
         <CardHeader title={m.title}></CardHeader>
       </div>
-      <Card.Body>
+      <Card.Body style={{ display: 'flex', flexDirection: 'column' }}>
         {HTMLParser(m.message)}
         <span style={{ fontSize: 'smaller' }}>
           - {m.authorName}, {originalPostDate}
