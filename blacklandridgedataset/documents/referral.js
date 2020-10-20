@@ -69,6 +69,21 @@ export default {
       type: 'image',
       title: 'Image',
     },
+    {
+      name: 'rating',
+      type: 'number',
+      title: 'Rating',
+    },
+    {
+      name: 'numberOfRatings',
+      type: 'number',
+      title: 'Number of Times Rated',
+    },
+    {
+      name: 'recommendedBy',
+      type: 'string',
+      title: 'Person who orignially recommended:',
+    },
   ],
 
   preview: {
