@@ -1,0 +1,13 @@
+@import '../styles/custom-properties.scss';
+
+.categoryDiv {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.category {
+  width: 40%;
+  @media screen and (max-width: $breakpoint-medium) {
+    width: 48%;
+  }
+}

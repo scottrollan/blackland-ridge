@@ -26,22 +26,22 @@ const Messages = () => {
     let updated = {};
 
     if (incDec === 'inc') {
-      $('.byIcon').hide(); // hide all icons
-      $(el).css('color', color).show(); // but color and show the one selected
+      $('.byIcon').css('visibility', 'hidden'); // hide all icons
+      $(el).css('color', color).css('visibility', 'visible'); // but color and show the one selected
       if (origMessage[`${array}`]) {
         newParams = [...origMessage[`${array}`], me]; //add user's name to the array of reactioners if array already exists
       } else {
         newParams = [me]; //create array and add name if array doesn't exist
       }
-      $(el).attr('action', 'dec');
+      $(el).attr('action', 'dec'); //reverse the inc/dec so that it decreases on the next click
     } else {
-      $('.byIcon').show(); // put all icons above the mask (which is z index 2)
-      $(el).css('color', 'var(--overlay-medium)');
-      const index = origMessage[`${array}`].indexOf(me);
+      $('.byIcon').css('visibility', 'visible'); // show all icons because none have been clicked yet
+      $(el).css('color', 'var(--overlay-medium)'); //gray out the "unclicked" icon
+      const index = origMessage[`${array}`].indexOf(me); //splice me from array of likes,e tc.
       if (index > -1) {
         newParams.splice(index, 1);
       }
-      $(el).attr('action', 'inc');
+      $(el).attr('action', 'inc'); //rever the inc/dec so that it increases on the next click
     }
     try {
       updated = await Client.patch(messageID)
@@ -52,7 +52,6 @@ const Messages = () => {
       console.log(error);
     }
   };
-
   let subscription;
   const query = "*[_type == 'message'] | order(commentAdded desc)";
   subscription = client.listen(query).subscribe(async (update) => {

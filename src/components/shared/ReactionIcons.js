@@ -1,12 +1,36 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { UserContext } from '../../App';
 import { reactions } from '../../data/reactions';
 import styles from './ReactionIcons.module.scss';
 
 const ReactionIcons = ({ m, affectReaction }) => {
-  const thisUser = React.useContext(UserContext);
+  const thisUser = useContext(UserContext);
   const me = thisUser.name;
+  let likedBy = [];
+  if (m.likedBy) {
+    likedBy = [...m.likedBy];
+  }
 
+  let lovedBy = [];
+  if (m.lovedBy) {
+    lovedBy = [...m.lovedBy];
+  }
+
+  let criedBy = [];
+  if (m.criedBy) {
+    criedBy = [...m.criedBy];
+  }
+
+  let laughedBy = [];
+  if (m.laughedBy) {
+    laughedBy = [...m.laughedBy];
+  }
+
+  const allBys = [...likedBy, ...lovedBy, ...criedBy, ...laughedBy];
+  let iAmHere = false;
+  if (allBys.includes(me)) {
+    iAmHere = true;
+  }
   return (
     <div className={styles.iconRow}>
       {reactions.map((icon) => {
@@ -23,13 +47,13 @@ const ReactionIcons = ({ m, affectReaction }) => {
               affectReaction(icon.title, icon.array, icon.color, m)
             }
             className={[`${icon.fontawesome} ${styles.icon} byIcon`]}
-            disabled
-            style={{
-              color:
-                m[`${icon.array}`] && m[`${icon.array}`].includes(me) // if this reaction array (i.e. likedBy) includes me
-                  ? icon.color // color it
-                  : 'var(--overlay-medium)', //otherwise make it gray
-            }}
+            style={
+              !iAmHere
+                ? { color: 'var(--overlay-medium' } //if not iAmHere, all icons displayed and grayed out
+                : m[`${icon.array}`] && m[`${icon.array}`].includes(me) // if iAmHere and  this reaction array (i.e. likedBy) includes me
+                ? { color: icon.color, display: 'block' } // color it
+                : { visibility: 'hidden' } //otherwise (if iAmHere, but not in this array, don't display me)
+            }
           ></i>
         );
       })}

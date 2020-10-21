@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { referralCategories } from '../data/referralCategores';
+import NewReferral from '../components/NewReferral';
+import { referralCategories } from '../data/referralCategories';
 import { fetchReferrals } from '../api/sanityClient';
 import { Nav, Card, Button } from 'react-bootstrap';
 import $ from 'jquery';
@@ -8,6 +9,10 @@ import styles from './Referrals.module.scss';
 export default function Referrals() {
   const [allReferrals, setAllReferrals] = useState([]);
   const [category, setCategory] = useState([]);
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const fetchData = async () => {
     const response = await fetchReferrals();
@@ -34,6 +39,10 @@ export default function Referrals() {
   return (
     <div className={styles.referrals}>
       <h3>Referrals from Your Neighbors</h3>
+      <Button variant="success" onClick={handleShow}>
+        <i className="far fa-user-plus"></i>
+      </Button>
+      <NewReferral show={show} handleClose={handleClose} />
       <Nav justify variant="tabs">
         {referralCategories.map((c) => {
           return (
