@@ -13,6 +13,7 @@
 .cardDiv {
   display: flex;
   justify-content: space-around;
+  flex-wrap: wrap;
   @media (pointer: coarse) {
     @media screen and (max-width: $breakpoint-medium) {
       flex-direction: column;
@@ -21,6 +22,7 @@
 }
 .card {
   max-width: 25rem;
+  min-width: 250px;
   margin: 1rem;
   padding: 0.5rem;
   border: 2px solid var(--color-pallette-accent);

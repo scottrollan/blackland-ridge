@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { UseContext, UserContext } from '../App';
+import Loading from '../components/shared/Loading';
+import { UserContext } from '../App';
 import { referralCategories } from '../data/referralCategories';
 import { Client } from '../api/sanityClient';
 import { Modal, Button, Form } from 'react-bootstrap';
@@ -18,6 +19,8 @@ export default function NewReferral({ show, handleClose }) {
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [website, setWebsite] = useState('');
+  const [rating, setRating] = useState('');
+  const [image, setImage] = useState('');
 
   const selectCategory = (cat) => {
     const subC = referralCategories.find((el) => el.category === cat);
@@ -29,7 +32,23 @@ export default function NewReferral({ show, handleClose }) {
     setSubcategory([...theseSubs]);
   };
 
-  const saveReferral = (e) => {
+  const clearAllFields = () => {
+    setName('');
+    setComments('');
+    setCategory('select');
+    setSubcategories([]);
+    setSubcategory([]);
+    setPhone('');
+    setEmail('');
+    setAddress('');
+    setWebsite('');
+    setRating('');
+    setImage('');
+  };
+
+  const saveReferral = async (e) => {
+    handleClose();
+    $('#loading').css({ display: 'flex', zIndex: '999' });
     e.preventDefault();
     if (category === 'select') {
       alert('Please select a category');
@@ -48,6 +67,15 @@ export default function NewReferral({ show, handleClose }) {
       recommendedBy,
     };
     console.log(newReferral);
+    clearAllFields();
+    try {
+      const response = await Client.create(newReferral);
+      console.log(response);
+    } catch (error) {
+      alert(error);
+    } finally {
+      $('#loading').css('display', 'none');
+    }
   };
 
   const phoneMask = () => {
@@ -65,12 +93,13 @@ export default function NewReferral({ show, handleClose }) {
 
   return (
     <Modal show={show} onHide={handleClose}>
+      <Loading />
       <Modal.Header closeButton>
         <Modal.Title>Refer a New Person or Business</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={(e) => saveReferral(e)} id="newReferral">
-          <Form.Group controlId="newBusiness">
+          <Form.Group controlId="name">
             <Form.Label>Business or Person's Name (* required)</Form.Label>
             <Form.Control
               type="text"
