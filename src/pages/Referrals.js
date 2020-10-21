@@ -29,7 +29,6 @@ export default function Referrals() {
   };
 
   const readMore = (el, text) => {
-    console.log(el, text);
     $(el).text(text);
   };
 

@@ -46,7 +46,7 @@ export default function NewReferral({ show, handleClose }) {
     setImage('');
   };
 
-  const checkInputs = async (e) => {
+  const checkInputs = (e) => {
     e.preventDefault();
     switch (true) {
       case category === 'select':
@@ -58,23 +58,28 @@ export default function NewReferral({ show, handleClose }) {
         );
         break;
       default:
-        handleClose();
+        handleClose(); //close modal
+        clearAllFields(); // set "state" back to blank fields
         saveReferral();
         break;
     }
   };
   const saveReferral = async () => {
-    $('#loading').css({ display: 'flex', zIndex: '999' });
+    $('#loading').css({ display: 'flex', zIndex: '999' }); //loading on
 
-    const imageRes = await Client.assets.upload('image', image);
-    const newImage = {
-      _type: 'image',
-      asset: {
-        _ref: imageRes._id,
-        _type: 'reference',
-      },
-    };
-
+    let newImage;
+    try {
+      const imageRes = await Client.assets.upload('image', image);
+      newImage = {
+        _type: 'image',
+        asset: {
+          _ref: imageRes._id,
+          _type: 'reference',
+        },
+      };
+    } catch (error) {
+      console.log(error);
+    }
     const newReferral = {
       _type: 'referral',
       address,
@@ -88,8 +93,7 @@ export default function NewReferral({ show, handleClose }) {
       subcategory,
       recommendedBy,
     };
-    console.log(newReferral);
-    clearAllFields();
+    // console.log(newReferral);
     try {
       const response = await Client.create(newReferral);
       console.log(response);
@@ -114,7 +118,7 @@ export default function NewReferral({ show, handleClose }) {
   $('[type="tel"]').keyup(phoneMask);
 
   return (
-    <Modal show={show} onHide={handleClose}>
+    <Modal show={show} onHide={handleClose} className={styles.Modal}>
       <Loading />
       <Modal.Header closeButton>
         <Modal.Title>Refer a New Person or Business</Modal.Title>

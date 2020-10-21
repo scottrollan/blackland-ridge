@@ -11,3 +11,11 @@
     width: 48%;
   }
 }
+
+@media (pointer: coarse) {
+  @media screen and (max-width: $breakpoint-medium) {
+    .modal {
+      padding-bottom: 6rem;
+    }
+  }
+}

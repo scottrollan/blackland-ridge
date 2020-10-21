@@ -2,23 +2,22 @@ export const referralCategories = [
   { category: 'General', subcategories: ['General'] },
   {
     category: 'Food',
-    subcategories: ['General', 'Restaurants', 'Delivery', 'Grocery'],
+    subcategories: ['Restaurants', 'Delivery', 'Grocery', 'Food-General'],
   },
   {
     category: 'Kids',
     subcategories: [
-      'General',
       'Sitters',
       'Nannies',
       'Tutors',
       'Coaching/Athletics',
       'Pediatrics',
+      'Kids-General',
     ],
   },
   {
     category: 'Houses',
     subcategories: [
-      'General',
       'House Cleaning',
       'Plumbing',
       'Electrical',
@@ -31,40 +30,41 @@ export const referralCategories = [
       'Masonry',
       'Siding',
       'Painting',
-      'Builders',
+      'Builders/Contractors',
       'Interior Design',
+      'Houses-General',
     ],
   },
   {
     category: 'Pets',
     subcategories: [
-      'General',
       'Dog-Walking',
       'Pet-Sitting',
       'Training',
       'Grooming',
       'Pet Food & Supplies',
+      'Pets-General',
     ],
   },
   {
     category: 'Repairs',
     subcategories: [
-      'General',
       'Appliance Repair',
       'Upholstery',
       'Mechanics',
       'HVAC',
+      'Repairs-General',
     ],
   },
   {
     category: 'Yards',
     subcategories: [
-      'General',
       'Landscape Maintenance',
       'Landscape Installation',
       'Landscape Design',
       'Mowing',
       'Hardscaping',
+      'Yards-General',
     ],
   },
 ];
