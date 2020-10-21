@@ -46,20 +46,42 @@ export default function NewReferral({ show, handleClose }) {
     setImage('');
   };
 
-  const saveReferral = async (e) => {
-    handleClose();
-    $('#loading').css({ display: 'flex', zIndex: '999' });
+  const checkInputs = async (e) => {
     e.preventDefault();
-    if (category === 'select') {
-      alert('Please select a category');
-      return;
+    switch (true) {
+      case category === 'select':
+        alert('Please select a category.');
+        break;
+      case phone === '' && email === '' && website === '':
+        alert(
+          'Please enter a phone number, email address or website for this business/person.'
+        );
+        break;
+      default:
+        handleClose();
+        saveReferral();
+        break;
     }
+  };
+  const saveReferral = async () => {
+    $('#loading').css({ display: 'flex', zIndex: '999' });
+
+    const imageRes = await Client.assets.upload('image', image);
+    const newImage = {
+      _type: 'image',
+      asset: {
+        _ref: imageRes._id,
+        _type: 'reference',
+      },
+    };
+
     const newReferral = {
       _type: 'referral',
       address,
       category,
       comments,
       email,
+      image: newImage,
       name,
       phone,
       link1: website,
@@ -98,7 +120,7 @@ export default function NewReferral({ show, handleClose }) {
         <Modal.Title>Refer a New Person or Business</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={(e) => saveReferral(e)} id="newReferral">
+        <Form onSubmit={(e) => checkInputs(e)} id="newReferral">
           <Form.Group controlId="name">
             <Form.Label>Business or Person's Name (* required)</Form.Label>
             <Form.Control
@@ -206,7 +228,13 @@ export default function NewReferral({ show, handleClose }) {
               onChange={(e) => setWebsite(e.target.value)}
             />
           </Form.Group>
-
+          <Form.Group>
+            <Form.File
+              id="image"
+              label="Upload An Image"
+              onChange={(e) => setImage(e.target.files[0])}
+            />
+          </Form.Group>
           <Button variant="success" type="submit">
             Save
           </Button>
