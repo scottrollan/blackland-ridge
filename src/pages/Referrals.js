@@ -16,6 +16,7 @@ export default function Referrals() {
 
   const fetchData = async () => {
     const response = await fetchReferrals();
+    console.log(response);
     setAllReferrals([...response]);
   };
 

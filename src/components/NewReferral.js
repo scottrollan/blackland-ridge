@@ -27,8 +27,14 @@ export default function NewReferral({ show, handleClose }) {
     setSubcategories([...subC.subcategories]);
   };
 
-  const selectSubs = () => {
-    const theseSubs = $('#subcategory').val();
+  const handleMultiselect = (options) => {
+    const theseSubs = [];
+    for (let i = 0; i < options.length; i++) {
+      if (options[i].selected) {
+        theseSubs.push(options[i].value);
+      }
+    }
+    console.log(theseSubs);
     setSubcategory([...theseSubs]);
   };
 
@@ -180,7 +186,7 @@ export default function NewReferral({ show, handleClose }) {
               <Form.Control
                 as="select"
                 multiple
-                onChange={(e) => setSubcategory(e.target.value)}
+                onChange={(e) => handleMultiselect(e.target.options)}
               >
                 {subcategories.map((s) => {
                   return (

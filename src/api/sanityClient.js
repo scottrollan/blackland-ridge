@@ -37,6 +37,11 @@ export const fetchMessages = async () => {
 };
 
 export const fetchReferrals = async () => {
-  let response = await Client.fetch("*[_type == 'referral']");
-  return response;
+  try {
+    let response = await Client.fetch("*[_type == 'referral']");
+
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
 };
