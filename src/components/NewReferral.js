@@ -180,9 +180,7 @@ export default function NewReferral({ show, handleClose }) {
               <Form.Control
                 as="select"
                 multiple
-                onChange={(e) =>
-                  setSubcategory([...subcategory, e.target.value])
-                }
+                onChange={(e) => setSubcategory(e.target.value)}
               >
                 {subcategories.map((s) => {
                   return (
