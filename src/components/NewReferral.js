@@ -19,7 +19,7 @@ export default function NewReferral({ show, handleClose }) {
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [website, setWebsite] = useState('');
-  const [rating, setRating] = useState('');
+  const [rating, setRating] = useState(5);
   const [image, setImage] = useState('');
 
   const selectCategory = (cat) => {
@@ -96,6 +96,7 @@ export default function NewReferral({ show, handleClose }) {
       name,
       phone,
       link1: website,
+      rating,
       subcategory,
       recommendedBy,
     };

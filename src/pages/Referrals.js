@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NewReferral from '../components/NewReferral';
 import { referralCategories } from '../data/referralCategories';
 import { fetchReferrals } from '../api/sanityClient';
+import { createRandomString } from '../functions/CreateRandomString';
 import { Nav, Card, Button } from 'react-bootstrap';
 import $ from 'jquery';
 import styles from './Referrals.module.scss';
@@ -14,12 +15,6 @@ export default function Referrals() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const fetchData = async () => {
-    const response = await fetchReferrals();
-    console.log(response);
-    setAllReferrals([...response]);
-  };
-
   const filterBy = (category) => {
     const result = allReferrals.filter(
       (referral) => referral.category === category
@@ -29,11 +24,11 @@ export default function Referrals() {
     $('#filtered').css('display', 'flex');
   };
 
-  const readMore = (el, text) => {
-    $(el).text(text);
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetchReferrals();
+      setAllReferrals([...response]);
+    };
     fetchData();
   }, []);
   return (
@@ -59,14 +54,15 @@ export default function Referrals() {
       </Nav>
       <div id="allReferrals" className={styles.cardDiv}>
         {allReferrals.map((r) => {
-          const tolerance = 24;
-          const original = r.comments;
-          const cLength = original.split(' ').length;
+          const tolerance = 24; //number of words you want to show initially
+          const original = r.comments; //entire comment
+          const cLength = original.split(' ').length; //comment word count
           let abbreviated = '';
           if (cLength > tolerance) {
+            //if word count is over more than tolerance
             abbreviated = original.split(' ').slice(0, tolerance).join(' ');
           }
-          const elID = r.name.split(' ').join('-');
+          const elID = createRandomString(10);
           return (
             <Card className={styles.card} key={r._id}>
               <Card.Title>{r.name}</Card.Title>
@@ -74,17 +70,23 @@ export default function Referrals() {
                 <Card.Subtitle key={s}>{s}</Card.Subtitle>
               ))}
 
-              <Card.Text id={elID}>
-                {abbreviated ? abbreviated : original}
+              <Card.Text id={`${elID}short`}>
+                {abbreviated}
                 <span>
-                  <a
+                  <Button
                     className={styles.moreBtn}
                     style={{ display: abbreviated ? 'inherit' : 'none' }}
-                    onClick={() => readMore(`#${elID}`, original)}
+                    onClick={() => {
+                      $(`#${elID}short`).hide();
+                      $(`#${elID}long`).show();
+                    }}
                   >
                     ...more...
-                  </a>
+                  </Button>
                 </span>
+              </Card.Text>
+              <Card.Text id={`${elID}long`} style={{ display: 'none' }}>
+                {original}
               </Card.Text>
               <Card.Link
                 href={r.link1}

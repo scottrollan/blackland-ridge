@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import Zillow from '../../assets/zillow.png';
 import { UserContext } from '../../App';
 import { LoginContext } from '../../App';
 import { Client } from '../../api/sanityClient';
@@ -13,7 +14,7 @@ import styles from './NavBar.module.scss';
 const NavBar = () => {
   let history = useHistory();
   const thisUser = useContext(UserContext);
-  const [showLogin, setShowLogin] = useContext(LoginContext);
+  const setShowLogin = useContext(LoginContext);
 
   const builder = imageUrlBuilder(Client);
 
@@ -133,7 +134,8 @@ const NavBar = () => {
               className="dropdown-item"
               onClick={() => collapseNavbar()}
             >
-              Real Estate
+              Homes by{' '}
+              <img src={Zillow} alt="Zillow" className={styles.zillow} />
             </a>
             <Link
               to="/"

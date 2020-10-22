@@ -43,9 +43,15 @@
   display: none;
 }
 .moreBtn {
+  background-color: transparent;
+  padding: 0;
+  border: none;
   color: var(--color-pallette-accent);
+  text-transform: none;
   &:hover {
     cursor: pointer;
+    background-color: transparent;
+    color: var(--color-pallette-purple);
   }
 }
 .footer {

@@ -61,9 +61,7 @@ const Messages = () => {
     setMessages([...refresh]);
   });
 
-  useEffect(() => {
-    setMessages([...theseMessages]);
-
+  const startSubsription = () => {
     subscription = client.listen(query).subscribe(async (update) => {
       const comment = update.result; //returns main (newThread) message (not the response to it)
       console.log(comment);
@@ -78,6 +76,11 @@ const Messages = () => {
       const response = await fetchMessages();
       setMessages([...response]);
     });
+  };
+
+  useEffect(() => {
+    setMessages([...theseMessages]);
+    startSubsription();
     return () => {
       subscription.unsubscribe();
     };

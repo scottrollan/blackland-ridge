@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Loading from './shared/Loading';
 import FileUpload from './shared/FileUpload';
 import { Button, Spinner } from 'react-bootstrap';
@@ -19,10 +19,10 @@ const urlFor = (source) => {
 };
 
 const Comment = ({ m, newThread, fieldName, id }) => {
-  const [showLogin, setShowLogin] = React.useContext(LoginContext);
+  const setShowLogin = React.useContext(LoginContext);
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
-  const [selectedFile, setSelectedFile] = useState(null); //image file
+  const setSelectedFile = useState(null); //image file
   const [newImageID, setNewImageID] = useState('');
   const [uploadedImage, setUploadedImage] = useState(null); //url
   const thisUser = React.useContext(UserContext);

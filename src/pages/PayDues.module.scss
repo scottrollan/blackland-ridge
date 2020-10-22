@@ -1,0 +1,8 @@
+@import '../styles/custom-properties.scss';
+
+.payDues {
+  min-height: 90vh;
+}
+.payDues h3 {
+  color: var(--white);
+}
