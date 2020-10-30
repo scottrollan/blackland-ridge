@@ -104,7 +104,7 @@ const NavBar = () => {
           >
             {/* <NavDropdown.Item> */}
             <Link
-              to="/messages"
+              to="/"
               className="dropdown-item"
               onClick={() => collapseNavbar()}
               style={{ display: thisUser ? 'inherit' : 'none' }}
