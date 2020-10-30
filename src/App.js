@@ -47,12 +47,12 @@ const App = () => {
               <Navbar loginShow={(trueFalse) => setShowLogin(trueFalse)} />
               <Switch>
                 {/* <Route path="/" exact component={Home}></Route> */}
+                <Route path="/" exact component={Messages}></Route>
                 <Route path="/calendar" component={Calendar}></Route>
                 <Route path="/directory" component={Directory}></Route>
                 <Route path="/myProfile" component={MyProfile}></Route>
                 <Route path="/payDues" component={PayDues}></Route>
                 <Route path="/referrals" component={Referrals}></Route>
-                <Route path="/" component={Messages}></Route>
               </Switch>
             </Router>
 

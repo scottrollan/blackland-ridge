@@ -1,5 +1,5 @@
 import React from 'react';
-import { Client } from '../api/sanityClient';
+import { Client, fetchDirectory } from '../api/sanityClient';
 import { Card, Tab, Tabs, Button } from 'react-bootstrap';
 import $ from 'jquery';
 import { useHistory } from 'react-router-dom';
@@ -24,7 +24,7 @@ const Directory = () => {
   let neighbors;
   const getNeighborList = async () => {
     try {
-      neighbors = await Client.fetch("*[_type == 'profile'] | order(address)");
+      neighbors = await fetchDirectory();
       setNeighborList([...neighbors]);
       //sort by street name, then number (so that 4181 Blackland Dr comes before 38 Blackland Way, i.e.)
       neighborList.sort((a, b) =>

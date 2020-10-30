@@ -89,13 +89,13 @@ const NavBar = () => {
           </span>
         </Nav>
         <Nav>
-          <Link
+          {/* <Link
             to="/"
             className={[`nav-link ${styles.navLink}`]}
             onClick={() => collapseNavbar()}
           >
             Home
-          </Link>
+          </Link> */}
 
           <NavDropdown
             title="The Neighborhood"
@@ -138,7 +138,7 @@ const NavBar = () => {
               <img src={Zillow} alt="Zillow" className={styles.zillow} />
             </a>
             <Link
-              to="/"
+              to="/payDues"
               className="dropdown-item"
               onClick={() => collapseNavbar()}
               style={{ display: thisUser ? 'inherit' : 'none' }}

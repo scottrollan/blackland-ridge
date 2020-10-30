@@ -45,3 +45,12 @@ export const fetchReferrals = async () => {
     console.log(error);
   }
 };
+
+export const fetchDirectory = async () => {
+  try {
+    let response = await Client.fetch("*[_type == 'profile'] | order(address)");
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};

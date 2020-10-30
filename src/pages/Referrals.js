@@ -57,7 +57,7 @@ export default function Referrals() {
           const tolerance = 24; //number of words you want to show initially
           const original = r.comments; //entire comment
           const cLength = original.split(' ').length; //comment word count
-          let abbreviated = '';
+          let abbreviated = original;
           if (cLength > tolerance) {
             //if word count is over more than tolerance
             abbreviated = original.split(' ').slice(0, tolerance).join(' ');

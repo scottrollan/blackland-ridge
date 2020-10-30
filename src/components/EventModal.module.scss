@@ -1,6 +1,7 @@
 @import '../styles/custom-properties.scss';
 
 .modalButton {
+  width: 100%;
   background-color: transparent;
   border: none;
   color: var(--color-pallette-accent);
