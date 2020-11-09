@@ -26,6 +26,11 @@ const App = () => {
   let theseMessages = useMessages();
   const [showLogin, setShowLogin] = useState(false);
 
+  const showLoginPopup = () => setShowLogin(true);
+  const hideLoginPopup = () => setShowLogin(false);
+
+  const setLoginPopup = { showLoginPopup, hideLoginPopup };
+
   if (thisUser) {
     $('#firebaseui-auth-container').hide();
   }
@@ -42,9 +47,9 @@ const App = () => {
       <Welcome />
       <UserContext.Provider value={thisUser}>
         <MessagesContext.Provider value={theseMessages}>
-          <LoginContext.Provider value={[showLogin, setShowLogin]}>
+          <LoginContext.Provider value={setLoginPopup}>
             <Router>
-              <Navbar loginShow={(trueFalse) => setShowLogin(trueFalse)} />
+              <Navbar />
               <Switch>
                 {/* <Route path="/" exact component={Home}></Route> */}
                 <Route path="/" exact component={Messages}></Route>

@@ -14,7 +14,7 @@ import styles from './NavBar.module.scss';
 const NavBar = () => {
   let history = useHistory();
   const thisUser = useContext(UserContext);
-  const setShowLogin = useContext(LoginContext);
+  const setLoginPopup = useContext(LoginContext);
 
   const builder = imageUrlBuilder(Client);
 
@@ -24,11 +24,12 @@ const NavBar = () => {
   const logInOut = () => {
     if (thisUser) {
       db.signOut();
-      setShowLogin(false);
+      setLoginPopup.hideLoginPopup();
       history.push('/');
     }
     if (!thisUser) {
-      setShowLogin(true);
+      // setShowLogin(true);
+      setLoginPopup.showLoginPopup();
     }
   };
 
@@ -156,7 +157,7 @@ const NavBar = () => {
             <div
               className="dropdown-item"
               style={{ display: thisUser ? 'none' : 'inherit' }}
-              onClick={() => setShowLogin(true)}
+              onClick={() => setLoginPopup.showLoginPopup()}
             >
               Login For More
             </div>

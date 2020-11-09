@@ -19,7 +19,7 @@ const urlFor = (source) => {
 };
 
 const Comment = ({ m, newThread, fieldName, id }) => {
-  const setShowLogin = React.useContext(LoginContext);
+  const setLoginPopup = React.useContext(LoginContext);
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
   const setSelectedFile = useState(null); //image file
@@ -132,7 +132,7 @@ const Comment = ({ m, newThread, fieldName, id }) => {
         <span
           style={{ display: thisUser ? 'none' : 'inherit' }}
           className={styles.setLogin}
-          onClick={() => setShowLogin(true)}
+          onClick={() => setLoginPopup.showLoginPopup()}
         >
           <h5>Login to comment</h5>
           <i className="fal fa-comment-lines" style={{ fontSize: 48 }}></i>
