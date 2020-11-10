@@ -3,7 +3,7 @@ import NewReferral from '../components/NewReferral';
 import { referralCategories } from '../data/referralCategories';
 import { fetchReferrals } from '../api/sanityClient';
 import { createRandomString } from '../functions/CreateRandomString';
-import { Nav, Card, Button } from 'react-bootstrap';
+import { Nav, Card, Button, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import $ from 'jquery';
 import styles from './Referrals.module.scss';
 
@@ -24,6 +24,12 @@ export default function Referrals() {
     $('#filtered').css('display', 'flex');
   };
 
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Add A Referral
+    </Tooltip>
+  );
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetchReferrals();
@@ -34,9 +40,15 @@ export default function Referrals() {
   return (
     <div className={styles.referrals}>
       <h3>Referrals from Your Neighbors</h3>
-      <Button variant="success" onClick={handleShow}>
-        <i className="far fa-user-plus"></i>
-      </Button>
+      <OverlayTrigger
+        placement="right"
+        delay={{ show: 250, hide: 400 }}
+        overlay={renderTooltip}
+      >
+        <Button variant="success" onClick={handleShow}>
+          <i className="far fa-user-plus"></i>
+        </Button>
+      </OverlayTrigger>
       <NewReferral show={show} handleClose={handleClose} />
       <Nav justify variant="tabs">
         {referralCategories.map((c) => {

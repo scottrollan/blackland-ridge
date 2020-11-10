@@ -117,7 +117,7 @@ const Authentication = ({ show }) => {
               </span>{' '}
             </Button>
 
-            <Button
+            {/* <Button
               onClick={db.signInWithTwitter}
               className={styles.twitterAuthButton}
             >
@@ -125,7 +125,7 @@ const Authentication = ({ show }) => {
               <span className={styles.authLogin}>
                 {'   '}Sign in with Twitter
               </span>
-            </Button>
+            </Button> */}
 
             <div className={styles.form}>
               <h5 style={{ textAlign: 'center' }}>

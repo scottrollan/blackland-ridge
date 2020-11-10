@@ -320,7 +320,7 @@ const Calendar = () => {
               backgroundColor:
                 index % 2 === 0
                   ? 'var(--white)'
-                  : 'var(--color-pallette-light)',
+                  : 'var(--color-pallette-medium)',
             }}
           >
             <div className={styles.eventPicWrapper}>

@@ -27,7 +27,7 @@ const Messages = () => {
 
     if (incDec === 'inc') {
       $('.byIcon').css('visibility', 'hidden'); // hide all icons
-      $(el).css('color', color).css('visibility', 'visible'); // but color and show the one selected
+      $(el).css('color', color).css('visibility', 'visible'); // but color and show the icon selected, e.g. if heart was clicked, color it red and show it, keep others hidden
       if (origMessage[`${array}`]) {
         newParams = [...origMessage[`${array}`], me]; //add user's name to the array of reactioners if array already exists
       } else {
@@ -35,13 +35,14 @@ const Messages = () => {
       }
       $(el).attr('action', 'dec'); //reverse the inc/dec so that it decreases on the next click
     } else {
+      //if incDec = 'dec' (default)
       $('.byIcon').css('visibility', 'visible'); // show all icons because none have been clicked yet
       $(el).css('color', 'var(--overlay-medium)'); //gray out the "unclicked" icon
       const index = origMessage[`${array}`].indexOf(me); //splice me from array of likes,e tc.
       if (index > -1) {
         newParams.splice(index, 1);
       }
-      $(el).attr('action', 'inc'); //rever the inc/dec so that it increases on the next click
+      $(el).attr('action', 'inc'); //reverse the inc/dec so that it increases on the next click
     }
     try {
       updated = await Client.patch(messageID)
@@ -52,10 +53,11 @@ const Messages = () => {
       console.log(error);
     }
   };
-  let subscription;
+
   const query = "*[_type == 'message'] | order(commentAdded desc)";
-  subscription = client.listen(query).subscribe(async (update) => {
-    const comment = update.result; //returns main (newThread) message (not the response to it)
+
+  let subscription = client.listen(query).subscribe(async (update) => {
+    const comment = await update.result; //returns main (newThread) message (not the response to it)
     console.log(comment);
     const refresh = await fetchMessages();
     setMessages([...refresh]);
@@ -63,13 +65,12 @@ const Messages = () => {
 
   const startSubsription = () => {
     subscription = client.listen(query).subscribe(async (update) => {
-      const comment = update.result; //returns main (newThread) message (not the response to it)
+      const comment = await update.result; //returns main (newThread) message (not the response to it)
       console.log(comment);
-      setTimeout(() => $('#loading').css('display', 'none'), 3000);
 
       $('#alertThis')
         .text(
-          `Someone just replied or reacted to ${comment.author}'s post: "${comment.title}"`
+          `Someone just replied or reacted to ${comment.authorName}'s post: "${comment.title}"`
         )
         .css('display', 'flex');
       setTimeout(() => $('#alertThis').css('display', 'none').text(''), 8400);

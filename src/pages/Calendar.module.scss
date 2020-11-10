@@ -325,7 +325,7 @@ button:hover {
   width: 100%;
   font-size: large;
   text-align: center;
-  color: var(--color-pallette-purple);
+  color: var(--color-pallette-muted-accent);
   background-color: var(--white);
   border-bottom: 1px dashed #2f2f2f;
   box-shadow: 0 2px 0 var(--color-pallette-accent);
@@ -343,7 +343,7 @@ button:hover {
   text-align: center;
 }
 .nextEventNumber {
-  color: var(--color-pallette-purple);
+  color: var(--color-pallette-muted-accent);
   font-size: 200%;
 }
 .nextEventsList {

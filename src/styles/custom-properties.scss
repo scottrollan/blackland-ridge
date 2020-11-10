@@ -23,26 +23,29 @@ $breakpoint-extra-large: 1600px;
 
   //color pallette
   --default-font-color: #1b4a56;
-  --color-pallette-dark: #415821;
-  --color-pallette-accent: #94bd58;
-  --color-pallette-purple: #382158;
-  --color-pallette-gray: #7d9b9e;
-  --color-pallette-light: #d3e08f;
+
+  --color-pallette-dark: #505b6a;
+  --color-pallette-medium: #bec3cc;
+  --color-pallette-light: #dfe7f2;
+  --color-pallette-accent: #b9d452;
+  --color-pallette-muted-accent: rgba(185, 212, 82, 0.8);
+
   --default-background: #fafafa;
+
   --white: #fafafa;
   --page-border: 8px solid var(--color-pallette-dark);
   --avatar-size: 130px;
   @media (pointer: coarse) {
     @media screen and (max-width: $breakpoint-medium) {
-      --page-border: 8px solid var(--color-pallette-purple);
+      --page-border: 8px solid var(--color-pallette-muted-accent);
     }
   }
 }
 
 @mixin primary-button {
-  background-color: var(--color-pallette-gray);
+  background-color: var(--color-pallette-light);
   color: var(--white);
-  border-color: var(--color-pallette-gray);
+  border-color: var(--color-pallette-light);
   font-size: large;
   text-transform: uppercase;
   -webkit-transform: perspective(1px) translateZ(0);
@@ -55,7 +58,7 @@ $breakpoint-extra-large: 1600px;
   -webkit-transition-duration: 0.3s;
   transition-duration: 0.3s;
   &:before {
-    border-color: var(--color-pallette-purple);
+    border-color: var(--color-pallette-muted-accent);
   }
   &:hover {
     background-color: var(--color-pallette-accent);
@@ -65,26 +68,26 @@ $breakpoint-extra-large: 1600px;
   &:active,
   :visited,
   :focus {
-    background-color: var(--color-pallette-gray);
+    background-color: var(--color-pallette-light);
     color: var(--color-pallette-dark);
     border-color: var(--color-pallette-dark);
   }
 }
 
 @mixin purple-button {
-  background-color: var(--color-pallette-purple);
+  background-color: var(--color-pallette-muted-accent);
   color: var(--white);
-  border-color: var(--color-pallette-purple);
+  border-color: var(--color-pallette-muted-accent);
   font-size: large;
   text-transform: uppercase;
   &:before {
-    border-color: var(--color-pallette-purple);
+    border-color: var(--color-pallette-muted-accent);
   }
 
   &:active,
   :visited,
   :focus {
-    background-color: var(--color-pallette-gray);
+    background-color: var(--color-pallette-light);
     color: var(--color-pallette-dark);
     border-color: var(--color-pallette-dark);
   }
@@ -98,9 +101,9 @@ $breakpoint-extra-large: 1600px;
 @mixin rectangle-out {
   @include hacks();
   position: relative;
-  background: var(--color-pallette-purple);
+  background: var(--color-pallette-muted-accent);
   color: var(--white);
-  border: 1px solid var(--color-pallette-purple);
+  border: 1px solid var(--color-pallette-muted-accent);
   @include prefixed(transition-property, color);
   @include prefixed(transition-duration, $mediumDuration);
 
@@ -126,7 +129,7 @@ $breakpoint-extra-large: 1600px;
   &:visited,
   &:hover {
     color: white;
-    background-color: var(--color-pallette-purple);
+    background-color: var(--color-pallette-muted-accent);
     border-color: var(--color-pallette-accent);
 
     &:before {

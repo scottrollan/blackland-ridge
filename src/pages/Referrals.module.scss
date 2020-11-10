@@ -8,7 +8,7 @@
   min-height: 90vh;
 }
 .referrals a {
-  color: var(--color-pallette-purple);
+  color: var(--color-pallette-muted-accent);
 }
 .cardDiv {
   display: flex;
@@ -51,7 +51,7 @@
   &:hover {
     cursor: pointer;
     background-color: transparent;
-    color: var(--color-pallette-purple);
+    color: var(--color-pallette-muted-accent);
   }
 }
 .footer {
