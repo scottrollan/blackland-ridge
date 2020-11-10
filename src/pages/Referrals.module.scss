@@ -43,9 +43,9 @@
 }
 
 .clickable {
-  color: var(--color-pallette-dark) !important;
+  color: var(--default-font-color) !important;
   &:hover {
-    color: var(--color-pallette-muted-accent) !important;
+    color: var(--color-pallette-medium) !important;
   }
 }
 
