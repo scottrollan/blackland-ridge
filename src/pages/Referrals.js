@@ -75,6 +75,23 @@ export default function Referrals() {
             abbreviated = original.split(' ').slice(0, tolerance).join(' ');
           }
           const elID = createRandomString(10);
+          let htmlAddress;
+          if (r.address) {
+            htmlAddress = `http://google.com/maps?q=${r.address
+              .split(' ')
+              .join('+')}`;
+          }
+          let htmlEmail;
+          if (r.email) {
+            htmlEmail = `mailto:${r.email}`;
+          }
+          let htmlPhone;
+          if (r.phone) {
+            const noHyphen = r.phone.replace('-', '');
+            const noOpenParenth = noHyphen.replace('(', '');
+            const noCloseParenth = noOpenParenth.replace(')', '');
+            htmlPhone = `tel:+${noCloseParenth}`;
+          }
           return (
             <Card className={styles.card} key={r._id}>
               <Card.Title>{r.name}</Card.Title>
@@ -104,12 +121,31 @@ export default function Referrals() {
                 href={r.link1}
                 target="_blank"
                 rel="noopener noreferrer"
+                className={styles.clickable}
               >
                 {r.link1}
               </Card.Link>
               <Card.Footer className={styles.footer}>
-                <span>{r.phone}</span>
-                <span>{r.email}</span>
+                <span>
+                  <a href={htmlPhone} className={styles.clickable}>
+                    {r.phone}
+                  </a>
+                </span>
+                <span>
+                  <a href={htmlEmail} className={styles.clickable}>
+                    {r.email}
+                  </a>
+                </span>
+                <span>
+                  <a
+                    href={htmlAddress}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.clickable}
+                  >
+                    {r.address}
+                  </a>
+                </span>
               </Card.Footer>
             </Card>
           );
@@ -117,16 +153,61 @@ export default function Referrals() {
       </div>
       <div className={`${styles.filtered} ${styles.cardDiv}`} id="filtered">
         {category.map((r) => {
+          let htmlAddress;
+          if (r.address) {
+            htmlAddress = `http://google.com/maps?q=${r.address
+              .split(' ')
+              .join('+')}`;
+          }
+          let htmlEmail;
+          if (r.email) {
+            htmlEmail = `mailto:${r.email}`;
+          }
+          let htmlPhone;
+          if (r.phone) {
+            const noHyphen = r.phone.replace('-', '');
+            const noOpenParenth = noHyphen.replace('(', '');
+            const noCloseParenth = noOpenParenth.replace(')', '');
+            htmlPhone = `tel:+${noCloseParenth}`;
+          }
           return (
             <Card className={styles.card} key={r._id}>
               <Card.Title>{r.name}</Card.Title>
-              <Card.Subtitle className={styles.subcategory}>
-                <span>{r.phone}</span>
-                <span>{r.email}</span>
-              </Card.Subtitle>
+              {r.subcategory.map((s) => (
+                <Card.Subtitle key={s}>{s}</Card.Subtitle>
+              ))}
 
               <Card.Text>{r.comments}</Card.Text>
-              <Card.Link>{r.link1}</Card.Link>
+              <Card.Link
+                href={r.link1}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.clickable}
+              >
+                {r.link1}
+              </Card.Link>
+              <Card.Footer className={styles.footer}>
+                <span>
+                  <a href={htmlPhone} className={styles.clickable}>
+                    {r.phone}
+                  </a>
+                </span>
+                <span>
+                  <a href={htmlEmail} className={styles.clickable}>
+                    {r.email}
+                  </a>
+                </span>
+                <span>
+                  <a
+                    href={htmlAddress}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.clickable}
+                  >
+                    {r.address}
+                  </a>
+                </span>
+              </Card.Footer>
             </Card>
           );
         })}

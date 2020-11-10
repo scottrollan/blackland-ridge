@@ -34,9 +34,19 @@
       min-width: calc(100% - 2rem);
     }
   }
+  &:hover {
+    box-shadow: 5px 10px 18px var(--color-pallette-muted-accent);
+  }
 }
 .card * {
   margin: 0.25rem 0;
+}
+
+.clickable {
+  color: var(--color-pallette-dark) !important;
+  &:hover {
+    color: var(--color-pallette-muted-accent) !important;
+  }
 }
 
 .filtered {

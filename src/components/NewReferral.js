@@ -127,8 +127,18 @@ export default function NewReferral({ show, handleClose }) {
   return (
     <Modal show={show} onHide={handleClose} className={styles.Modal}>
       <Loading />
-      <Modal.Header closeButton>
+      <Modal.Header
+        closeButton
+        style={{
+          flexDirection: 'column',
+          width: '100%',
+          alignItems: 'center',
+        }}
+      >
         <Modal.Title>Refer a New Person or Business</Modal.Title>
+        <p style={{ fontStyle: 'italic' }}>
+          Please fill in as much information as possible
+        </p>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={(e) => checkInputs(e)} id="newReferral">
