@@ -56,35 +56,35 @@ const Messages = () => {
 
   const query = "*[_type == 'message'] | order(commentAdded desc)";
 
-  let subscription = client.listen(query).subscribe(async (update) => {
-    const comment = await update.result; //returns main (newThread) message (not the response to it)
-    console.log(comment);
-    const refresh = await fetchMessages();
-    setMessages([...refresh]);
-  });
+  // let subscription = client.listen(query).subscribe(async (update) => {
+  //   const comment = await update.result; //returns main (newThread) message (not the response to it)
+  //   console.log(comment);
+  //   const refresh = await fetchMessages();
+  //   setMessages([...refresh]);
+  // });
 
-  const startSubsription = () => {
-    subscription = client.listen(query).subscribe(async (update) => {
-      const comment = await update.result; //returns main (newThread) message (not the response to it)
-      console.log(comment);
+  // const startSubsription = () => {
+  //   subscription = client.listen(query).subscribe(async (update) => {
+  //     const comment = await update.result; //returns main (newThread) message (not the response to it)
+  //     console.log(comment);
 
-      $('#alertThis')
-        .text(
-          `Someone just replied or reacted to ${comment.authorName}'s post: "${comment.title}"`
-        )
-        .css('display', 'flex');
-      setTimeout(() => $('#alertThis').css('display', 'none').text(''), 8400);
-      const response = await fetchMessages();
-      setMessages([...response]);
-    });
-  };
+  //     $('#alertThis')
+  //       .text(
+  //         `Someone just replied or reacted to ${comment.authorName}'s post: "${comment.title}"`
+  //       )
+  //       .css('display', 'flex');
+  //     setTimeout(() => $('#alertThis').css('display', 'none').text(''), 8400);
+  //     const response = await fetchMessages();
+  //     setMessages([...response]);
+  //   });
+  // };
 
   useEffect(() => {
     setMessages([...theseMessages]);
-    startSubsription();
-    return () => {
-      subscription.unsubscribe();
-    };
+    // startSubsription();
+    // return () => {
+    //   subscription.unsubscribe();
+    // };
   }, [theseMessages]);
 
   return (

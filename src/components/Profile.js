@@ -32,7 +32,7 @@ const Profile = () => {
         tryAgainText={tryAgainText}
         resetBtn={resetBtn}
       />
-      <Modal.Header>Profile Setup</Modal.Header>
+      <Modal.Header>Please Complete Your Profile</Modal.Header>
 
       <Modal.Body>
         <ProfileForm

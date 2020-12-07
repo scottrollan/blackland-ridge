@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 // import { UserContext } from '../App';
-import * as db from '../firestore';
-import { Button, Modal } from 'react-bootstrap';
+import * as fs from '../firestore/index';
+import { Button, Modal, Form } from 'react-bootstrap';
 import $ from 'jquery';
 import ErrorMessage from '../components/ErrorMessage';
 import ResetPassword from '../components/ResetPassword';
@@ -16,9 +16,10 @@ const Authentication = ({ show }) => {
   const [tryAgainText, setTryAgainText] = useState('Try Again');
   const [resetBtn, setResetBtn] = useState('none'); //what display: is
 
-  const login = async () => {
+  const login = async (e) => {
+    e.preventDefault();
     if (/\S+@\S+/.test(email.toLowerCase())) {
-      const returned = await db.signInUserWithEmail(email, password);
+      const returned = await fs.signInWithEmail(email, password);
       switch (returned) {
         case 'incorrectPassword':
           setErrorMessage('Incorrect Password');
@@ -41,6 +42,7 @@ const Authentication = ({ show }) => {
           $('#errorMessage').css('display', 'flex');
           break;
         default:
+          break;
       }
     } else {
       setErrorMessage('Email format must be: user@email.com');
@@ -52,18 +54,38 @@ const Authentication = ({ show }) => {
   };
   const signUp = async () => {
     if (/\S+@\S+/.test(String(email).toLowerCase()) && password.length > 6) {
-      const returned = await db.createUserWithEmail(email, password);
-      if (returned === 'userAlreadyExists') {
-        setErrorMessage('That User Already Exists');
-        setTryAgainText('Try Again');
-        setResetBtn('block');
-        $('#errorMessage').css('display', 'flex');
+      try {
+        const returned = await fs.createUserWithEmail(email, password);
+        let newUser;
+        switch (returned) {
+          case 'userAlreadyExists':
+            setErrorMessage('That User Already Exists');
+            setTryAgainText('Go Back');
+            setResetBtn('block');
+            $('#errorMessage').css('display', 'flex');
+            newUser = 'That user already exists';
+            break;
+          case '':
+            setErrorMessage('Sorry. Something went wrong.');
+            setTryAgainText('Try Again');
+            setResetBtn('block');
+            $('#errorMessage').css('display', 'flex');
+            newUser = 'Unknown Error';
+            break;
+          default:
+            newUser = returned;
+            break;
+        }
+        return newUser;
+      } catch (error) {
+        alert(error.message);
       }
-      // return user;
-    } else if (password.length < 6) {
+    } else if (
+      /\S+@\S+/.test(String(email).toLowerCase()) &&
+      password.length < 6
+    ) {
       setErrorMessage('Password must be at least 6 characters long.');
       setTryAgainText('OK, Enter a Longer Password');
-
       $('#errorMessage').css('display', 'flex');
     } else {
       setErrorMessage('Email format must be: user@email.com');
@@ -99,7 +121,7 @@ const Authentication = ({ show }) => {
           </Modal.Header>
           <Modal.Body className={styles.modalBody}>
             <Button
-              onClick={db.signInWithFacebook}
+              onClick={fs.signInWithFacebook}
               className={styles.facebookAuthButton}
             >
               <i className={[`fab fa-facebook ${styles.authLogin}`]}></i>
@@ -108,7 +130,7 @@ const Authentication = ({ show }) => {
               </span>
             </Button>
             <Button
-              onClick={db.signInWithGoogle}
+              onClick={fs.signInWithGoogle}
               className={styles.googleAuthButton}
             >
               <i className={[`fab fa-google ${styles.authLogin}`]}></i>
@@ -118,7 +140,7 @@ const Authentication = ({ show }) => {
             </Button>
 
             {/* <Button
-              onClick={db.signInWithTwitter}
+              onClick={fs.signInWithTwitter}
               className={styles.twitterAuthButton}
             >
               <i className={[`fab fa-twitter ${styles.authLogin}`]}></i>
@@ -131,7 +153,53 @@ const Authentication = ({ show }) => {
               <h5 style={{ textAlign: 'center' }}>
                 or sign in with your email
               </h5>
-              <input
+              <Form onSubmit={login}>
+                <Form.Group controlId="email">
+                  <Form.Control
+                    value={email}
+                    className={styles.input}
+                    type="email"
+                    name="setEmail"
+                    placeholder="email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group controlId="password">
+                  <Form.Control
+                    value={password}
+                    className={styles.input}
+                    type="password"
+                    name="setPassword"
+                    placeholder="password"
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                  }}
+                >
+                  <Button
+                    type="submit"
+                    variant="light"
+                    className={styles.loginForm}
+                  >
+                    Log In
+                  </Button>
+                  <Button
+                    onClick={() => signUp()}
+                    variant="light"
+                    className={styles.signupForm}
+                  >
+                    Sign Up
+                  </Button>
+                </div>
+              </Form>
+              {/* <input
                 className={styles.input}
                 type="email"
                 id="email"
@@ -139,8 +207,8 @@ const Authentication = ({ show }) => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-              ></input>
-              <input
+              ></input> */}
+              {/* <input
                 className={styles.input}
                 type="password"
                 id="password"
@@ -148,29 +216,7 @@ const Authentication = ({ show }) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-              ></input>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  width: '100%',
-                }}
-              >
-                <Button
-                  onClick={() => login()}
-                  variant="light"
-                  className={styles.loginForm}
-                >
-                  Log In
-                </Button>
-                <Button
-                  onClick={() => signUp()}
-                  variant="light"
-                  className={styles.signupForm}
-                >
-                  Sign Up
-                </Button>
-              </div>
+              ></input> */}
             </div>
           </Modal.Body>
         </div>

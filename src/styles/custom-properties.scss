@@ -30,16 +30,17 @@ $breakpoint-extra-large: 1600px;
   --color-pallette-accent: #b9d452;
   --color-pallette-muted-accent: rgba(185, 212, 82, 0.8);
 
-  --default-background: #fafafa;
-
   --white: #fafafa;
-  --page-border: 8px solid var(--color-pallette-dark);
+  --default-background: var(--white);
   --avatar-size: 130px;
+
+  --backgrounds: var(--color-pallette-medium);
   @media (pointer: coarse) {
     @media screen and (max-width: $breakpoint-medium) {
-      --page-border: 8px solid var(--color-pallette-muted-accent);
+      --backgrounds: var(--color-pallette-muted-accent);
     }
   }
+  --page-border: 8px solid var(--backgrounds);
 }
 
 @mixin primary-button {

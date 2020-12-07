@@ -41,8 +41,8 @@ const NavBar = () => {
       <Navbar.Brand className={styles.navbarBrand}>
         <img
           src={
-            thisUser && thisUser.image
-              ? urlFor(thisUser.image)
+            thisUser && thisUser.photoURL
+              ? thisUser.photoURL
               : 'https://robohash.org/user?bgset=bg1'
           }
           alt=""

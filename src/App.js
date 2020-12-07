@@ -6,7 +6,7 @@ import $ from 'jquery';
 import Navbar from './components/shared/Navbar';
 import Authentication from './pages/Authentication';
 import Loading from './components/shared/Loading';
-import Welcome from './components/Welcome';
+// import Welcome from './components/Welcome';
 import Calendar from './pages/Calendar';
 import Directory from './pages/Directory';
 import PayDues from './pages/PayDues';
@@ -44,7 +44,7 @@ const App = () => {
         ]}
         id="alertThis"
       ></div>
-      <Welcome />
+      {/* <Welcome /> */}
       <UserContext.Provider value={thisUser}>
         <MessagesContext.Provider value={theseMessages}>
           <LoginContext.Provider value={setLoginPopup}>

@@ -1,23 +1,18 @@
 import React, { useReducer, useState } from 'react';
 import StreetAddress from './StreetAddress';
-import * as db from '../firestore';
+import { signOut, profilesCollection } from '../firestore';
 import { Button } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import $ from 'jquery';
 import { Client } from '../api/sanityClient';
-import imageUrlBuilder from '@sanity/image-url';
 import styles from './ProfileForm.module.scss';
-
-const builder = imageUrlBuilder(Client);
-
-const urlFor = (source) => {
-  return builder.image(source);
-};
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'setName':
+    case 'setFullName':
       return { ...state, name: action.payload };
+    case 'setDisplayName':
+      return { ...state, displayName: action.payload };
     case 'setEmail':
       return { ...state, email: action.payload };
     case 'setPhone':
@@ -26,29 +21,44 @@ const reducer = (state, action) => {
       return { ...state, address: action.payload };
     case 'imageUploaded':
       $('#profileSetupImage').attr('src', action.payload.url);
-      return { ...state, image: action.payload.image };
+      // return { ...state, image: action.payload.image }; THIS IS FOR SANITY PROFILE
+      return { ...state, photoURL: action.payload.url }; //THIS IS FOR FIREBASE PROFILE
     //////////checkboxes/////////////
     case 'setDirectory':
       if ($('#includeInDirectory').prop('checked')) {
         return { ...state, includeInDirectory: true };
       } else {
-        return { ...state, includeInDirectory: false };
+        return {
+          ...state,
+          includeInDirectory: false,
+          emailInDirectory: false,
+          phoneInDirectory: false,
+        };
       }
     case 'setNotifications':
       if ($('#receiveNotifications').prop('checked')) {
         return { ...state, receiveNotifications: true };
       } else {
-        return { ...state, receiveNotifications: false };
+        return {
+          ...state,
+          receiveNotifications: false,
+        };
       }
     case 'setDisplayEmail':
       console.log(state);
-      if ($('#displayEmail').prop('checked')) {
+      if (
+        $('#displayEmail').prop('checked') &&
+        $('#includeInDirectory').prop('checked')
+      ) {
         return { ...state, emailInDirectory: true };
       } else {
         return { ...state, emailInDirectory: false };
       }
     case 'setDisplayPhone':
-      if ($('#displayPhone').prop('checked')) {
+      if (
+        $('#displayPhone').prop('checked') &&
+        $('#includeInDirectory').prop('checked')
+      ) {
         return { ...state, phoneInDirectory: true };
       } else {
         return { ...state, phoneInDirectory: false };
@@ -60,8 +70,6 @@ const reducer = (state, action) => {
 
 const ProfileForm = ({ thisUser, setError }) => {
   const [state, dispatch] = useReducer(reducer, { ...thisUser });
-
-  const [selectedFile, setSelectedFile] = useState(null);
 
   let history = useHistory();
 
@@ -80,13 +88,14 @@ const ProfileForm = ({ thisUser, setError }) => {
 
   const fileSelect = async (e) => {
     const thisImage = e.target.files[0];
-    setSelectedFile(thisImage);
-    $('#uploadFunctionButton').css('visibility', 'visible');
+    // setSelectedFile(thisImage);
+    // $('#uploadFunctionButton').css('visibility', 'visible');
+    uploadImage(thisImage);
   };
 
-  const uploadImage = async () => {
+  const uploadImage = async (pic) => {
     try {
-      const response = await Client.assets.upload('image', selectedFile);
+      const response = await Client.assets.upload('image', pic);
       console.log(response);
       const newImage = {
         _type: 'image',
@@ -110,6 +119,10 @@ const ProfileForm = ({ thisUser, setError }) => {
         setError('Please Select a User Name', 'Go Back');
         $('#errorMessage').css('display', 'show');
         break;
+      case $('#displayNameInput').val() === '':
+        setError('Please Select a Display Name', 'Go Back');
+        $('#errorMessage').css('display', 'show');
+        break;
       case state.emailInDirectory && $('#profileEmailInput').val() === '':
         setError(
           'Please enter an email address, or uncheck the "Let my neighbors see my email address" box',
@@ -129,14 +142,12 @@ const ProfileForm = ({ thisUser, setError }) => {
         $('#errorMessage').css('display', 'show');
         break;
       default:
-        state['_type'] = 'profile';
-        delete state.isNewUser;
+        //if no input errors
+        alert('updating document id: ' + state.id);
+
         try {
-          const response = await Client.patch(state._id).set(state).commit();
-          console.log(response);
-          setError('Your profile has been updated', 'close');
-          $('#errorMessage').css('display', 'show');
-          break;
+          await profilesCollection.doc(state.id).set({ ...state });
+          window.location.reload();
         } catch (error) {
           console.log(error);
         }
@@ -145,36 +156,58 @@ const ProfileForm = ({ thisUser, setError }) => {
   };
 
   const logout = () => {
-    db.signOut();
+    signOut();
+
     history.push('/');
   };
 
   return (
-    <form
-      id="profileForm"
-      className={styles.profileForm}
-      style={{ display: thisUser ? 'flex' : 'none' }}
-    >
+    <form id="profileForm" className={styles.profileForm}>
       {/* <h2 style={{ display: state.address ? 'inherit' : 'none' }}>
         My Profile
       </h2> */}
       <label htmlFor="profileNameInput" style={{ marginBottom: 0 }}>
-        User Name{' '}
+        Full Name{' '}
         <span style={{ color: 'var(--google-red', fontSize: 'small' }}>
           required
         </span>
       </label>
       <div style={{ fontSize: 'small', textAlign: 'left' }}>
-        as you want it to appear in the directory (if opted in)
+        as you want it to appear in the directory (ex:{' '}
+        <span style={{ fontStyle: 'italic' }}>John W. Doe</span>)
       </div>
       <input
         id="profileNameInput"
         required
         type="input"
         value={state.name}
-        onChange={(e) => dispatch({ type: 'setName', payload: e.target.value })}
+        onChange={(e) =>
+          dispatch({ type: 'setFullName', payload: e.target.value })
+        }
         placeholder="John Doe"
       ></input>
+
+      <label htmlFor="displayNameInput" style={{ marginBottom: 0 }}>
+        Display Name{' '}
+        <span style={{ color: 'var(--google-red', fontSize: 'small' }}>
+          required
+        </span>
+      </label>
+      <div style={{ fontSize: 'small', textAlign: 'left' }}>
+        as you want it to appear in conversations/posts (ex:{' '}
+        <span style={{ fontStyle: 'italic' }}>John D</span>)
+      </div>
+      <input
+        id="displayNameInput"
+        required
+        type="input"
+        value={state.displayName}
+        onChange={(e) =>
+          dispatch({ type: 'setDisplayName', payload: e.target.value })
+        }
+        placeholder="John Doe"
+      ></input>
+
       <label htmlFor="profileEmailInput">
         Email Address:{' '}
         <span
@@ -264,7 +297,7 @@ const ProfileForm = ({ thisUser, setError }) => {
       <div className={styles.photoDiv}>
         <img
           id="profileSetupImage"
-          src={urlFor(state.image)}
+          src={state.photoURL}
           alt=""
           style={{
             minHeight: 'var(--avatar-size)',

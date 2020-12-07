@@ -10,6 +10,12 @@
 .referrals a {
   color: var(--color-pallette-muted-accent);
 }
+
+.addBtn {
+  @include rectangle-out;
+  margin-left: 1rem;
+  font-size: small;
+}
 .cardDiv {
   display: flex;
   justify-content: space-around;
@@ -31,7 +37,7 @@
   justify-content: space-between;
   @media (pointer: coarse) {
     @media screen and (max-width: $breakpoint-medium) {
-      min-width: calc(100% - 2rem);
+      min-width: calc(100% - 2rem - 16px);
     }
   }
   &:hover {

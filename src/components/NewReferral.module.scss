@@ -6,7 +6,7 @@
   width: 100%;
 }
 .category {
-  width: 40%;
+  width: 44%;
   @media screen and (max-width: $breakpoint-medium) {
     width: 48%;
   }
@@ -16,6 +16,13 @@
   @media screen and (max-width: $breakpoint-medium) {
     .modal {
       padding-bottom: 6rem;
+    }
+    .categoryDiv {
+      flex-direction: column;
+      align-items: center;
+    }
+    .category {
+      width: 75%;
     }
   }
 }

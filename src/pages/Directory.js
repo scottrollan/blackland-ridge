@@ -1,17 +1,18 @@
 import React from 'react';
-import { Client, fetchDirectory } from '../api/sanityClient';
+import { profilesCollection } from '../firestore';
+// import { Client, fetchDirectory } from '../api/sanityClient';
 import { Card, Tab, Tabs, Button } from 'react-bootstrap';
 import $ from 'jquery';
 import { useHistory } from 'react-router-dom';
 import { UserContext } from '../App';
-import imageUrlBuilder from '@sanity/image-url';
+// import imageUrlBuilder from '@sanity/image-url';
 import styles from './Directory.module.scss';
 
-const builder = imageUrlBuilder(Client);
+// const builder = imageUrlBuilder(Client);
 
-const urlFor = (source) => {
-  return builder.image(source);
-};
+// const urlFor = (source) => {
+//   return builder.image(source);
+// };
 
 const Directory = () => {
   const thisUser = React.useContext(UserContext);
@@ -21,10 +22,14 @@ const Directory = () => {
   const [neighborList, setNeighborList] = React.useState([]);
   const [addressMode, setAddressMode] = React.useState(true);
 
-  let neighbors;
+  let neighbors = [];
   const getNeighborList = async () => {
     try {
-      neighbors = await fetchDirectory();
+      await profilesCollection.get().then((snapshot) => {
+        snapshot.forEach((doc) => {
+          neighbors.push(doc.data());
+        });
+      });
       setNeighborList([...neighbors]);
       //sort by street name, then number (so that 4181 Blackland Dr comes before 38 Blackland Way, i.e.)
       neighborList.sort((a, b) =>
@@ -79,7 +84,7 @@ const Directory = () => {
             {neighborList.map((n) => {
               return (
                 <Card
-                  key={n._id}
+                  key={n.photoURL}
                   className={styles.card}
                   style={{ display: n.includeInDirectory ? 'inherit' : 'none' }}
                 >
@@ -120,15 +125,11 @@ const Directory = () => {
                     </div>
                     <div className={styles.photoDiv}>
                       <a
-                        href={urlFor(n.image)}
+                        href={n.photoURL}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        <img
-                          src={urlFor(n.image)}
-                          alt=""
-                          className={styles.photo}
-                        />
+                        <img src={n.photoURL} alt="" className={styles.photo} />
                       </a>
                       <Button
                         className={styles.editProfile}
@@ -151,7 +152,7 @@ const Directory = () => {
             {neighborList.map((n) => {
               return (
                 <Card
-                  key={n._id}
+                  key={n.photoURL}
                   className={styles.card}
                   style={{ display: n.includeInDirectory ? 'inherit' : 'none' }}
                 >
@@ -194,15 +195,11 @@ const Directory = () => {
 
                     <div className={styles.photoDiv}>
                       <a
-                        href={urlFor(n.image)}
+                        href={n.photoURL}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        <img
-                          src={urlFor(n.image)}
-                          alt=""
-                          className={styles.photo}
-                        />
+                        <img src={n.photoURL} alt="" className={styles.photo} />
                       </a>
 
                       <Button

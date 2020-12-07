@@ -45,7 +45,11 @@ export default function Referrals() {
         delay={{ show: 250, hide: 400 }}
         overlay={renderTooltip}
       >
-        <Button variant="success" onClick={handleShow}>
+        <Button
+          variant="success"
+          onClick={handleShow}
+          className={styles.addBtn}
+        >
           <i className="far fa-user-plus"></i>
         </Button>
       </OverlayTrigger>

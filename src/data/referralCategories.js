@@ -59,9 +59,11 @@ export const referralCategories = [
   {
     category: 'Yards',
     subcategories: [
+      'Irrigation',
       'Landscape Maintenance',
       'Landscape Installation',
       'Landscape Design',
+      'Arborist/Tree Removal',
       'Mowing',
       'Hardscaping',
       'Yards-General',
