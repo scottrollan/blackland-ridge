@@ -29,13 +29,7 @@ const Messages = () => {
               display: m.newThread ? 'flex' : 'none',
             }}
           >
-            <SingleMessage
-              // thisSrc={thisSrc}
-              // avatarID={avatarID}
-              // originalPostDate={originalPostDate}
-              m={m}
-            />
-            <Responses myResponsesArray={responseArray} />
+            <SingleMessage m={m} myResponsesArray={responseArray} />
           </div>
         );
       })}

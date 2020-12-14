@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { UserContext, MessagesContext } from '../../App';
+import ResponseAccordion from '../ResponseAccordion';
 import { profilesCollection } from '../../firestore/index';
 import { createRandomString } from '../../functions/CreateRandomString';
 import $ from 'jquery';
@@ -10,7 +11,8 @@ const SingleMessage = ({ m }) => {
   const userID = thisUser.id ?? '';
   let myID = userID.trim();
   const theseMessages = useContext(MessagesContext);
-  const messages = useState([...theseMessages]);
+  const [messages, setMessages] = useState([...theseMessages]);
+  const newThread = m.newThread;
 
   let theseResponses = [];
   let myRefs = [];
@@ -18,10 +20,9 @@ const SingleMessage = ({ m }) => {
   if (m.responses) {
     //make an array of message id's (strings)
     m.responses.forEach((re) => {
-      myRefs = [...myRefs, re];
+      myRefs = [...myRefs, re.id];
     });
-    const revArray = messages.filter((mess) => myRefs.includes(mess._id)); //filter messages that are included in the array created above
-    theseResponses = revArray.reverse(); // orders them from oldest to newest
+    theseResponses = messages.filter((id) => myRefs.includes(id)); //filter messages that are included in the response id array created above
   }
   const date = m.createdAt;
   const milliseconds = date.seconds * 1000;
@@ -91,7 +92,7 @@ const SingleMessage = ({ m }) => {
       <div
         className={styles.messageWordsDiv}
         style={{
-          flexDirection: !m.newThread && authorIsMe ? 'row-reverse' : 'row',
+          flexDirection: !newThread && authorIsMe ? 'row-reverse' : 'row',
         }}
       >
         <div className={styles.avatarDiv}>
@@ -115,9 +116,7 @@ const SingleMessage = ({ m }) => {
           <span style={{ fontSize: 'small' }}>{originalPostDate}</span>
 
           <div
-            className={
-              !m.newThread && authorIsMe ? styles.quoteMe : styles.quote
-            }
+            className={!newThread && authorIsMe ? styles.quoteMe : styles.quote}
           >
             {m.message.map((p) => {
               const pKey = createRandomString(10);
@@ -141,6 +140,7 @@ const SingleMessage = ({ m }) => {
             })
           : null}
       </div>
+      <ResponseAccordion newThread={false} fieldName={'Reply'} m={m} />
     </div>
   );
 };

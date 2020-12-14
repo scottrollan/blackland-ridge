@@ -1,0 +1,11 @@
+@import '../styles/custom-properties.scss';
+
+.root {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.heading {
+  display: flex;
+}

@@ -1,68 +1,58 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { UserContext, MessagesContext } from '../App';
+import { MessagesContext } from '../App';
+import { createRandomString } from '../functions/CreateRandomString';
 import SingleMessage from './shared/SingleMessage';
-import { reactions } from '../data/reactions';
-import ReactAndComment from './shared/ReactAndComment';
-import ReactionIcons from './shared/ReactionIcons';
-import Comment from './Comment';
-import {
-  Card as UICard,
-  CardHeader,
-  CardActions,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-} from '@material-ui/core';
-import HTMLParser from 'react-html-parser';
-import { Card } from 'react-bootstrap';
+import { Card as UICard } from '@material-ui/core';
 import styles from './Responses.module.scss';
 
-const Message = ({ myResponsesArray }) => {
+const Message = ({ m }) => {
+  const allMessages = useContext(MessagesContext);
+  let theseResponses = [];
+  const myResponsesRefs = m.responses ?? [];
   const [myResponses, setMyResponses] = useState([]);
-  const thisUser = useContext(UserContext);
-  const me = thisUser.name;
-  const theseMessages = useContext(MessagesContext);
-  let allMessages = theseMessages;
-  let allResponses = [];
 
   useEffect(() => {
-    const getResponses = () => {
-      if (myResponsesArray.length > 0) {
-        //if there is a list of response refs (responses, props from parent)
-        try {
-          myResponsesArray.map((r) => {
-            const responseID = r.id; //extract response message id's
-            const thisResponse = allMessages.find(
-              (mess) => mess.id === responseID
-            );
-            allResponses = [...allResponses, thisResponse];
-          });
-        } finally {
+    if (myResponsesRefs.length > 0) {
+      //if there is a list of response refs (m.responses)
+      try {
+        myResponsesRefs.map((r) => {
+          const responseID = r.id; //extract response message id's
+          const thisResponse = allMessages.find(
+            (mess) => mess.id === responseID
+          );
+          theseResponses = [...theseResponses, { ...thisResponse }];
+        });
+      } finally {
+        console.log(theseResponses);
+        if (theseResponses.length > 0) {
           setMyResponses(
-            allResponses.sort((a, b) => {
+            theseResponses.sort((a, b) => {
               return a.createdAt - b.createdAt;
             })
           );
         }
       }
-    };
-
-    getResponses();
+    }
   }, []);
 
-  return myResponses.map((r) => (
-    <UICard
-      key={r.id}
-      // id={m._id}
-      className={styles.card}
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <SingleMessage m={r} />
-    </UICard>
-  ));
+  return myResponses.length > 0
+    ? myResponses.map((r) => {
+        const key = createRandomString(5);
+        return (
+          <UICard
+            key={key}
+            // id={m._id}
+            className={styles.card}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <SingleMessage m={r} />
+          </UICard>
+        );
+      })
+    : null;
 };
 
 export default Message;

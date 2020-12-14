@@ -1,5 +1,5 @@
 import React from 'react';
-import Comment from './Comment';
+import Comment from './shared/Comment';
 import { createRandomString } from '../functions/CreateRandomString';
 import $ from 'jquery';
 import styles from './MessagesHeader.module.scss';
