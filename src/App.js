@@ -34,7 +34,6 @@ const App = () => {
   if (thisUser) {
     $('#firebaseui-auth-container').hide();
   }
-
   return (
     <div className={styles.App}>
       <div className={styles.backgroundOverlay}></div>

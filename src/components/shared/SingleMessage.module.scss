@@ -1,0 +1,84 @@
+@import '../../styles/custom-properties.scss';
+
+.messageWordsDiv {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+}
+.avatarDiv {
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  margin: 0 19px 19px 19px;
+}
+.avatar {
+  max-width: 100%;
+  min-width: 5rem;
+  max-height: 8rem;
+  border-radius: 50%;
+}
+.paragraphDiv {
+  // flex: 4;
+  padding: 0 0 0.5rem 0;
+}
+.quote,
+.quoteMe {
+  width: auto;
+  padding: 0.5rem;
+  background-color: var(--color-pallette-accent);
+  border-radius: 0.75rem;
+  position: relative;
+}
+.quoteMe {
+  text-align: right;
+  background-color: var(--color-pallette-light);
+}
+.quote:before {
+  content: '';
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  border-left: 10px solid transparent;
+  border-right: 10px solid var(--color-pallette-accent);
+  border-top: 10px solid var(--color-pallette-accent);
+  border-bottom: 10px solid transparent;
+  left: -19px;
+  top: 6px;
+}
+.quoteMe:before {
+  content: '';
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  border-left: 10px solid var(--color-pallette-light);
+  border-right: 10px solid transparent;
+  border-top: 10px solid var(--color-pallette-light);
+  border-bottom: 10px solid transparent;
+  top: 6px;
+  right: -19px;
+}
+.messageImagesDiv {
+  width: 100%;
+  flex-wrap: wrap;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: start;
+  @media screen and (max-width: $breakpoint-medium) {
+    flex-direction: column;
+  }
+}
+.messageImage {
+  max-width: 25rem;
+  max-height: 25rem;
+  width: auto;
+  height: auto;
+  @media screen and (max-width: $breakpoint-medium) {
+    max-width: 100%;
+    max-widht: 40rem;
+    margin: 0 0 0.5rem 0;
+  }
+}

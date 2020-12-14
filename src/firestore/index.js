@@ -21,16 +21,27 @@ const firebaseApp = !firebase.apps.length
   ? firebase.initializeApp(firebaseConfig)
   : firebase.app();
 
+////////// Storage //////////
+const storage = firebase.storage();
+export const storageRef = storage.ref();
+export const usersRef = storageRef.child('images/users');
+export const albumsRef = storageRef.child('images/albums/');
+export const attachmentsRef = storageRef.child('images/messageAttachments');
+
 ////////// Database access //////////
 export const profilesCollection = firebaseApp
   .firestore()
   .collection('profiles');
 
+export const messagesCollection = firebaseApp
+  .firestore()
+  .collection('messages');
+
 export const referralsCollection = firebaseApp
   .firestore()
   .collection('referrals');
 
-export const firebaseTimestamp = firebase.firestore.FieldValue.serverTimestamp;
+export const firebaseTimestamp = firebase.firestore.FieldValue.serverTimestamp();
 
 ////////// Authentication //////////
 

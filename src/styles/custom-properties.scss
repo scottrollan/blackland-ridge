@@ -31,7 +31,12 @@ $breakpoint-extra-large: 1600px;
   --color-pallette-muted-accent: rgba(185, 212, 82, 0.8);
 
   --white: #fafafa;
-  --default-background: var(--white);
+  --default-background: linear-gradient(
+    var(--overlay-light),
+    var(--overlay-medium),
+    var(--overlay-dark),
+    var(--overlay-darkest)
+  );
   --avatar-size: 130px;
 
   --backgrounds: var(--color-pallette-medium);

@@ -1,24 +1,24 @@
 @import '../styles/custom-properties.scss';
 
-.messages {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 9;
-}
+// .messages {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   z-index: 9;
+// }
 
 .card {
   margin: 0.5rem 0;
   padding: 1rem 2rem;
-  width: 85%;
+  width: 100%;
   text-align: left;
   max-width: $breakpoint-medium;
   background-color: var(--white);
   border-radius: 0.35rem;
-  @media screen and (max-width: $breakpoint-medium) {
-    width: 92%;
-    padding: 0.5rem 1rem;
-  }
+  // @media screen and (max-width: $breakpoint-medium) {
+  //   width: 92%;
+  //   padding: 0.5rem 1rem;
+  // }
 }
 .cardOuterDiv {
   display: flex;

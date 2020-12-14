@@ -24,7 +24,7 @@ export default function ReactAndComment({
               title={
                 <React.Fragment>
                   <Typography color="inherit">{r.label}</Typography>
-                  {m[r.array] //map the "likedBy's", etc... fro reactions array
+                  {m[r.array] //map the "likedBy's", etc... from reactions array
                     ? m[r.array].map((by) => {
                         return <Typography key={by}>{by}</Typography>;
                       })

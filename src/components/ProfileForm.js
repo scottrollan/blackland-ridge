@@ -1,10 +1,11 @@
 import React, { useReducer, useState } from 'react';
 import StreetAddress from './StreetAddress';
-import { signOut, profilesCollection } from '../firestore';
-import { Button } from '@material-ui/core';
+import { signOut, profilesCollection, usersRef } from '../firestore';
+import { Button, LinearProgress } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import { createRandomString } from '../functions/CreateRandomString';
 import $ from 'jquery';
-import { Client } from '../api/sanityClient';
+// import { Client } from '../api/sanityClient';
 import styles from './ProfileForm.module.scss';
 
 const reducer = (state, action) => {
@@ -21,8 +22,7 @@ const reducer = (state, action) => {
       return { ...state, address: action.payload };
     case 'imageUploaded':
       $('#profileSetupImage').attr('src', action.payload.url);
-      // return { ...state, image: action.payload.image }; THIS IS FOR SANITY PROFILE
-      return { ...state, photoURL: action.payload.url }; //THIS IS FOR FIREBASE PROFILE
+      return { ...state, photoURL: action.payload.url };
     //////////checkboxes/////////////
     case 'setDirectory':
       if ($('#includeInDirectory').prop('checked')) {
@@ -45,7 +45,6 @@ const reducer = (state, action) => {
         };
       }
     case 'setDisplayEmail':
-      console.log(state);
       if (
         $('#displayEmail').prop('checked') &&
         $('#includeInDirectory').prop('checked')
@@ -70,6 +69,8 @@ const reducer = (state, action) => {
 
 const ProfileForm = ({ thisUser, setError }) => {
   const [state, dispatch] = useReducer(reducer, { ...thisUser });
+  const [image, setImage] = useState(null);
+  const [progress, setProgress] = useState(0);
 
   let history = useHistory();
 
@@ -88,29 +89,41 @@ const ProfileForm = ({ thisUser, setError }) => {
 
   const fileSelect = async (e) => {
     const thisImage = e.target.files[0];
-    // setSelectedFile(thisImage);
-    // $('#uploadFunctionButton').css('visibility', 'visible');
-    uploadImage(thisImage);
+    setImage(thisImage);
+    $('#uploadFunctionButton').css('visibility', 'visible');
   };
 
-  const uploadImage = async (pic) => {
-    try {
-      const response = await Client.assets.upload('image', pic);
-      console.log(response);
-      const newImage = {
-        _type: 'image',
-        asset: {
-          _ref: response._id,
-          _type: 'reference',
-        },
-      };
-      dispatch({
-        type: 'imageUploaded',
-        payload: { url: response.url, image: newImage },
-      });
-    } catch (err) {
-      console.log(err);
-    }
+  const uploadImage = async (e) => {
+    e.preventDefault();
+
+    const randomString = createRandomString(8);
+    const uploadTask = usersRef
+      .child(`${randomString}${image.name}`)
+      .put(image);
+
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        //gives progress info on upload
+        const transferProgress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgress(transferProgress);
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => {
+        //when complete
+        uploadTask.snapshot.ref.getDownloadURL().then((gotURL) => {
+          dispatch({
+            type: 'imageUploaded',
+            payload: { url: gotURL, image: image },
+          });
+        });
+        console.log('Upload Complete');
+      }
+    );
   };
 
   const saveHandler = async () => {
@@ -143,11 +156,13 @@ const ProfileForm = ({ thisUser, setError }) => {
         break;
       default:
         //if no input errors
-        alert('updating document id: ' + state.id);
 
         try {
           await profilesCollection.doc(state.id).set({ ...state });
+          setError('Your profile has been upated', 'OK');
+          history.push('/');
           window.location.reload();
+          $('#errorMessage').css('display', 'flex');
         } catch (error) {
           console.log(error);
         }
@@ -293,6 +308,13 @@ const ProfileForm = ({ thisUser, setError }) => {
           </a>{' '}
           if your address is listed incorrectly
         </div>
+      </div>
+      <div style={{ width: '100%', minHeight: '14px', padding: '3px 10px' }}>
+        <LinearProgress
+          variant="determinate"
+          value={progress}
+          style={{ visibility: progress < 1 ? 'hidden' : 'visible' }}
+        />
       </div>
       <div className={styles.photoDiv}>
         <img
