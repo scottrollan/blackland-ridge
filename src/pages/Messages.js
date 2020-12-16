@@ -2,18 +2,19 @@ import React, { useEffect, useState, useContext } from 'react';
 import { MessagesContext } from '../App';
 import MessagesHeader from '../components/MessagesHeader';
 import SingleMessage from '../components/shared/SingleMessage';
-import Responses from '../components/Responses';
 import styles from './Messages.module.scss';
 import { createRandomString } from '../functions/CreateRandomString';
 
 const Messages = () => {
   // const thisUser = useContext(UserContext);
-  const theseMessages = useContext(MessagesContext);
-  const [messages, setMessages] = useState([...theseMessages]);
+  const retrievedMessages = useContext(MessagesContext);
+  const [messages, setMessages] = useState([...retrievedMessages]);
 
   useEffect(() => {
+    const theseMessages = [...retrievedMessages];
+    theseMessages.sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1));
     setMessages([...theseMessages]);
-  }, [theseMessages]);
+  }, [retrievedMessages]);
 
   return (
     <div className={styles.messages}>

@@ -40,7 +40,9 @@ const useAuth = () => {
           .then((doc) => {
             switch (doc.exists) {
               case true:
-                setThisUser(doc.data());
+                const data = doc.data();
+                data['ref'] = doc.ref;
+                setThisUser(data);
                 break;
               case false:
                 setThisUser(newUser);

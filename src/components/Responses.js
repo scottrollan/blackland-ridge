@@ -5,7 +5,7 @@ import SingleMessage from './shared/SingleMessage';
 import { Card as UICard } from '@material-ui/core';
 import styles from './Responses.module.scss';
 
-const Message = ({ m }) => {
+const Responses = ({ m }) => {
   const allMessages = useContext(MessagesContext);
   let theseResponses = [];
   const myResponsesRefs = m.responses ?? [];
@@ -21,13 +21,13 @@ const Message = ({ m }) => {
             (mess) => mess.id === responseID
           );
           theseResponses = [...theseResponses, { ...thisResponse }];
+          theseResponses = [...new Set(theseResponses)];
         });
       } finally {
-        console.log(theseResponses);
         if (theseResponses.length > 0) {
           setMyResponses(
             theseResponses.sort((a, b) => {
-              return a.createdAt - b.createdAt;
+              return a.updatedAt - b.updatedAt;
             })
           );
         }
@@ -55,4 +55,4 @@ const Message = ({ m }) => {
     : null;
 };
 
-export default Message;
+export default Responses;

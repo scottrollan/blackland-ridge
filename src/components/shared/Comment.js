@@ -1,6 +1,12 @@
 import React, { useState, useContext } from 'react';
 import Loading from './Loading';
 import FileUpload from './FileUpload';
+import {
+  attachmentsRef,
+  timeStamp,
+  messagesCollection,
+  fsArrayUnion,
+} from '../../firestore/index';
 import { Button, Spinner } from 'react-bootstrap';
 import { UserContext } from '../../App';
 import { LoginContext } from '../../App';
@@ -8,27 +14,115 @@ import { createRandomString } from '../../functions/CreateRandomString';
 import { TextField, TextareaAutosize } from '@material-ui/core';
 import $ from 'jquery';
 import styles from './Comment.module.scss';
+import { addSeconds } from 'date-fns';
 
-const Comment = ({ newThread, fieldName }) => {
+const Comment = ({ newThread, fieldName, replyingToID }) => {
   const setLoginPopup = useContext(LoginContext);
   const thisUser = useContext(UserContext);
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
-  const setSelectedFile = useState(null); //image file
-  const [newImageID, setNewImageID] = useState('');
+  const [attachedImages, setAttachedImages] = useState([]);
   const [uploadedImage, setUploadedImage] = useState(null); //url
+  const [progress, setProgress] = useState(0);
 
-  const onFileUpload = async (file) => {
+  const onFileUpload = async (image, uploadedBy) => {
     //image upload
-    $('#uploadButton').html(<Spinner animation="border" variant="light" />);
-    setSelectedFile(file);
-    const response = '';
-    setUploadedImage(response.url);
-    setNewImageID(response._id);
-    console.log(message);
+    $('#uploadButton').hide();
+    $('#progressCircle').show();
+    setUploadedImage(image);
+    const randomString = createRandomString(8);
+    const metadata = {
+      customMetadata: {
+        uploadedBy: uploadedBy,
+      },
+    };
+    const uploadTask = attachmentsRef
+      .child(`${randomString}${image.name}`)
+      .put(image, metadata);
+
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        //gives progress info on upload
+        const transferProgress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgress(transferProgress);
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => {
+        //when complete
+        uploadTask.snapshot.ref.getDownloadURL().then((gotURL) => {
+          setAttachedImages([...attachedImages, gotURL]);
+        });
+        console.log('Upload Complete');
+      }
+    );
   };
 
-  const sendComment = async (event) => {};
+  const sendComment = async (event) => {
+    event.preventDefault();
+    const newID = createRandomString(20).concat('xxxxxxx');
+    let newMessageRef;
+    const ahora = new Date();
+    const now = timeStamp.fromDate(ahora);
+    const authorRef = thisUser.ref;
+    const messageArray = message.split('\n');
+    let comment = {
+      attachedImages,
+      authorRef: authorRef,
+      category: 'General',
+      createdAt: now,
+      id: newID,
+      message: messageArray,
+      newThread: newThread,
+      updatedAt: now,
+    };
+    if (newThread) {
+      //if starting a new thread
+      comment['title'] = title;
+      try {
+        messagesCollection.doc(newID).set({ ...comment });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      //if adding a comment/reply to an existing post
+      comment['updatedAt'] = now;
+      try {
+        messagesCollection
+          .doc(newID)
+          .set({ ...comment })
+          .then(
+            //to extract the reference for this new message
+            messagesCollection
+              .doc(newID)
+              .get()
+              .then(async (doc) => {
+                switch (doc.exists) {
+                  case true:
+                    newMessageRef = await doc.ref;
+                    messagesCollection
+                      .doc(replyingToID)
+                      .update({
+                        //and post that ref to the
+                        responses: fsArrayUnion(newMessageRef),
+                      })
+                      .set({ updatedAt: now });
+                    console.log(newMessageRef);
+                    break;
+                  default:
+                    console.log('Sorry, something went wrong.');
+                }
+              })
+          );
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   return (
     <>
@@ -54,6 +148,7 @@ const Comment = ({ newThread, fieldName }) => {
           <div className={styles.inputDiv}>
             <TextField
               // id={`title${messageID}`}
+              className={styles.textBox}
               label="Title"
               variant="outlined"
               position="start"
@@ -67,7 +162,7 @@ const Comment = ({ newThread, fieldName }) => {
             ></TextField>
             <TextareaAutosize
               // id={`post${messageID}`}
-              className={styles.textArea}
+              className={styles.textBox}
               label={fieldName}
               variant="outlined"
               position="start"
@@ -86,15 +181,21 @@ const Comment = ({ newThread, fieldName }) => {
               paddingTop: newThread ? '1rem' : '0',
             }}
           >
-            <FileUpload newThread={newThread} onFileUpload={onFileUpload} />
+            <FileUpload
+              newThread={newThread}
+              onFileUpload={onFileUpload}
+              progress={progress}
+            />
             <Button type="submit">POST</Button>
           </div>
         </div>
-        <img
-          src={uploadedImage ? uploadedImage : null}
-          alt=""
-          className={styles.commentImage}
-        />
+        {attachedImages.length > 0
+          ? attachedImages.map((i) => {
+              return (
+                <img key={i} src={i} alt="" className={styles.commentImage} />
+              );
+            })
+          : null}
       </form>
     </>
   );

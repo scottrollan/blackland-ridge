@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// import { fetchMessages } from '../api/sanityClient';
 import { messagesCollection } from '../firestore/index';
 
 const useMessages = () => {

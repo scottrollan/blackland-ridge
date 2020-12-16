@@ -12,7 +12,7 @@ const SingleMessage = ({ m }) => {
   let myID = userID.trim();
   const theseMessages = useContext(MessagesContext);
   const [messages, setMessages] = useState([...theseMessages]);
-  const newThread = m.newThread;
+  const newThread = m.newThread ?? false;
 
   let theseResponses = [];
   let myRefs = [];
@@ -88,7 +88,7 @@ const SingleMessage = ({ m }) => {
       console.log(error.message);
     });
   return (
-    <div>
+    <div style={{ width: '100%' }}>
       <div
         className={styles.messageWordsDiv}
         style={{
@@ -140,7 +140,7 @@ const SingleMessage = ({ m }) => {
             })
           : null}
       </div>
-      <ResponseAccordion newThread={false} fieldName={'Reply'} m={m} />
+      <ResponseAccordion newThread={newThread} fieldName={'Replies'} m={m} />
     </div>
   );
 };

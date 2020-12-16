@@ -22,7 +22,11 @@ const MessagesHeader = () => {
         ></i>
       </div>
       <div id="commentDiv" className={styles.commentDiv}>
-        <Comment m={{ _id: randomStr }} newThread={true} fieldName="Message" />
+        <Comment
+          m={{ _id: randomStr }}
+          newThread={true}
+          fieldName="Message *"
+        />
       </div>
     </div>
   );

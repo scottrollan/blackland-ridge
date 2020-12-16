@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { UserContext } from '../../App';
 import { Modal, Button } from 'react-bootstrap';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import $ from 'jquery';
 import styles from './FileUpload.module.scss';
 
-export default function FileUpload({ newThread, onFileUpload }) {
+export default function FileUpload({ newThread, onFileUpload, progress }) {
+  const thisUser = useContext(UserContext);
+  const uploadedBy = `${thisUser.name} at ${thisUser.address}`;
   const [show, setShow] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -56,13 +60,19 @@ export default function FileUpload({ newThread, onFileUpload }) {
             variant="dark"
             id="uploadButton"
             onClick={() => {
-              onFileUpload(selectedFile);
+              onFileUpload(selectedFile, uploadedBy);
               setTimeout(() => handleClose(), 1800);
             }}
             className={styles.uploadButton}
           >
             Upload
           </Button>
+          <CircularProgress
+            style={{ display: 'none' }}
+            id="progressCircle"
+            variant="determinate"
+            value={progress}
+          />
         </Modal.Footer>
       </Modal>
     </div>

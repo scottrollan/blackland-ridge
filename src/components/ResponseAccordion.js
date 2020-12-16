@@ -1,6 +1,6 @@
 import React from 'react';
-import Comment from './shared/Comment';
 import Responses from './Responses';
+import Comment from './shared/Comment';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
@@ -11,22 +11,30 @@ import styles from './ResponseAccordion.module.scss';
 const ResponseAccordion = ({ newThread, fieldName, m }) => {
   const responses = m.responses ?? [];
   const responsesLength = responses.length;
+  const origMessageID = m.id;
   return (
-    <div className={styles.root}>
+    <div
+      className={styles.root}
+      style={{ display: newThread ? 'flex' : 'none' }}
+    >
+      <Comment
+        fieldName="Add Reply"
+        newThread={false}
+        replyingToID={origMessageID}
+      />
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography className={styles.heading}>
-            Comments{'  '}
+            {fieldName}
+            {'  '}
             <span style={{ display: responsesLength > 0 ? 'block' : 'none' }}>
               ({responsesLength})
             </span>
           </Typography>
         </AccordionSummary>
-        <Responses m={m} />
-        <AccordionDetails>
-          <Comment newThread={newThread} fieldName={fieldName} />
+        <AccordionDetails style={{ flexDirection: 'column' }}>
+          <Responses m={m} />
         </AccordionDetails>
-        <Responses m={m} />
       </Accordion>
     </div>
   );
