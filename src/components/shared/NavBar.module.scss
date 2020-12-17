@@ -27,10 +27,12 @@ img {
   margin-left: 1rem;
   font-size: small;
 }
-
 .navLink {
   font-size: x-large;
   color: var(--default-font-color) !important;
+}
+.directDrop {
+  display: none;
 }
 .zillow {
   max-width: 70px;
@@ -45,4 +47,15 @@ button,
 
 #collasible-nav-dropdown:after {
   display: none;
+}
+
+@media screen and (max-width: $breakpoint-medium) {
+  .subDrop {
+    display: none;
+  }
+  .directDrop {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
 }
