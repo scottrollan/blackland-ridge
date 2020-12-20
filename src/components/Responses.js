@@ -21,14 +21,12 @@ const Responses = ({ m }) => {
           const thisResponse = allMessages.find(
             (mess) => mess.id === responseID
           );
-          console.log(thisResponse);
           if (thisResponse !== undefined) {
             theseResponses = [...theseResponses, { ...thisResponse }];
           }
           theseResponses = [...new Set(theseResponses)];
         });
       } finally {
-        console.log(theseResponses);
         if (theseResponses.length > 0) {
           setMyResponses(
             theseResponses.sort((a, b) => {

@@ -18,72 +18,72 @@ const SingleMessage = ({ m }) => {
   let originalPostDate;
   let rString;
   let photoURL;
-
-  useEffect(() => {
-    const renderMessage = () => {
-      const date = m.createdAt;
-      const milliseconds = date.seconds * 1000;
-      const rawDate = new Date(milliseconds);
-      originalPostDate =
-        rawDate.toLocaleString('default', {
-          month: 'long',
-        }) +
-        ' ' +
-        rawDate.getDate() +
-        ', ' +
-        rawDate.getFullYear();
-
-      let likedBy = 0;
-      if (m.likedBy) {
-        likedBy = m.likedBy.length;
+  rString = createRandomString(11);
+  let thisAuthor;
+  const authorRef = m.authorRef;
+  const authID = authorRef.id;
+  // const authorID = authID.trim();
+  if (authID === myID) {
+    authorIsMe = true;
+  }
+  profilesCollection
+    .doc(authID)
+    .get()
+    .then((doc) => {
+      switch (doc.exists) {
+        case true:
+          const profile = { ...doc.data() };
+          console.log('Retrieved profile from SingleMessage: ', profile);
+          photoURL = profile.photoURL;
+          thisAuthor = profile.displayName;
+          $(`#image${rString}`).attr('src', photoURL);
+          $(`#aTag${rString}`).attr('href', photoURL);
+          $(`#name${rString}`).html(authorIsMe ? 'ME' : thisAuthor);
+          break;
+        default:
+          console.log('Sorry, that user no longer exists');
       }
-      let lovedBy = 0;
-      if (m.lovedBy) {
-        lovedBy = m.lovedBy.length;
-      }
-      let laughedBy = 0;
-      if (m.laughedBy) {
-        laughedBy = m.laughedBy.length;
-      }
-      let criedBy = 0;
-      if (m.criedBy) {
-        criedBy = m.criedBy.length;
-      }
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
 
-      let numberOfReactions = likedBy + lovedBy + criedBy + laughedBy; //total number of reactions
+  // useEffect(() => {
+  //   const renderMessage = () => {
+  const date = m.createdAt;
+  const milliseconds = date.seconds * 1000;
+  const rawDate = new Date(milliseconds);
+  originalPostDate =
+    rawDate.toLocaleString('default', {
+      month: 'long',
+    }) +
+    ' ' +
+    rawDate.getDate() +
+    ', ' +
+    rawDate.getFullYear();
 
-      rString = createRandomString(11);
-      let thisAuthor;
-      const authorRef = m.authorRef;
-      const authID = authorRef.id;
-      const authorID = authID.trim();
-      if (authorID === myID) {
-        authorIsMe = true;
-      }
-      const docRef = profilesCollection.doc(authorID);
-      docRef
-        .get()
-        .then((doc) => {
-          switch (doc.exists) {
-            case true:
-              const profile = doc.data();
-              photoURL = profile.photoURL;
-              thisAuthor = profile.displayName;
-              $(`#image${rString}`).attr('src', photoURL);
-              $(`#aTag${rString}`).attr('href', photoURL);
-              $(`#name${rString}`).html(authorIsMe ? 'ME' : thisAuthor);
-              break;
-            default:
-              console.log('Sorry, that user no longer exists');
-          }
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
-    };
+  let likedBy = 0;
+  if (m.likedBy) {
+    likedBy = m.likedBy.length;
+  }
+  let lovedBy = 0;
+  if (m.lovedBy) {
+    lovedBy = m.lovedBy.length;
+  }
+  let laughedBy = 0;
+  if (m.laughedBy) {
+    laughedBy = m.laughedBy.length;
+  }
+  let criedBy = 0;
+  if (m.criedBy) {
+    criedBy = m.criedBy.length;
+  }
 
-    renderMessage();
-  });
+  let numberOfReactions = likedBy + lovedBy + criedBy + laughedBy; //total number of reactions
+  // };
+
+  //   renderMessage();
+  // });
 
   return (
     <div style={{ width: '100%' }}>
