@@ -31,7 +31,8 @@ $breakpoint-extra-large: 1600px;
   --color-pallette-muted-accent: rgba(185, 212, 82, 0.8);
 
   --white: #fafafa;
-  --default-background: linear-gradient(
+  --default-background-color: var(--overlay-light);
+  --default-background-image: linear-gradient(
     var(--overlay-light),
     var(--overlay-medium),
     var(--overlay-dark),

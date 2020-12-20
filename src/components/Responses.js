@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { MessagesContext } from '../App';
+import { messagesCollection } from '../firestore/index';
 import { createRandomString } from '../functions/CreateRandomString';
 import SingleMessage from './shared/SingleMessage';
 import { Card as UICard } from '@material-ui/core';
@@ -7,23 +8,27 @@ import styles from './Responses.module.scss';
 
 const Responses = ({ m }) => {
   const allMessages = useContext(MessagesContext);
-  let theseResponses = [];
-  const myResponsesRefs = m.responses ?? [];
   const [myResponses, setMyResponses] = useState([]);
+  const responseIDs = m.responses ?? [];
+  let theseResponses = [];
 
   useEffect(() => {
-    if (myResponsesRefs.length > 0) {
+    if (responseIDs.length > 0) {
       //if there is a list of response refs (m.responses)
       try {
-        myResponsesRefs.map((r) => {
+        responseIDs.map((r) => {
           const responseID = r.id; //extract response message id's
           const thisResponse = allMessages.find(
             (mess) => mess.id === responseID
           );
-          theseResponses = [...theseResponses, { ...thisResponse }];
+          console.log(thisResponse);
+          if (thisResponse !== undefined) {
+            theseResponses = [...theseResponses, { ...thisResponse }];
+          }
           theseResponses = [...new Set(theseResponses)];
         });
       } finally {
+        console.log(theseResponses);
         if (theseResponses.length > 0) {
           setMyResponses(
             theseResponses.sort((a, b) => {
@@ -36,7 +41,7 @@ const Responses = ({ m }) => {
   }, []);
 
   return myResponses.length > 0
-    ? myResponses.map((r) => {
+    ? myResponses.map((mr) => {
         const key = createRandomString(5);
         return (
           <UICard
@@ -48,7 +53,7 @@ const Responses = ({ m }) => {
               flexDirection: 'column',
             }}
           >
-            <SingleMessage m={r} />
+            <SingleMessage m={mr} />
           </UICard>
         );
       })

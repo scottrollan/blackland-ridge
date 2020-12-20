@@ -17,23 +17,26 @@ const ResponseAccordion = ({ newThread, fieldName, m }) => {
       className={styles.root}
       style={{ display: newThread ? 'flex' : 'none' }}
     >
-      <Comment
-        fieldName="Add Reply"
-        newThread={false}
-        replyingToID={origMessageID}
-      />
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography className={styles.heading}>
-            {fieldName}
-            {'  '}
-            <span style={{ display: responsesLength > 0 ? 'block' : 'none' }}>
-              ({responsesLength})
-            </span>
+            {fieldName} ({responsesLength})
           </Typography>
         </AccordionSummary>
         <AccordionDetails style={{ flexDirection: 'column' }}>
+          <Comment
+            fieldName="Add Reply"
+            newThread={false}
+            replyingToID={origMessageID}
+          />
           <Responses m={m} />
+          <div style={{ display: m.responses ? 'inherit' : 'none' }}>
+            <Comment
+              fieldName="Add Reply"
+              newThread={false}
+              replyingToID={origMessageID}
+            />
+          </div>
         </AccordionDetails>
       </Accordion>
     </div>

@@ -23,28 +23,6 @@ const Directory = () => {
   const [addressMode, setAddressMode] = React.useState(true);
 
   let neighbors = [];
-  const getNeighborList = async () => {
-    try {
-      await profilesCollection.get().then((snapshot) => {
-        snapshot.forEach((doc) => {
-          neighbors.push(doc.data());
-        });
-      });
-      setNeighborList([...neighbors]);
-      //sort by street name, then number (so that 4181 Blackland Dr comes before 38 Blackland Way, i.e.)
-      neighborList.sort((a, b) =>
-        a.address.split(' ')[1] + a.address.split(' ').shift() >
-        b.address.split(' ')[1] + b.address.split(' ').shift()
-          ? 1
-          : -1
-      );
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setNeighborList([...neighbors]);
-      setAddressMode(true);
-    }
-  };
 
   const sortByAddress = () => {
     neighbors = [...neighborList];
@@ -73,8 +51,30 @@ const Directory = () => {
   $('#nameTab').click(() => sortByName());
 
   React.useEffect(() => {
+    const getNeighborList = async () => {
+      try {
+        await profilesCollection.get().then((snapshot) => {
+          snapshot.forEach((doc) => {
+            neighbors.push(doc.data());
+          });
+        });
+        setNeighborList([...neighbors]);
+        //sort by street name, then number (so that 4181 Blackland Dr comes before 38 Blackland Way, i.e.)
+        neighborList.sort((a, b) =>
+          a.address.split(' ')[1] + a.address.split(' ').shift() >
+          b.address.split(' ')[1] + b.address.split(' ').shift()
+            ? 1
+            : -1
+        );
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setNeighborList([...neighbors]);
+        setAddressMode(true);
+      }
+    };
     getNeighborList();
-  }, []);
+  }, [neighbors, neighborList]);
 
   return (
     <div className={styles.directory}>

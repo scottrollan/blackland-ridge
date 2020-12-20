@@ -1,92 +1,90 @@
-import React, { useState, useContext } from 'react';
-import { UserContext, MessagesContext } from '../../App';
+import React, { useContext, useState, useEffect } from 'react';
+import { UserContext } from '../../App';
 import ResponseAccordion from '../ResponseAccordion';
-import { profilesCollection } from '../../firestore/index';
+import { profilesCollection, messagesCollection } from '../../firestore/index';
 import { createRandomString } from '../../functions/CreateRandomString';
 import $ from 'jquery';
 import styles from './SingleMessage.module.scss';
 
 const SingleMessage = ({ m }) => {
+  const thisMessage = { ...m };
+  const messageID = m.id;
   const thisUser = useContext(UserContext);
   const userID = thisUser.id ?? '';
   let myID = userID.trim();
-  const theseMessages = useContext(MessagesContext);
-  const [messages, setMessages] = useState([...theseMessages]);
   const newThread = m.newThread ?? false;
 
-  let theseResponses = [];
-  let myRefs = [];
   let authorIsMe = false;
-  if (m.responses) {
-    //make an array of message id's (strings)
-    m.responses.forEach((re) => {
-      myRefs = [...myRefs, re.id];
-    });
-    theseResponses = messages.filter((id) => myRefs.includes(id)); //filter messages that are included in the response id array created above
-  }
-  const date = m.createdAt;
-  const milliseconds = date.seconds * 1000;
-  const rawDate = new Date(milliseconds);
-  const originalPostDate =
-    rawDate.toLocaleString('default', {
-      month: 'long',
-    }) +
-    ' ' +
-    rawDate.getDate() +
-    ', ' +
-    rawDate.getFullYear();
-  let numberOfResponses = 0;
-  let likedBy = 0;
-  if (m.likedBy) {
-    likedBy = m.likedBy.length;
-  }
-  let lovedBy = 0;
-  if (m.lovedBy) {
-    lovedBy = m.lovedBy.length;
-  }
-  let laughedBy = 0;
-  if (m.laughedBy) {
-    laughedBy = m.laughedBy.length;
-  }
-  let criedBy = 0;
-  if (m.criedBy) {
-    criedBy = m.criedBy.length;
-  }
+  let originalPostDate;
+  let rString;
+  let photoURL;
 
-  let numberOfReactions = likedBy + lovedBy + criedBy + laughedBy; //total number of reactions
+  useEffect(() => {
+    const renderMessage = () => {
+      const date = m.createdAt;
+      const milliseconds = date.seconds * 1000;
+      const rawDate = new Date(milliseconds);
+      originalPostDate =
+        rawDate.toLocaleString('default', {
+          month: 'long',
+        }) +
+        ' ' +
+        rawDate.getDate() +
+        ', ' +
+        rawDate.getFullYear();
 
-  if (m.responses) {
-    numberOfResponses = m.responses.length;
-  }
-  const rString = createRandomString(11);
-  let thisSrc;
-  let thisAuthor;
-  const authorRef = m.authorRef;
-  const authID = authorRef.id;
-  const authorID = authID.trim();
-  if (authorID === myID) {
-    authorIsMe = true;
-  }
-  const docRef = profilesCollection.doc(authorID);
-  docRef
-    .get()
-    .then((doc) => {
-      switch (doc.exists) {
-        case true:
-          const profile = doc.data();
-          thisSrc = profile.photoURL;
-          thisAuthor = profile.displayName;
-          $(`#image${rString}`).attr('src', thisSrc);
-          $(`#aTag${rString}`).attr('href', thisSrc);
-          $(`#name${rString}`).html(authorIsMe ? 'ME' : thisAuthor);
-          break;
-        default:
-          console.log('Sorry, that user no longer exists');
+      let likedBy = 0;
+      if (m.likedBy) {
+        likedBy = m.likedBy.length;
       }
-    })
-    .catch((error) => {
-      console.log(error.message);
-    });
+      let lovedBy = 0;
+      if (m.lovedBy) {
+        lovedBy = m.lovedBy.length;
+      }
+      let laughedBy = 0;
+      if (m.laughedBy) {
+        laughedBy = m.laughedBy.length;
+      }
+      let criedBy = 0;
+      if (m.criedBy) {
+        criedBy = m.criedBy.length;
+      }
+
+      let numberOfReactions = likedBy + lovedBy + criedBy + laughedBy; //total number of reactions
+
+      rString = createRandomString(11);
+      let thisAuthor;
+      const authorRef = m.authorRef;
+      const authID = authorRef.id;
+      const authorID = authID.trim();
+      if (authorID === myID) {
+        authorIsMe = true;
+      }
+      const docRef = profilesCollection.doc(authorID);
+      docRef
+        .get()
+        .then((doc) => {
+          switch (doc.exists) {
+            case true:
+              const profile = doc.data();
+              photoURL = profile.photoURL;
+              thisAuthor = profile.displayName;
+              $(`#image${rString}`).attr('src', photoURL);
+              $(`#aTag${rString}`).attr('href', photoURL);
+              $(`#name${rString}`).html(authorIsMe ? 'ME' : thisAuthor);
+              break;
+            default:
+              console.log('Sorry, that user no longer exists');
+          }
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    };
+
+    renderMessage();
+  });
+
   return (
     <div style={{ width: '100%' }}>
       <div
@@ -97,13 +95,13 @@ const SingleMessage = ({ m }) => {
       >
         <div className={styles.avatarDiv}>
           <a
-            href={thisSrc}
+            href={photoURL}
             target="_blank"
             rel="noopener noreferrer"
             id={`aTag${rString}`}
           >
             <img
-              src={thisSrc}
+              src={photoURL}
               alt=""
               className={styles.avatar}
               id={`image${rString}`}
@@ -118,7 +116,7 @@ const SingleMessage = ({ m }) => {
           <div
             className={!newThread && authorIsMe ? styles.quoteMe : styles.quote}
           >
-            {m.message.map((p) => {
+            {thisMessage.message.map((p) => {
               const pKey = createRandomString(10);
               return <p key={pKey}>{p}</p>;
             })}
@@ -126,8 +124,8 @@ const SingleMessage = ({ m }) => {
         </div>
       </div>
       <div className={styles.messageImagesDiv}>
-        {m.attachedImages
-          ? m.attachedImages.map((i) => {
+        {thisMessage.attachedImages
+          ? thisMessage.attachedImages.map((i) => {
               const iKey = createRandomString(9);
               return (
                 <img

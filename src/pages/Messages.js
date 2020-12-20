@@ -1,20 +1,31 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { MessagesContext } from '../App';
+// import { MessagesContext } from '../App';
+import { messagesCollection } from '../firestore/index';
 import MessagesHeader from '../components/MessagesHeader';
 import SingleMessage from '../components/shared/SingleMessage';
 import styles from './Messages.module.scss';
 import { createRandomString } from '../functions/CreateRandomString';
 
 const Messages = () => {
-  // const thisUser = useContext(UserContext);
-  const retrievedMessages = useContext(MessagesContext);
-  const [messages, setMessages] = useState([...retrievedMessages]);
+  const filteredMessages = [];
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    const theseMessages = [...retrievedMessages];
-    theseMessages.sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1));
-    setMessages([...theseMessages]);
-  }, [retrievedMessages]);
+    messagesCollection
+      .where('newThread', '==', true)
+      .onSnapshot((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          filteredMessages.push({ ...doc.data(), id: doc.id });
+        });
+        setMessages([...filteredMessages]);
+      });
+  }, []);
+
+  // useEffect(() => {
+  //   const theseMessages = [...retrievedMessages];
+  //   theseMessages.sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1));
+  //   setMessages([...theseMessages]);
+  // }, [retrievedMessages]);
 
   return (
     <div className={styles.messages}>

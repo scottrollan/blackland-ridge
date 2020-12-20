@@ -5,16 +5,12 @@ import styles from './ReactionIcons.module.scss';
 
 const ReactionIcons = ({ m, affectReaction }) => {
   const thisUser = useContext(UserContext);
-  const me = thisUser.name;
   let likedBy = [];
   if (m.likedBy) {
     likedBy = [...m.likedBy];
   }
 
-  let lovedBy = [];
-  if (m.lovedBy) {
-    lovedBy = [...m.lovedBy];
-  }
+  let lovedBy = (lovedBy = [...m.lovedBy] ?? []);
 
   let criedBy = [];
   if (m.criedBy) {
@@ -26,6 +22,7 @@ const ReactionIcons = ({ m, affectReaction }) => {
     laughedBy = [...m.laughedBy];
   }
 
+  const me = thisUser.name;
   const allBys = [...likedBy, ...lovedBy, ...criedBy, ...laughedBy];
   let iAmHere = false;
   if (allBys.includes(me)) {

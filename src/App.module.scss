@@ -9,7 +9,8 @@ body {
   overflow-x: hidden;
   min-width: 100vw;
   min-height: 100vh;
-  background-image: var(--default-background);
+  // background-color: var(--default-background-color);
+  background-image: var(--default-background-image);
 }
 .App {
   display: flex;

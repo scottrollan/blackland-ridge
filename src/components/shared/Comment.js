@@ -7,14 +7,13 @@ import {
   messagesCollection,
   fsArrayUnion,
 } from '../../firestore/index';
-import { Button, Spinner } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { UserContext } from '../../App';
 import { LoginContext } from '../../App';
 import { createRandomString } from '../../functions/CreateRandomString';
 import { TextField, TextareaAutosize } from '@material-ui/core';
 import $ from 'jquery';
 import styles from './Comment.module.scss';
-import { addSeconds } from 'date-fns';
 
 const Comment = ({ newThread, fieldName, replyingToID }) => {
   const setLoginPopup = useContext(LoginContext);
@@ -22,14 +21,12 @@ const Comment = ({ newThread, fieldName, replyingToID }) => {
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
   const [attachedImages, setAttachedImages] = useState([]);
-  const [uploadedImage, setUploadedImage] = useState(null); //url
   const [progress, setProgress] = useState(0);
 
   const onFileUpload = async (image, uploadedBy) => {
     //image upload
     $('#uploadButton').hide();
     $('#progressCircle').show();
-    setUploadedImage(image);
     const randomString = createRandomString(8);
     const metadata = {
       customMetadata: {
@@ -103,15 +100,13 @@ const Comment = ({ newThread, fieldName, replyingToID }) => {
               .then(async (doc) => {
                 switch (doc.exists) {
                   case true:
-                    newMessageRef = await doc.ref;
-                    messagesCollection
-                      .doc(replyingToID)
-                      .update({
-                        //and post that ref to the
-                        responses: fsArrayUnion(newMessageRef),
-                      })
-                      .set({ updatedAt: now });
-                    console.log(newMessageRef);
+                    newMessageRef = doc.ref;
+                    messagesCollection.doc(replyingToID).update({
+                      //and post that ref to the
+                      responses: fsArrayUnion(newMessageRef),
+                      updatedAt: now,
+                    });
+
                     break;
                   default:
                     console.log('Sorry, something went wrong.');

@@ -9,12 +9,15 @@
   background-color: var(--white);
   text-align: left;
   margin: 0.5rem 0;
-  padding: 1rem 2rem;
   max-width: $breakpoint-medium;
-  border-radius: 0.25rem;
+  border-radius: 0.5rem;
   @media screen and (max-width: $breakpoint-medium) {
     width: 92%;
   }
+}
+.messagesHeader > div {
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
 }
 
 .iconDiv {
