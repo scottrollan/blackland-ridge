@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 // import { MessagesContext } from '../App';
 import { messagesCollection } from '../firestore/index';
 import MessagesHeader from '../components/MessagesHeader';
@@ -13,19 +13,25 @@ const Messages = () => {
   useEffect(() => {
     messagesCollection
       .where('newThread', '==', true)
-      .onSnapshot((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          filteredMessages.push({ ...doc.data(), id: doc.id });
+      .onSnapshot(function (snapshot) {
+        snapshot.docChanges().forEach(function (change) {
+          if (change.type === 'added') {
+            filteredMessages.push({ ...change.doc.data(), id: change.doc.id });
+            let mergedMessages = [...messages, ...filteredMessages];
+            mergedMessages.sort((a, b) => {
+              return a.updatedAt > b.updatedAt ? -1 : 1; //most recent at top
+            });
+            setMessages([...mergedMessages]);
+          }
+          if (change.type === 'modified') {
+            console.log('Thread modified.');
+          }
         });
-        setMessages([...filteredMessages]);
       });
-  }, []);
+    const unsubscribe = messagesCollection.onSnapshot(function () {});
 
-  // useEffect(() => {
-  //   const theseMessages = [...retrievedMessages];
-  //   theseMessages.sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1));
-  //   setMessages([...theseMessages]);
-  // }, [retrievedMessages]);
+    return unsubscribe();
+  }, []);
 
   return (
     <div className={styles.messages}>

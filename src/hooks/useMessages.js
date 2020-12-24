@@ -7,10 +7,11 @@ const useMessages = () => {
 
   React.useEffect(() => {
     let allMessages = [];
+    let thisMessage = {};
     try {
       messagesCollection.onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          const thisMessage = { ...doc.data(), id: doc.id };
+          thisMessage = { ...doc.data(), myRef: doc.ref };
           allMessages.push(thisMessage);
         });
       });

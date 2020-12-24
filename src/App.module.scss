@@ -10,7 +10,6 @@ body {
   min-width: 100vw;
   min-height: 100vh;
   // background-color: var(--default-background-color);
-  background-image: var(--default-background-image);
 }
 .App {
   display: flex;
@@ -46,6 +45,7 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
+  background-image: var(--default-background-image);
   // background-image: linear-gradient(
   //   292deg,
   //   var(--backgrounds) 50%,

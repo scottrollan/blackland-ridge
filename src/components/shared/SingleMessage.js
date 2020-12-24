@@ -1,14 +1,13 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { UserContext } from '../../App';
 import ResponseAccordion from '../ResponseAccordion';
-import { profilesCollection, messagesCollection } from '../../firestore/index';
+import { profilesCollection } from '../../firestore/index';
 import { createRandomString } from '../../functions/CreateRandomString';
 import $ from 'jquery';
 import styles from './SingleMessage.module.scss';
 
 const SingleMessage = ({ m }) => {
   const thisMessage = { ...m };
-  const messageID = m.id;
   const thisUser = useContext(UserContext);
   const userID = thisUser.id ?? '';
   let myID = userID.trim();
@@ -16,40 +15,14 @@ const SingleMessage = ({ m }) => {
 
   let authorIsMe = false;
   let originalPostDate;
-  let rString;
+  let rString = createRandomString(11);
   let photoURL;
-  rString = createRandomString(11);
   let thisAuthor;
   const authorRef = m.authorRef;
   const authID = authorRef.id;
-  // const authorID = authID.trim();
   if (authID === myID) {
     authorIsMe = true;
   }
-  profilesCollection
-    .doc(authID)
-    .get()
-    .then((doc) => {
-      switch (doc.exists) {
-        case true:
-          const profile = { ...doc.data() };
-          console.log('Retrieved profile from SingleMessage: ', profile);
-          photoURL = profile.photoURL;
-          thisAuthor = profile.displayName;
-          $(`#image${rString}`).attr('src', photoURL);
-          $(`#aTag${rString}`).attr('href', photoURL);
-          $(`#name${rString}`).html(authorIsMe ? 'ME' : thisAuthor);
-          break;
-        default:
-          console.log('Sorry, that user no longer exists');
-      }
-    })
-    .catch((error) => {
-      console.log(error.message);
-    });
-
-  // useEffect(() => {
-  //   const renderMessage = () => {
   const date = m.createdAt;
   const milliseconds = date.seconds * 1000;
   const rawDate = new Date(milliseconds);
@@ -80,10 +53,26 @@ const SingleMessage = ({ m }) => {
   }
 
   let numberOfReactions = likedBy + lovedBy + criedBy + laughedBy; //total number of reactions
-  // };
-
-  //   renderMessage();
-  // });
+  profilesCollection
+    .doc(authID)
+    .get()
+    .then((doc) => {
+      switch (doc.exists) {
+        case true:
+          const profile = { ...doc.data() };
+          photoURL = profile.photoURL;
+          thisAuthor = profile.displayName;
+          $(`#image${rString}`).attr('src', photoURL);
+          $(`#aTag${rString}`).attr('href', photoURL);
+          $(`#name${rString}`).html(authorIsMe ? 'ME' : thisAuthor);
+          break;
+        default:
+          console.log('Sorry, that user no longer exists');
+      }
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
 
   return (
     <div style={{ width: '100%' }}>

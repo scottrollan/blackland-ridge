@@ -9,9 +9,9 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import styles from './ResponseAccordion.module.scss';
 
 const ResponseAccordion = ({ newThread, fieldName, m }) => {
-  const responses = m.responses ?? [];
-  const responsesLength = responses.length;
-  const origMessageID = m.id;
+  const myResponses = m.responses ?? [];
+  const responsesLength = myResponses.length;
+
   return (
     <div
       className={styles.root}
@@ -24,18 +24,10 @@ const ResponseAccordion = ({ newThread, fieldName, m }) => {
           </Typography>
         </AccordionSummary>
         <AccordionDetails style={{ flexDirection: 'column' }}>
-          <Comment
-            fieldName="Add Reply"
-            newThread={false}
-            replyingToID={origMessageID}
-          />
+          <Comment fieldName="Add Reply" newThread={false} m={m} />
           <Responses m={m} />
           <div style={{ display: m.responses ? 'inherit' : 'none' }}>
-            <Comment
-              fieldName="Add Reply"
-              newThread={false}
-              replyingToID={origMessageID}
-            />
+            <Comment fieldName="Add Reply" newThread={false} m={m} />
           </div>
         </AccordionDetails>
       </Accordion>

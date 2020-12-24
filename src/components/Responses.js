@@ -1,5 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { MessagesContext } from '../App';
+import React, { useState, useEffect } from 'react';
 import { messagesCollection } from '../firestore/index';
 import { createRandomString } from '../functions/CreateRandomString';
 import SingleMessage from './shared/SingleMessage';
@@ -7,44 +6,45 @@ import { Card as UICard } from '@material-ui/core';
 import styles from './Responses.module.scss';
 
 const Responses = ({ m }) => {
-  const allMessages = useContext(MessagesContext);
+  const thisMessage = { ...m };
+  const messageID = thisMessage.id;
   const [myResponses, setMyResponses] = useState([]);
-  const responseIDs = m.responses ?? [];
-  let theseResponses = [];
 
   useEffect(() => {
-    if (responseIDs.length > 0) {
-      //if there is a list of response refs (m.responses)
-      try {
-        responseIDs.map((r) => {
-          const responseID = r.id; //extract response message id's
-          const thisResponse = allMessages.find(
-            (mess) => mess.id === responseID
-          );
-          if (thisResponse !== undefined) {
-            theseResponses = [...theseResponses, { ...thisResponse }];
-          }
-          theseResponses = [...new Set(theseResponses)];
-        });
-      } finally {
-        if (theseResponses.length > 0) {
-          setMyResponses(
+    let mounted = true;
+    let theseResponses = [];
+    messagesCollection
+      .where('id', '==', `${messageID}`)
+      .onSnapshot((snapshot) => {
+        try {
+          snapshot.docChanges().forEach((change) => {
+            const changeData = { ...change.doc.data() };
+            theseResponses = changeData.responses ?? [];
             theseResponses.sort((a, b) => {
-              return a.updatedAt - b.updatedAt;
-            })
-          );
+              return a.createdAt > b.createdAt ? 1 : -1; //most recent at top
+            });
+          });
+        } finally {
+          if (mounted) {
+            setMyResponses([...theseResponses]);
+          }
         }
-      }
-    }
-  }, []);
+      });
+
+    const unsubscribe = messagesCollection.onSnapshot(function () {});
+
+    return () => {
+      mounted = false;
+      unsubscribe();
+    };
+  }, [messageID]);
 
   return myResponses.length > 0
     ? myResponses.map((mr) => {
-        const key = createRandomString(5);
+        const key = createRandomString(7);
         return (
           <UICard
             key={key}
-            // id={m._id}
             className={styles.card}
             style={{
               display: 'flex',

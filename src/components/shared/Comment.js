@@ -15,13 +15,14 @@ import { TextField, TextareaAutosize } from '@material-ui/core';
 import $ from 'jquery';
 import styles from './Comment.module.scss';
 
-const Comment = ({ newThread, fieldName, replyingToID }) => {
+const Comment = ({ newThread, fieldName, m }) => {
   const setLoginPopup = useContext(LoginContext);
   const thisUser = useContext(UserContext);
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
   const [attachedImages, setAttachedImages] = useState([]);
   const [progress, setProgress] = useState(0);
+  const replyToID = m.id;
 
   const onFileUpload = async (image, uploadedBy) => {
     //image upload
@@ -62,7 +63,6 @@ const Comment = ({ newThread, fieldName, replyingToID }) => {
   const sendComment = async (event) => {
     event.preventDefault();
     const newID = createRandomString(20).concat('xxxxxxx');
-    let newMessageRef;
     const ahora = new Date();
     const now = timeStamp.fromDate(ahora);
     const authorRef = thisUser.ref;
@@ -70,49 +70,29 @@ const Comment = ({ newThread, fieldName, replyingToID }) => {
     let comment = {
       attachedImages,
       authorRef: authorRef,
-      category: 'General',
       createdAt: now,
       id: newID,
       message: messageArray,
-      newThread: newThread,
-      updatedAt: now,
     };
     if (newThread) {
       //if starting a new thread
+      comment['category'] = 'General';
       comment['title'] = title;
+      comment['newThread'] = true;
+      comment['updatedAt'] = now;
+      comment['responses'] = [];
       try {
         messagesCollection.doc(newID).set({ ...comment });
       } catch (error) {
         console.log(error);
       }
     } else {
-      //if adding a comment/reply to an existing post
-      comment['updatedAt'] = now;
+      //add a comment/reply to an existing post
       try {
-        messagesCollection
-          .doc(newID)
-          .set({ ...comment })
-          .then(
-            //to extract the reference for this new message
-            messagesCollection
-              .doc(newID)
-              .get()
-              .then(async (doc) => {
-                switch (doc.exists) {
-                  case true:
-                    newMessageRef = doc.ref;
-                    messagesCollection.doc(replyingToID).update({
-                      //and post that ref to the
-                      responses: fsArrayUnion(newMessageRef),
-                      updatedAt: now,
-                    });
-
-                    break;
-                  default:
-                    console.log('Sorry, something went wrong.');
-                }
-              })
-          );
+        messagesCollection.doc(`${replyToID}`).update({
+          responses: fsArrayUnion({ ...comment }),
+          updatedAt: now,
+        });
       } catch (error) {
         console.log(error);
       }
@@ -121,11 +101,7 @@ const Comment = ({ newThread, fieldName, replyingToID }) => {
 
   return (
     <>
-      <form
-        onSubmit={(e) => sendComment(e)}
-        className={styles.commentForm}
-        // id={}
-      >
+      <form onSubmit={(e) => sendComment(e)} className={styles.commentForm}>
         <Loading />
         <span
           style={{ display: thisUser ? 'none' : 'inherit' }}

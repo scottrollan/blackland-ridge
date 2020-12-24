@@ -7,7 +7,7 @@ import Navbar from './components/shared/Navbar';
 import Authentication from './pages/Authentication';
 import Loading from './components/shared/Loading';
 // import Welcome from './components/Welcome';
-import Calendar from './pages/Calendar';
+// import Calendar from './pages/Calendar';
 import Directory from './pages/Directory';
 import PayDues from './pages/PayDues';
 import Referrals from './pages/Referrals';
@@ -52,7 +52,7 @@ const App = () => {
               <Switch>
                 {/* <Route path="/" exact component={Home}></Route> */}
                 <Route path="/" exact component={Messages}></Route>
-                <Route path="/calendar" component={Calendar}></Route>
+                {/* <Route path="/calendar" component={Calendar}></Route> */}
                 <Route path="/directory" component={Directory}></Route>
                 <Route path="/myProfile" component={MyProfile}></Route>
                 <Route path="/payDues" component={PayDues}></Route>
