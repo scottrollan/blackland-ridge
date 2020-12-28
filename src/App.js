@@ -2,6 +2,7 @@ import React, { useState, createContext } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import useAuth from './hooks/useAuth';
 import useMessages from './hooks/useMessages';
+import useReferrals from './hooks/useReferrals';
 import $ from 'jquery';
 import Navbar from './components/shared/Navbar';
 import Authentication from './pages/Authentication';
@@ -20,10 +21,12 @@ import fadeStyles from './components/FadeInMessage.module.scss';
 export const UserContext = createContext();
 export const MessagesContext = createContext();
 export const LoginContext = createContext();
+export const ReferralsContext = createContext();
 
 const App = () => {
   const thisUser = useAuth();
   let theseMessages = useMessages();
+  const theseReferrals = useReferrals();
   const [showLogin, setShowLogin] = useState(false);
 
   const showLoginPopup = () => setShowLogin(true);
@@ -34,6 +37,7 @@ const App = () => {
   if (thisUser) {
     $('#firebaseui-auth-container').hide();
   }
+
   return (
     <div className={styles.App}>
       <div className={styles.backgroundOverlay}></div>
@@ -47,22 +51,24 @@ const App = () => {
       <UserContext.Provider value={thisUser}>
         <MessagesContext.Provider value={theseMessages}>
           <LoginContext.Provider value={setLoginPopup}>
-            <Router>
-              <Navbar />
-              <Switch>
-                {/* <Route path="/" exact component={Home}></Route> */}
-                <Route path="/" exact component={Messages}></Route>
-                {/* <Route path="/calendar" component={Calendar}></Route> */}
-                <Route path="/directory" component={Directory}></Route>
-                <Route path="/myProfile" component={MyProfile}></Route>
-                <Route path="/payDues" component={PayDues}></Route>
-                <Route path="/referrals" component={Referrals}></Route>
-              </Switch>
-            </Router>
+            <ReferralsContext.Provider value={theseReferrals}>
+              <Router>
+                <Navbar />
+                <Switch>
+                  {/* <Route path="/" exact component={Home}></Route> */}
+                  <Route path="/" exact component={Messages}></Route>
+                  {/* <Route path="/calendar" component={Calendar}></Route> */}
+                  <Route path="/directory" component={Directory}></Route>
+                  <Route path="/myProfile" component={MyProfile}></Route>
+                  <Route path="/payDues" component={PayDues}></Route>
+                  <Route path="/referrals" component={Referrals}></Route>
+                </Switch>
+              </Router>
 
-            <Loading />
-            <Profile />
-            <Authentication show={showLogin} thisUser={thisUser} />
+              <Loading />
+              <Profile />
+              <Authentication show={showLogin} thisUser={thisUser} />
+            </ReferralsContext.Provider>
           </LoginContext.Provider>
         </MessagesContext.Provider>
       </UserContext.Provider>

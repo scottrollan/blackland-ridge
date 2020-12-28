@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import NewReferral from '../components/NewReferral';
+import { referralsCollection } from '../firestore/index';
 import { referralCategories } from '../data/referralCategories';
-import { fetchReferrals } from '../api/sanityClient';
 import { createRandomString } from '../functions/CreateRandomString';
 import { Nav, Card, Button, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import $ from 'jquery';
@@ -31,12 +31,30 @@ export default function Referrals() {
   );
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetchReferrals();
-      setAllReferrals([...response]);
+    let mounted = true;
+    let theseReferrals = [];
+    const getReferrals = async () => {
+      try {
+        await referralsCollection.get().then((snapshot) => {
+          snapshot.forEach((doc) => {
+            const thisReferral = { ...doc.data(), id: doc.id };
+            theseReferrals = [...theseReferrals, thisReferral];
+          });
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        if (mounted) {
+          setAllReferrals([...theseReferrals]);
+        }
+      }
     };
-    fetchData();
+    getReferrals();
+    return () => {
+      mounted = false;
+    };
   }, []);
+
   return (
     <div className={styles.referrals}>
       <h3>Referrals from Your Neighbors</h3>

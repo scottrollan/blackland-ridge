@@ -1,5 +1,7 @@
 import React, { useContext } from 'react';
 import { UserContext } from '../../App';
+import ReactionIcons from './ReactionIcons';
+import Reactions from './Reactions';
 import ResponseAccordion from '../ResponseAccordion';
 import { profilesCollection } from '../../firestore/index';
 import { createRandomString } from '../../functions/CreateRandomString';
@@ -35,24 +37,6 @@ const SingleMessage = ({ m }) => {
     ', ' +
     rawDate.getFullYear();
 
-  let likedBy = 0;
-  if (m.likedBy) {
-    likedBy = m.likedBy.length;
-  }
-  let lovedBy = 0;
-  if (m.lovedBy) {
-    lovedBy = m.lovedBy.length;
-  }
-  let laughedBy = 0;
-  if (m.laughedBy) {
-    laughedBy = m.laughedBy.length;
-  }
-  let criedBy = 0;
-  if (m.criedBy) {
-    criedBy = m.criedBy.length;
-  }
-
-  let numberOfReactions = likedBy + lovedBy + criedBy + laughedBy; //total number of reactions
   profilesCollection
     .doc(authID)
     .get()
@@ -126,6 +110,15 @@ const SingleMessage = ({ m }) => {
               );
             })
           : null}
+      </div>
+      <div
+        style={{
+          display: newThread ? 'none' : 'flex',
+          justifyContent: 'space-between',
+        }}
+      >
+        <ReactionIcons m={m} />
+        <Reactions m={m} />
       </div>
       <ResponseAccordion newThread={newThread} fieldName={'Replies'} m={m} />
     </div>

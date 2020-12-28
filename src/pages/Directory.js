@@ -90,6 +90,7 @@ const Directory = () => {
                     style={{ display: addressMode ? 'inherit' : 'none' }}
                   >
                     {n.address}
+                    {/* add some logic to place all profiles at same address onto same card??? */}
                   </Card.Header>
                   <div
                     style={{

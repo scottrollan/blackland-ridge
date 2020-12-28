@@ -1,16 +1,17 @@
 import React, { useState, useContext } from 'react';
 import Loading from '../components/shared/Loading';
-import { UserContext } from '../App';
+import { UserContext, ReferralsContext } from '../App';
+import { referralsCollection } from '../firestore/index';
 import { referralCategories } from '../data/referralCategories';
-import { Client } from '../api/sanityClient';
+import { createRandomString } from '../functions/CreateRandomString';
 import { Modal, Button, Form } from 'react-bootstrap';
 import $ from 'jquery';
 import styles from './NewReferral.module.scss';
 
 export default function NewReferral({ show, handleClose }) {
   const thisUser = useContext(UserContext);
-  const [subcategories, setSubcategories] = useState([]); //to populate choices, not an array of selected (see subcategory below for that)
-  const recommendedBy = thisUser.name;
+  const theseReferrals = useContext(ReferralsContext);
+  const [subcategories, setSubcategories] = useState([]); //to populate choices
   const [name, setName] = useState('');
   const [comments, setComments] = useState('');
   const [category, setCategory] = useState('select');
@@ -19,7 +20,6 @@ export default function NewReferral({ show, handleClose }) {
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [website, setWebsite] = useState('');
-  const [rating, setRating] = useState(5);
   const [image, setImage] = useState('');
 
   const selectCategory = (cat) => {
@@ -48,7 +48,6 @@ export default function NewReferral({ show, handleClose }) {
     setEmail('');
     setAddress('');
     setWebsite('');
-    setRating('');
     setImage('');
   };
 
@@ -73,39 +72,29 @@ export default function NewReferral({ show, handleClose }) {
   const saveReferral = async () => {
     $('#loading').css({ display: 'flex', zIndex: '999' }); //loading on
 
-    let newImage;
-    try {
-      const imageRes = await Client.assets.upload('image', image);
-      newImage = {
-        _type: 'image',
-        asset: {
-          _ref: imageRes._id,
-          _type: 'reference',
-        },
-      };
-    } catch (error) {
-      console.log(error);
-    }
+    const rID = createRandomString(20);
     const newReferral = {
-      _type: 'referral',
       address,
       category,
       comments,
       email,
-      image: newImage,
+      image,
       name,
       phone,
       link1: website,
-      rating,
+      rating: [
+        {
+          ratedBy: thisUser.name,
+          ref: thisUser.ref,
+          stars: 5,
+        },
+      ],
       subcategory,
-      recommendedBy,
     };
-    // console.log(newReferral);
     try {
-      const response = await Client.create(newReferral);
-      console.log(response);
+      referralsCollection.doc(rID).set(newReferral);
     } catch (error) {
-      alert(error);
+      console.log(error);
     } finally {
       $('#loading').css('display', 'none');
     }

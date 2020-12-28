@@ -18,6 +18,8 @@
     "firebase": "^7.22.0",
     "firebaseui": "^4.6.1",
     "jquery": "^3.5.1",
+    "lodash.remove": "^4.7.0",
+    "lodash.union": "^4.6.0",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-bootstrap": "^1.2.2",

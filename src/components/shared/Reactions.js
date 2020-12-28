@@ -1,20 +1,23 @@
 import React from 'react';
 import { reactions } from '../../data/reactions';
 import { Tooltip, Typography } from '@material-ui/core';
-import styles from './ReactAndComment.module.scss';
+import styles from './Reactions.module.scss';
 
-export default function ReactAndComment({
-  m,
-  numberOfReactions,
-  numberOfResponses,
-}) {
+export default function Reactions({ m }) {
+  let likedBy = m.likedBy ? m.likedBy.length : 0;
+  let lovedBy = m.lovedBy ? m.lovedBy.length : 0;
+  let laughedBy = m.laughedBy ? m.laughedBy.length : 0;
+  let criedBy = m.criedBy ? m.criedBy.length : 0;
+  let numberOfReactions = likedBy + lovedBy + criedBy + laughedBy; //total number of reactions
+
   return (
     <div className={styles.statsRow}>
       <div className={styles.statsReactions}>
         {reactions.map((r) => {
           let num;
-          if (m[`${r.array}`]) {
-            num = m[`${r.array}`].length;
+          const thisArray = r.array;
+          if (m[`${thisArray}`]) {
+            num = m[`${thisArray}`].length;
           }
 
           return (
@@ -24,8 +27,8 @@ export default function ReactAndComment({
               title={
                 <React.Fragment>
                   <Typography color="inherit">{r.label}</Typography>
-                  {m[r.array] //map the "likedBy's", etc... from reactions array
-                    ? m[r.array].map((by) => {
+                  {m[thisArray] //map the "likedBy's", etc... from reactions array
+                    ? m[thisArray].map((by) => {
                         return <Typography key={by}>{by}</Typography>;
                       })
                     : null}
@@ -42,30 +45,15 @@ export default function ReactAndComment({
             </Tooltip>
           );
         })}
-
-        <span
-          style={{
-            marginLeft: '12px',
-          }}
-        >
-          {numberOfReactions > 0 ? numberOfReactions : 'No reactions yet.'}
-        </span>
-      </div>
-      <div
-        className={styles.statsComments}
-        style={{
-          display: numberOfResponses ? 'inherit' : 'none', //if num of responses not 0
-        }}
-      >
-        {numberOfResponses} Comments
-      </div>
-      <div
-        className={styles.statsComments}
-        style={{
-          display: numberOfResponses ? 'none' : 'block', //if num of response is 0
-        }}
-      >
-        Comment
+        <div>
+          <span
+            style={{
+              marginLeft: '12px',
+            }}
+          >
+            {numberOfReactions > 0 ? numberOfReactions : 'No reactions yet.'}
+          </span>
+        </div>
       </div>
     </div>
   );

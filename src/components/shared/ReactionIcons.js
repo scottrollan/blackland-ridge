@@ -1,31 +1,58 @@
-import React, { useContext } from 'react';
+import React, { useReducer, useContext } from 'react';
 import { UserContext } from '../../App';
 import { reactions } from '../../data/reactions';
 import styles from './ReactionIcons.module.scss';
 
-const ReactionIcons = ({ m, affectReaction }) => {
+const union = require('lodash.union');
+const remove = require('lodash.remove');
+
+const reducer = (state, action) => {
+  let arrayName = action.payload.array;
+  let userName = [`${action.payload.name}`];
+  switch (action.type) {
+    case 'add':
+      const mArray = union(state[arrayName], userName);
+      console.log(mArray);
+      return {
+        ...state,
+        [arrayName]: mArray,
+      };
+    case 'remove':
+      console.log('case remove triggered');
+      return {
+        ...state,
+        [arrayName]: remove([arrayName], (name) => {
+          return name !== `${action.payload}`;
+        }),
+      };
+    default:
+      return { ...state };
+  }
+};
+
+const ReactionIcons = ({ m }) => {
   const thisUser = useContext(UserContext);
-  let likedBy = [];
-  if (m.likedBy) {
-    likedBy = [...m.likedBy];
-  }
+  let likedBy = m.likedBy ? [...m.likedBy] : [];
+  let lovedBy = m.lovedBy ? [...m.lovedBy] : [];
+  let criedBy = m.criedBy ? [...m.criedBy] : [];
+  let laughedBy = m.laughedBy ? [...m.laughedBy] : [];
+  let mergedBys = [...likedBy, ...lovedBy, ...criedBy, ...laughedBy];
+  let byObj = { likedBy, lovedBy, criedBy, laughedBy };
 
-  let lovedBy = (lovedBy = [...m.lovedBy] ?? []);
+  const [state, dispatch] = useReducer(reducer, { ...byObj });
 
-  let criedBy = [];
-  if (m.criedBy) {
-    criedBy = [...m.criedBy];
-  }
+  ////////lodash practice
+  // let arr = ['Barry', 'Lucius', 'Beth', 'Harry', 'Lucius', 'Barry'];
+  // arr = remove(arr, (name) => {
+  //   return name !== 'Harry';
+  // }); //['Barry', 'Lucius', 'Beth', 'Lucius', 'Barry']
+  // arr = union(arr, ['Chuck', 'Sandra', 'Chuck']);
+  // console.log(arr); //  }); //['Barry', 'Lucius', 'Beth', 'Chuck', 'Sandra']
 
-  let laughedBy = [];
-  if (m.laughedBy) {
-    laughedBy = [...m.laughedBy];
-  }
-
+  const affectReaction = () => {};
   const me = thisUser.name;
-  const allBys = [...likedBy, ...lovedBy, ...criedBy, ...laughedBy];
   let iAmHere = false;
-  if (allBys.includes(me)) {
+  if (mergedBys.includes(me)) {
     iAmHere = true;
   }
   return (
@@ -33,16 +60,20 @@ const ReactionIcons = ({ m, affectReaction }) => {
       {reactions.map((icon) => {
         return (
           <i
-            key={`${icon.title}of${m._id}`}
-            id={`${icon.title}Of${m._id}`}
-            action={
-              m[`${icon.array}`] && m[`${icon.array}`].includes(me)
-                ? 'dec'
-                : 'inc'
-            } //if reaction array (i.e. likedBy) includes me, then the first click of this button should decrease the likes by 1 and remove me from the array (unlike), if me is not already there, then increase the number and add me to the array
-            onClick={() =>
-              affectReaction(icon.title, icon.array, icon.color, m)
-            }
+            key={`${icon.title}Of${m.id}`}
+            id={`${icon.title}Of${m.id}`}
+            //if reaction array (i.e. likedBy) includes me, then the first click of this button should decrease the likes by 1 and remove "me" from the array (unlike), if me is not already there, then increase the number and add me to the array
+            onClick={() => {
+              dispatch({
+                type:
+                  m[`${icon.array}`] && m[`${icon.array}`].includes(me)
+                    ? 'remove'
+                    : 'add',
+
+                payload: { name: me, array: icon.array },
+              });
+              setTimeout(() => console.log('new state: ', state), 2000);
+            }}
             className={[`${icon.fontawesome} ${styles.icon} byIcon`]}
             style={
               !iAmHere
