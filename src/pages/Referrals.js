@@ -57,35 +57,37 @@ export default function Referrals() {
 
   return (
     <div className={styles.referrals}>
-      <h3>Referrals from Your Neighbors</h3>
-      <OverlayTrigger
-        placement="right"
-        delay={{ show: 250, hide: 400 }}
-        overlay={renderTooltip}
-      >
-        <Button
-          variant="success"
-          onClick={handleShow}
-          className={styles.addBtn}
+      <div classNmae={styles.heading}>
+        <h3>Referrals from Your Neighbors</h3>
+        <OverlayTrigger
+          placement="right"
+          delay={{ show: 250, hide: 400 }}
+          overlay={renderTooltip}
         >
-          <i className="far fa-user-plus"></i>
-        </Button>
-      </OverlayTrigger>
-      <NewReferral show={show} handleClose={handleClose} />
-      <Nav justify variant="tabs">
-        {referralCategories.map((c) => {
-          return (
-            <Nav.Item key={c.category}>
-              <Nav.Link
-                className={styles.link}
-                onClick={() => filterBy(c.category)}
-              >
-                {c.category}
-              </Nav.Link>
-            </Nav.Item>
-          );
-        })}
-      </Nav>
+          <Button
+            variant="success"
+            onClick={handleShow}
+            className={styles.addBtn}
+          >
+            <i className="far fa-user-plus"></i>
+          </Button>
+        </OverlayTrigger>
+        <NewReferral show={show} handleClose={handleClose} />
+        <Nav justify variant="tabs">
+          {referralCategories.map((c) => {
+            return (
+              <Nav.Item key={c.category}>
+                <Nav.Link
+                  className={styles.link}
+                  onClick={() => filterBy(c.category)}
+                >
+                  {c.category}
+                </Nav.Link>
+              </Nav.Item>
+            );
+          })}
+        </Nav>
+      </div>
       <div id="allReferrals" className={styles.cardDiv}>
         {allReferrals.map((r) => {
           const tolerance = 24; //number of words you want to show initially

@@ -1,10 +1,18 @@
 @import '../../styles/custom-properties.scss';
 
+p {
+  @media screen and (max-width: $breakpoint-medium) {
+    margin: 0.5rem;
+  }
+}
 .messageWordsDiv {
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  @media screen and (max-width: $breakpoint-medium) {
+    flex-direction: column !important;
+  }
 }
 .avatarDiv {
   width: auto;
@@ -13,15 +21,25 @@
   justify-content: flex-start;
   align-items: center;
   margin: 0 19px 19px 19px;
+  @media screen and (max-width: $breakpoint-medium) {
+    flex-direction: row;
+    justify-content: flex-start;
+    max-height: 4rem;
+    margin: 0;
+  }
 }
 .avatar {
   max-width: 100%;
   min-width: 5rem;
   max-height: 8rem;
   border-radius: 50%;
+  @media screen and (max-width: $breakpoint-medium) {
+    min-width: 1rem;
+    max-height: 4rem;
+    margin-right: 1rem;
+  }
 }
 .paragraphDiv {
-  // flex: 4;
   padding: 0 0 0.5rem 0;
 }
 .quote,
@@ -60,6 +78,15 @@
   top: 6px;
   right: -19px;
 }
+.qoute,
+.quote:before,
+.quoteMe,
+.quoteMe:before {
+  @media screen and (max-width: $breakpoint-medium) {
+    border: none;
+    text-align: left;
+  }
+}
 .messageImagesDiv {
   width: 100%;
   flex-wrap: wrap;
@@ -79,7 +106,6 @@
   height: auto;
   @media screen and (max-width: $breakpoint-medium) {
     max-width: 100%;
-    max-width: 40rem;
     margin: 0 0 0.5rem 0;
   }
 }

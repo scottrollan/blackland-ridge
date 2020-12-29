@@ -23,7 +23,6 @@ $breakpoint-extra-large: 1600px;
 
   //color pallette
   --default-font-color: #1b4a56;
-
   --color-pallette-dark: #505b6a;
   --color-pallette-medium: #bec3cc;
   --color-pallette-light: #dfe7f2;
@@ -47,6 +46,8 @@ $breakpoint-extra-large: 1600px;
     }
   }
   --page-border: 8px solid var(--backgrounds);
+
+  --navbar-height: 5rem;
 }
 
 @mixin primary-button {

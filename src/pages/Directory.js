@@ -77,7 +77,7 @@ const Directory = () => {
   return (
     <div className={styles.directory}>
       <Tabs defaultActiveKey="address">
-        <Tab id="nameTab" eventKey="name" title="Name">
+        <Tab id="nameTab" eventKey="name" title="Sort by Name">
           <div className={styles.cardGrid}>
             {neighborList.map((n) => {
               return (
@@ -146,7 +146,7 @@ const Directory = () => {
             })}
           </div>
         </Tab>
-        <Tab id="addressTab" eventKey="address" title="Address">
+        <Tab id="addressTab" eventKey="address" title="Sort by Address">
           <div className={styles.cardGrid}>
             {neighborList.map((n) => {
               return (

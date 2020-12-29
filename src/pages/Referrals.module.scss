@@ -3,12 +3,15 @@
 .referrals {
   z-index: 9;
   background-color: var(--white);
-  border: var(--page-border);
   border-bottom: none;
   min-height: 90vh;
+  background-color: transparent;
+}
+.heading {
+  background-color: var(--color-pallette-light);
 }
 .referrals a {
-  color: var(--color-pallette-muted-accent);
+  color: var(--color-pallette-dark);
 }
 
 .addBtn {
@@ -38,6 +41,7 @@
   @media (pointer: coarse) {
     @media screen and (max-width: $breakpoint-medium) {
       min-width: calc(100% - 2rem - 16px);
+      max-width: calc(100% - 2rem);
     }
   }
   &:hover {

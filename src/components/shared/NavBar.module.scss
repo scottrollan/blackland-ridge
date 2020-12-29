@@ -3,12 +3,20 @@
 .navBar {
   width: 100vw;
   max-width: 100vw;
+  // height: var(--navbar-height);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 18;
   background-color: var(--white);
-  background-color: transparent;
   font-family: 'Roboto', sans-serif;
-  border: var(--page-border);
+  // border: var(--page-border);
   border-bottom: none;
   color: var(--default-font-color) !important;
+}
+.navbar * {
+  z-index: 18;
+  background-color: var(--color-pallette-dark);
 }
 .navbarBrand {
   display: flex;

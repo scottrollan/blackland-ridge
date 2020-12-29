@@ -66,7 +66,10 @@ const NavBar = () => {
         </Dropdown>
       </Navbar.Brand>
 
-      <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+      <Navbar.Toggle
+        aria-controls="responsive-navbar-nav"
+        style={{ backgroundColor: 'var(--white)' }}
+      />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">
           <span
