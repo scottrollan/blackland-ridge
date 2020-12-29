@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { UserContext } from '../App';
 import Comment from './shared/Comment';
 import { createRandomString } from '../functions/CreateRandomString';
 import $ from 'jquery';
 import styles from './MessagesHeader.module.scss';
 
-let randomStr = createRandomString(12); //creates a 12-random-character string to use as new message _id
+let randomStr = createRandomString(12);
 
 const showForm = () => {
   $('#commentDiv').css('display', 'flex');
@@ -12,14 +13,22 @@ const showForm = () => {
 };
 
 const MessagesHeader = () => {
+  const user = useContext(UserContext);
+  const userName = user.displayName;
+
   return (
     <div className={styles.messagesHeader}>
       <div className={styles.iconDiv} id="iconDiv" onClick={() => showForm()}>
-        <h5>What's on your mind?</h5>
-        <i
-          className="fal fa-comment-lines"
-          style={{ fontSize: 48, margin: '0 1rem' }}
-        ></i>
+        <h5>
+          <span>
+            What's on your mind
+            <span style={{ display: userName ? 'inherit' : 'none' }}>
+              , {userName}
+            </span>
+            ?
+          </span>
+        </h5>
+        <i className={[`fal fa-comment-lines ${styles.icon}`]}></i>
       </div>
       <div id="commentDiv" className={styles.commentDiv}>
         <Comment

@@ -3,22 +3,17 @@
 .statsRow {
   display: flex;
   justify-content: flex-start;
-  padding: 0 1rem;
   width: 100%;
 }
 
 .statsReactions {
   display: flex;
   flex-direction: row;
-  font-size: smaller;
+  // font-size: smaller;
 }
 .statsReactions .icon {
   margin-right: -6px;
   background-color: var(--white);
   padding: 2px;
   border-radius: 50%;
-  // font-size: small;
 }
-// .icon {
-//   margin: 0 10px 0 0;
-// }

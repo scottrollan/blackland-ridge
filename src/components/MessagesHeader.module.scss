@@ -22,9 +22,10 @@
 
 .iconDiv {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
-  margin: 0;
+  margin: 1rem;
+  background-color: #e5e7ea;
   &:hover {
     cursor: pointer;
     background-color: var(--color-pallette-muted-accent);
@@ -34,6 +35,13 @@
 .iconDiv > h5,
 .iconDiv > span {
   margin: 0 1rem;
+}
+.icon {
+  font-size: 48px;
+  margin: 0 1rem;
+  @media screen and (max-width: $breakpoint-medium) {
+    font-size: 30px;
+  }
 }
 
 .commentDiv {

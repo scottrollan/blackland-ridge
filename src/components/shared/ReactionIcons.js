@@ -1,6 +1,7 @@
 import React, { useReducer, useContext } from 'react';
 import { UserContext } from '../../App';
 import { reactions } from '../../data/reactions';
+import $ from 'jquery';
 import styles from './ReactionIcons.module.scss';
 
 const union = require('lodash.union');
@@ -77,10 +78,10 @@ const ReactionIcons = ({ m }) => {
             className={[`${icon.fontawesome} ${styles.icon} byIcon`]}
             style={
               !iAmHere
-                ? { color: 'var(--overlay-medium' } //if not iAmHere, all icons displayed and grayed out
+                ? { color: icon.color } //if not iAmHere, all icons displayed and grayed out
                 : m[`${icon.array}`] && m[`${icon.array}`].includes(me) // if iAmHere and  this reaction array (i.e. likedBy) includes me
-                ? { color: icon.color, display: 'block' } // color it
-                : { visibility: 'hidden' } //otherwise (if iAmHere, but not in this array, don't display me)
+                ? { display: 'block' } // color it
+                : { display: 'none' } //otherwise (if iAmHere, but not in this array, don't display me)
             }
           ></i>
         );

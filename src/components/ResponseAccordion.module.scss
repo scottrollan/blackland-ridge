@@ -6,6 +6,17 @@
   margin-top: 1rem;
 }
 
-.heading {
+.accordionHead {
+  width: 100%;
   display: flex;
+  justify-content: space-between;
+}
+
+.reactionSpan,
+.liked {
+  font-size: 13.333px;
+}
+
+.liked {
+  text-align: right;
 }

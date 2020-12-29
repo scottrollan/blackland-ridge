@@ -2,16 +2,21 @@ import React from 'react';
 import Responses from './Responses';
 import Comment from './shared/Comment';
 import Reactions from './shared/Reactions';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import Typography from '@material-ui/core/Typography';
+import ReactionIcons from './shared/ReactionIcons';
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 import styles from './ResponseAccordion.module.scss';
 
 const ResponseAccordion = ({ newThread, fieldName, m }) => {
   const myResponses = m.responses ?? [];
   const responsesLength = myResponses.length;
+
+  const popover = {};
 
   return (
     <div
@@ -20,7 +25,29 @@ const ResponseAccordion = ({ newThread, fieldName, m }) => {
     >
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Reactions m={m} />
+          <div className={styles.accordionHead}>
+            <span onClick={(e) => e.stopPropagation()}>
+              <OverlayTrigger
+                trigger="click"
+                placement="auto"
+                overlay={
+                  <Popover style={{ padding: '0.75rem' }}>
+                    <ReactionIcons m={m} />
+                  </Popover>
+                }
+              >
+                <span>
+                  <i className="far fa-thumbs-up" /> Like
+                </span>
+              </OverlayTrigger>
+            </span>
+            <span className={styles.reactionSpan}>
+              <Reactions m={m} />
+            </span>
+            <span className={styles.liked}>
+              {responsesLength > 0 ? 'Replies' : 'Be the first to comment'}
+            </span>
+          </div>
         </AccordionSummary>
         <AccordionDetails style={{ flexDirection: 'column' }}>
           <Comment fieldName="Add Reply" newThread={false} m={m} />
