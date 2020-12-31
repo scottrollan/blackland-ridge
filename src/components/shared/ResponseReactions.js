@@ -85,13 +85,7 @@ const ResponseReactions = ({ m }) => {
 
   return (
     <div className={styles.iconRow}>
-      <div style={{ display: thisUser ? 'none' : 'block' }}>
-        Login to Respond
-      </div>
-      <div
-        className={styles.iconMask}
-        style={{ display: thisUser ? 'block' : 'none' }}
-      ></div>
+      <div className={styles.iconMask}></div>
       {reactions.map((icon) => {
         const iconArray = thisResponse[icon.array] ?? [];
         return (

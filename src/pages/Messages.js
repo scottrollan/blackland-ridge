@@ -2,8 +2,9 @@ import React, { useEffect, useState, useContext } from 'react';
 import { messagesCollection } from '../firestore/index';
 import MessagesHeader from '../components/MessagesHeader';
 import SingleMessage from '../components/shared/SingleMessage';
-import styles from './Messages.module.scss';
 import { createRandomString } from '../functions/CreateRandomString';
+
+import styles from './Messages.module.scss';
 
 const Messages = () => {
   const [messages, setMessages] = useState([]);

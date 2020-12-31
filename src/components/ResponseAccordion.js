@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { UserContext } from '../App';
 import Responses from './Responses';
 import Comment from './shared/Comment';
 import MessageIcons from './shared/MessageIcons';
@@ -15,13 +16,17 @@ import styles from './ResponseAccordion.module.scss';
 const ResponseAccordion = ({ m }) => {
   const myResponses = m.responses ?? [];
   const responsesLength = myResponses.length;
+  const thisUser = useContext(UserContext);
 
   return (
     <div className={styles.root} style={{ display: 'block' }}>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <div className={styles.accordionHead}>
-            <span onClick={(e) => e.stopPropagation()}>
+            <span
+              onClick={(e) => e.stopPropagation()}
+              style={{ visibility: thisUser ? 'visible' : 'hidden' }}
+            >
               <OverlayTrigger
                 trigger="click"
                 placement="auto"
@@ -40,7 +45,13 @@ const ResponseAccordion = ({ m }) => {
               <MessageIcons m={m} />
             </span>
             <span className={styles.liked}>
-              {responsesLength > 0 ? 'Replies' : 'Be the first to comment'}
+              {responsesLength > 1 ? (
+                <span>{responsesLength} Replies</span>
+              ) : responsesLength > 0 ? (
+                <span>{responsesLength} Reply</span>
+              ) : (
+                'Be the first to comment'
+              )}
             </span>
           </div>
         </AccordionSummary>

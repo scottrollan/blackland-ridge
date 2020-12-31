@@ -110,11 +110,14 @@ const SingleResponse = ({ m }) => {
       <div
         style={{
           display: 'flex',
-          justifyContent: 'space-between',
+          justifyContent: 'flex-start',
           width: '100%',
         }}
       >
-        <span onClick={(e) => e.stopPropagation()}>
+        <span
+          onClick={(e) => e.stopPropagation()}
+          style={{ width: '33%', visibility: thisUser ? 'visible' : 'hidden' }}
+        >
           <OverlayTrigger
             trigger="click"
             placement="auto"
@@ -129,8 +132,10 @@ const SingleResponse = ({ m }) => {
             </span>
           </OverlayTrigger>
         </span>
-        <ResponseIcons m={thisResponse} />
-        {/* thisResponse contains responseToID */}
+        <span style={{ width: '33%' }}>
+          <ResponseIcons m={thisResponse} />
+          {/* thisResponse contains responseToID */}
+        </span>
       </div>
     </div>
   );

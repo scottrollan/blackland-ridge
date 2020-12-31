@@ -108,7 +108,7 @@ const Comment = ({ newThread, fieldName, m }) => {
           className={styles.setLogin}
           onClick={() => setLoginPopup.showLoginPopup()}
         >
-          <h5>Login to comment</h5>
+          <h5>Login to Engage Neighbors</h5>
           <i className="fal fa-comment-lines" style={{ fontSize: 48 }}></i>
         </span>
         <div
