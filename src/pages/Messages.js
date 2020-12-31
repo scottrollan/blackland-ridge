@@ -25,8 +25,8 @@ const Messages = () => {
           }
           if (change.type === 'modified') {
             console.log('Thread modified.');
-            const modifiedMessageID = change.doc.id;
-            setMessages(filteredMessages);
+            // const modifiedMessageID = change.doc.id;
+            // setMessages(filteredMessages);
           }
         });
       });
