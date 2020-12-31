@@ -4,6 +4,13 @@
   display: flex;
   position: relative;
 }
+.iconMask {
+  background-color: var(--overlay-light);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
 
 .icon {
   margin: 0 5px;

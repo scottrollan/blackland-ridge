@@ -3,7 +3,6 @@ import { referralsCollection } from '../firestore/index';
 
 const useReferrals = () => {
   const [theseReferrals, setTheseReferrals] = useState('');
-  // const [newThreads, setNewThreads] = useState('');
 
   React.useEffect(() => {
     let allReferrals = [];
@@ -19,11 +18,10 @@ const useReferrals = () => {
       } catch (error) {
         console.log(error);
       } finally {
-        setTheseReferrals(allReferrals);
+        setTheseReferrals([...allReferrals]);
       }
     };
     getReferrals();
-    console.log(theseReferrals);
   }, []);
   return theseReferrals;
 };

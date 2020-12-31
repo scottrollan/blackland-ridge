@@ -1,28 +1,29 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { UserContext } from '../../App';
-import ResponseAccordion from '../ResponseAccordion';
+import ResponseReactions from './ResponseReactions';
+import ResponseIcons from './ResponseIcons';
 import { profilesCollection } from '../../firestore/index';
 import { createRandomString } from '../../functions/CreateRandomString';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 import $ from 'jquery';
 import styles from './SingleMessage.module.scss';
 
-const SingleMessage = ({ m }) => {
-  const [thisMessage, setThisMessage] = useState({ ...m });
+const SingleResponse = ({ m }) => {
+  const thisResponse = { ...m };
   const thisUser = useContext(UserContext);
   const myID = thisUser.id ?? '';
-  const newThread = m.newThread ?? false;
 
   let authorIsMe = false;
   let originalPostDate;
   let rString = createRandomString(11);
   let photoURL;
   let thisAuthor;
-  const authorRef = thisMessage.authorRef;
+  const authorRef = m.authorRef;
   const authID = authorRef.id;
   if (authID === myID) {
     authorIsMe = true;
   }
-  const date = thisMessage.createdAt;
+  const date = m.createdAt;
   const milliseconds = date.seconds * 1000;
   const rawDate = new Date(milliseconds);
   originalPostDate =
@@ -34,35 +35,33 @@ const SingleMessage = ({ m }) => {
     ', ' +
     rawDate.getFullYear();
 
-  React.useEffect(() => {
-    profilesCollection
-      .doc(authID)
-      .get()
-      .then((doc) => {
-        switch (doc.exists) {
-          case true:
-            const profile = { ...doc.data() };
-            photoURL = profile.photoURL;
-            thisAuthor = profile.displayName;
-            $(`#image${rString}`).attr('src', photoURL);
-            $(`#aTag${rString}`).attr('href', photoURL);
-            $(`#name${rString}`).html(authorIsMe ? 'ME' : thisAuthor);
-            break;
-          default:
-            console.log('Sorry, that user no longer exists');
-        }
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  }, []);
+  profilesCollection
+    .doc(authID)
+    .get()
+    .then((doc) => {
+      switch (doc.exists) {
+        case true:
+          const profile = { ...doc.data() };
+          photoURL = profile.photoURL;
+          thisAuthor = profile.displayName;
+          $(`#image${rString}`).attr('src', photoURL);
+          $(`#aTag${rString}`).attr('href', photoURL);
+          $(`#name${rString}`).html(authorIsMe ? 'ME' : thisAuthor);
+          break;
+        default:
+          console.log('Sorry, that user no longer exists');
+      }
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
 
   return (
     <div style={{ width: '100%' }}>
       <div
         className={styles.messageWordsDiv}
         style={{
-          flexDirection: !newThread && authorIsMe ? 'row-reverse' : 'row',
+          flexDirection: authorIsMe ? 'row-reverse' : 'row',
         }}
       >
         <div className={styles.avatarDiv}>
@@ -82,13 +81,11 @@ const SingleMessage = ({ m }) => {
           <div style={{ letterSpacing: '0.2rem' }} id={`name${rString}`}></div>
         </div>
         <div className={styles.paragraphDiv}>
-          <h4>{thisMessage.title ? thisMessage.title : null}</h4>
+          <h4>{m.title ? m.title : null}</h4>
           <span style={{ fontSize: 'small' }}>{originalPostDate}</span>
 
-          <div
-            className={!newThread && authorIsMe ? styles.quoteMe : styles.quote}
-          >
-            {thisMessage.message.map((p) => {
+          <div className={authorIsMe ? styles.quoteMe : styles.quote}>
+            {thisResponse.message.map((p) => {
               const pKey = createRandomString(10);
               return <p key={pKey}>{p}</p>;
             })}
@@ -96,8 +93,8 @@ const SingleMessage = ({ m }) => {
         </div>
       </div>
       <div className={styles.messageImagesDiv}>
-        {thisMessage.attachedImages
-          ? thisMessage.attachedImages.map((i) => {
+        {thisResponse.attachedImages
+          ? thisResponse.attachedImages.map((i) => {
               const iKey = createRandomString(9);
               return (
                 <img
@@ -110,10 +107,33 @@ const SingleMessage = ({ m }) => {
             })
           : null}
       </div>
-
-      <ResponseAccordion fieldName={'Replies'} m={thisMessage} />
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          width: '100%',
+        }}
+      >
+        <span onClick={(e) => e.stopPropagation()}>
+          <OverlayTrigger
+            trigger="click"
+            placement="auto"
+            overlay={
+              <Popover style={{ padding: '0.75rem' }}>
+                <ResponseReactions m={thisResponse} />
+              </Popover>
+            }
+          >
+            <span>
+              <i className="far fa-thumbs-up" /> Like
+            </span>
+          </OverlayTrigger>
+        </span>
+        <ResponseIcons m={thisResponse} />
+        {/* thisResponse contains responseToID */}
+      </div>
     </div>
   );
 };
 
-export default SingleMessage;
+export default SingleResponse;

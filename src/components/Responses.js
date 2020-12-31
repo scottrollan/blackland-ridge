@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { messagesCollection } from '../firestore/index';
 import { createRandomString } from '../functions/CreateRandomString';
-import SingleMessage from './shared/SingleMessage';
+import SingleResponse from './shared/SingleResponse';
 import { Card as UICard } from '@material-ui/core';
 import styles from './Responses.module.scss';
 
@@ -40,8 +40,9 @@ const Responses = ({ m }) => {
   }, [messageID]);
 
   return myResponses.length > 0
-    ? myResponses.map((mr) => {
+    ? myResponses.map((mr, index) => {
         const key = createRandomString(7);
+        mr = { ...mr, arrayIndex: index, responseToID: messageID }; // add index of responses array as an object, as well as the original message id, for later querying
         return (
           <UICard
             key={key}
@@ -51,7 +52,7 @@ const Responses = ({ m }) => {
               flexDirection: 'column',
             }}
           >
-            <SingleMessage m={mr} />
+            <SingleResponse m={mr} />
           </UICard>
         );
       })

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import Loading from '../components/shared/Loading';
-import { UserContext, ReferralsContext } from '../App';
+import { UserContext } from '../App';
 import { referralsCollection } from '../firestore/index';
 import { referralCategories } from '../data/referralCategories';
 import { createRandomString } from '../functions/CreateRandomString';
@@ -10,7 +10,6 @@ import styles from './NewReferral.module.scss';
 
 export default function NewReferral({ show, handleClose }) {
   const thisUser = useContext(UserContext);
-  const theseReferrals = useContext(ReferralsContext);
   const [subcategories, setSubcategories] = useState([]); //to populate choices
   const [name, setName] = useState('');
   const [comments, setComments] = useState('');

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-// import { MessagesContext } from '../App';
+import React, { useEffect, useState, useContext } from 'react';
 import { messagesCollection } from '../firestore/index';
 import MessagesHeader from '../components/MessagesHeader';
 import SingleMessage from '../components/shared/SingleMessage';
@@ -7,16 +6,17 @@ import styles from './Messages.module.scss';
 import { createRandomString } from '../functions/CreateRandomString';
 
 const Messages = () => {
-  const filteredMessages = [];
   const [messages, setMessages] = useState([]);
+  let filteredMessages = [];
 
   useEffect(() => {
     messagesCollection
       .where('newThread', '==', true)
       .onSnapshot(function (snapshot) {
         snapshot.docChanges().forEach(function (change) {
+          filteredMessages.push({ ...change.doc.data(), id: change.doc.id });
           if (change.type === 'added') {
-            filteredMessages.push({ ...change.doc.data(), id: change.doc.id });
+            // filteredMessages.push({ ...change.doc.data(), id: change.doc.id });
             let mergedMessages = [...messages, ...filteredMessages];
             mergedMessages.sort((a, b) => {
               return a.updatedAt > b.updatedAt ? -1 : 1; //most recent at top
@@ -25,6 +25,8 @@ const Messages = () => {
           }
           if (change.type === 'modified') {
             console.log('Thread modified.');
+            const modifiedMessageID = change.doc.id;
+            setMessages(filteredMessages);
           }
         });
       });
@@ -38,7 +40,6 @@ const Messages = () => {
       <MessagesHeader />
       {messages.map((m) => {
         const divKey = createRandomString(8);
-        const responseArray = m.responses ? [...m.responses] : [];
         return (
           <div
             key={divKey}
@@ -47,7 +48,7 @@ const Messages = () => {
               display: m.newThread ? 'flex' : 'none',
             }}
           >
-            <SingleMessage m={m} myResponsesArray={responseArray} />
+            <SingleMessage m={m} responseIndex={-2} />
           </div>
         );
       })}

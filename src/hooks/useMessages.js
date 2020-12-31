@@ -3,23 +3,25 @@ import { messagesCollection } from '../firestore/index';
 
 const useMessages = () => {
   const [theseMessages, setTheseMessages] = useState('');
-  // const [newThreads, setNewThreads] = useState('');
 
   React.useEffect(() => {
     let allMessages = [];
     let thisMessage = {};
-    try {
-      messagesCollection.onSnapshot((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          thisMessage = { ...doc.data(), myRef: doc.ref };
-          allMessages.push(thisMessage);
+    const getMessages = async () => {
+      try {
+        await messagesCollection.get().then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            thisMessage = { ...doc.data(), id: doc.id };
+            allMessages = [...allMessages, thisMessage];
+          });
         });
-      });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setTheseMessages(allMessages);
-    }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setTheseMessages([...allMessages]);
+      }
+    };
+    getMessages();
   }, []);
   return theseMessages;
 };

@@ -3,16 +3,16 @@ import { UserContext } from '../../App';
 import { messagesCollection } from '../../firestore/index';
 import { reactions } from '../../data/reactions';
 import $ from 'jquery';
-import styles from './ReactionIcons.module.scss';
+import styles from './MessageReactions.module.scss';
 
 const remove = require('lodash.remove');
 
-const ReactionIcons = ({ m }) => {
+const MessageReactions = ({ m }) => {
   const thisUser = useContext(UserContext);
   const me = thisUser.name;
   const id = m.id;
 
-  const [state, setState] = useState({});
+  const [state, setState] = useState({ ...m });
   let likedBy = state.likedBy ?? [];
   let lovedBy = state.lovedBy ?? [];
   let criedBy = state.criedBy ?? [];
@@ -29,26 +29,28 @@ const ReactionIcons = ({ m }) => {
   }
 
   const affectReaction = (addRemove, array) => {
-    let newData = {};
+    let newData = { ...state };
     const currentArray = state[array] ?? []; //state.likedBy, i.e.
     let newArray;
     switch (addRemove) {
       case 'add':
         newArray = [...currentArray, me];
         newData = { ...state, [array]: [...newArray] };
-        console.log(newData);
         break;
       case 'remove':
         newArray = remove(currentArray, (name) => {
           return name != me;
         });
         newData = { ...state, [array]: [...newArray] };
-        console.log(newData);
         break;
       default:
         console.log(state);
     }
-    messagesCollection.doc(id).set(newData);
+
+    console.log(newData);
+    messagesCollection.doc(id).update({
+      [array]: newArray,
+    });
     setState(newData);
   };
 
@@ -72,8 +74,10 @@ const ReactionIcons = ({ m }) => {
       unsubscribe();
     };
   }, [id]);
+
   return (
     <div className={styles.iconRow}>
+      <div className={styles.iconMask}></div>
       {reactions.map((icon) => {
         const iconArray = state[icon.array] ?? [];
         return (
@@ -87,12 +91,12 @@ const ReactionIcons = ({ m }) => {
             className={[`${icon.fontawesome} ${styles.icon} byIcon`]}
             style={{
               color: icon.color,
-              opacity: iHaveReacted ? 1 : 0.6,
-              display: !iHaveReacted
-                ? 'block' //if I have not reacted, display all reation options
+              // opacity: iHaveReacted ? 1 : 0.6,
+              zIndex: !iHaveReacted
+                ? 3 //if I have not reacted, all icons above mask
                 : iconArray.includes(me) // if iHaveReacted (in one array) and this particular reaction array (i.e. likedBy, etc.) includes me
-                ? 'block' // show it
-                : 'none', //otherwise (if iHaveReacted, but not in this array, don't display me)
+                ? 3 // also above mask
+                : 1, //otherwise (if iHaveReacted, but not in this array), under mask
             }}
           ></i>
         );
@@ -101,4 +105,4 @@ const ReactionIcons = ({ m }) => {
   );
 };
 
-export default ReactionIcons;
+export default MessageReactions;

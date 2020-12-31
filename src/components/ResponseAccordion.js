@@ -1,8 +1,8 @@
 import React from 'react';
 import Responses from './Responses';
 import Comment from './shared/Comment';
-import Reactions from './shared/Reactions';
-import ReactionIcons from './shared/ReactionIcons';
+import MessageIcons from './shared/MessageIcons';
+import MessageReactions from './shared/MessageReactions';
 import {
   Accordion,
   AccordionSummary,
@@ -12,17 +12,12 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import styles from './ResponseAccordion.module.scss';
 
-const ResponseAccordion = ({ newThread, fieldName, m }) => {
+const ResponseAccordion = ({ m }) => {
   const myResponses = m.responses ?? [];
   const responsesLength = myResponses.length;
 
-  const popover = {};
-
   return (
-    <div
-      className={styles.root}
-      style={{ display: newThread ? 'flex' : 'none' }}
-    >
+    <div className={styles.root} style={{ display: 'block' }}>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <div className={styles.accordionHead}>
@@ -32,7 +27,7 @@ const ResponseAccordion = ({ newThread, fieldName, m }) => {
                 placement="auto"
                 overlay={
                   <Popover style={{ padding: '0.75rem' }}>
-                    <ReactionIcons m={m} />
+                    <MessageReactions m={m} />
                   </Popover>
                 }
               >
@@ -42,7 +37,7 @@ const ResponseAccordion = ({ newThread, fieldName, m }) => {
               </OverlayTrigger>
             </span>
             <span className={styles.reactionSpan}>
-              <Reactions m={m} />
+              <MessageIcons m={m} />
             </span>
             <span className={styles.liked}>
               {responsesLength > 0 ? 'Replies' : 'Be the first to comment'}
@@ -50,10 +45,10 @@ const ResponseAccordion = ({ newThread, fieldName, m }) => {
           </div>
         </AccordionSummary>
         <AccordionDetails style={{ flexDirection: 'column' }}>
-          <Comment fieldName="Add Reply" newThread={false} m={m} />
+          <Comment fieldName="Add Reply" m={m} />
           <Responses m={m} />
-          <div style={{ display: m.responses ? 'inherit' : 'none' }}>
-            <Comment fieldName="Add Reply" newThread={false} m={m} />
+          <div style={{ display: myResponses.length > 0 ? 'inherit' : 'none' }}>
+            <Comment fieldName="Add Reply" m={m} />
           </div>
         </AccordionDetails>
       </Accordion>

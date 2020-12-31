@@ -57,7 +57,7 @@ export default function Referrals() {
 
   return (
     <div className={styles.referrals}>
-      <div classNmae={styles.heading}>
+      <div className={styles.heading}>
         <h3>Referrals from Your Neighbors</h3>
         <OverlayTrigger
           placement="right"
@@ -117,7 +117,7 @@ export default function Referrals() {
             htmlPhone = `tel:+${noCloseParenth}`;
           }
           return (
-            <Card className={styles.card} key={r._id}>
+            <Card className={styles.card} key={r.id}>
               <Card.Title>{r.name}</Card.Title>
               {r.subcategory.map((s) => (
                 <Card.Subtitle key={s}>{s}</Card.Subtitle>
