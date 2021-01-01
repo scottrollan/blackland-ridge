@@ -43,7 +43,7 @@ $card-margin: 2rem 1rem;
   overflow: hidden;
 }
 .infoDiv {
-  max-width: calc(($card-width - $card-padding * 2) - $photo-width);
+  // max-width: calc(($card-width - $card-padding * 2) - $photo-width);
   overflow: hidden;
 }
 .photoDiv {
