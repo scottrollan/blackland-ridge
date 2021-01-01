@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import NextEventModal from '../components/NextEventModal';
-import EventModal from '../components/EventModal';
+import NextEventModal from '../../components/NextEventModal';
+import EventModal from '../../components/EventModal';
 import { Button } from 'react-bootstrap';
 import {
   format,
@@ -24,7 +24,7 @@ import {
   eventDayOfWeek,
   eventSrc,
   months,
-} from '../functions/GetNextEvent';
+} from '../../functions/GetNextEvent';
 import { Client } from '../api/sanityClient';
 import imageUrlBuilder from '@sanity/image-url';
 import styles from './Calendar.module.scss';

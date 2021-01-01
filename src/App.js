@@ -3,14 +3,15 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import useAuth from './hooks/useAuth';
 import $ from 'jquery';
 import Navbar from './components/shared/Navbar';
-import Authentication from './pages/Authentication';
+import Authentication from './pages/authentication/Authentication';
 import Loading from './components/shared/Loading';
-import Directory from './pages/Directory';
-import PayDues from './pages/PayDues';
-import Referrals from './pages/Referrals';
+import Directory from './pages/directory/Directory';
+import PayDues from './pages/payDues/PayDues';
+import Referrals from './pages/referrals/Referrals';
 import Profile from './components/Profile';
-import MyProfile from './pages/MyProfile';
-import Messages from './pages/Messages';
+import MyProfile from './pages/myProfile/MyProfile';
+import Messages from './pages/messages/Messages';
+import Album from './pages/album/Album';
 import styles from './App.module.scss';
 import fadeStyles from './components/FadeInMessage.module.scss';
 
@@ -49,6 +50,7 @@ const App = () => {
               <Route path="/myProfile" component={MyProfile}></Route>
               <Route path="/payDues" component={PayDues}></Route>
               <Route path="/referrals" component={Referrals}></Route>
+              <Route path="/album" component={Album}></Route>
             </Switch>
           </Router>
 

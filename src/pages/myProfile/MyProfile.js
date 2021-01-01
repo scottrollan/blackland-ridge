@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
-import ProfileForm from '../components/ProfileForm';
-import ErrorMessage from '../components/ErrorMessage';
-import { UserContext } from '../App';
+import ProfileForm from '../../components/ProfileForm';
+import ErrorMessage from '../../components/ErrorMessage';
+import { UserContext } from '../../App';
 import { Spinner } from 'react-bootstrap';
 import $ from 'jquery';
 import styles from './MyProfile.module.scss';

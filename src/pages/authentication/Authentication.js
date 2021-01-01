@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 // import { UserContext } from '../App';
-import * as fs from '../firestore/index';
+import * as fs from '../../firestore/index';
 import { Button, Modal, Form } from 'react-bootstrap';
 import $ from 'jquery';
-import ErrorMessage from '../components/ErrorMessage';
-import ResetPassword from '../components/ResetPassword';
+import ErrorMessage from '../../components/ErrorMessage';
+import ResetPassword from '../../components/ResetPassword';
 import styles from './Authentication.module.scss';
 
 const Authentication = ({ show }) => {

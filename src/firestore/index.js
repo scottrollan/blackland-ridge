@@ -27,6 +27,10 @@ export const storageRef = storage.ref();
 export const usersRef = storageRef.child('images/users');
 export const albumsRef = storageRef.child('images/albums/');
 export const attachmentsRef = storageRef.child('images/messageAttachments');
+export const petsRef = albumsRef.child('/pets');
+export const itemsForSaleRef = albumsRef.child('/itemsForSale');
+export const wildlifeRef = albumsRef.child('/wildlife');
+export const miscRef = albumsRef.child('/misc');
 
 ////////// Database access //////////
 export const profilesCollection = firebaseApp

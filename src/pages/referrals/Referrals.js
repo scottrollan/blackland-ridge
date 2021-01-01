@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import NewReferral from '../components/NewReferral';
-import { referralsCollection } from '../firestore/index';
-import { referralCategories } from '../data/referralCategories';
-import { createRandomString } from '../functions/CreateRandomString';
+import NewReferral from '../../components/NewReferral';
+import { referralsCollection } from '../../firestore/index';
+import { referralCategories } from '../../data/referralCategories';
+import { createRandomString } from '../../functions/CreateRandomString';
 import { Nav, Card, Button, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import $ from 'jquery';
 import styles from './Referrals.module.scss';

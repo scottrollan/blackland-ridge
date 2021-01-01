@@ -38,7 +38,7 @@ const NavBar = () => {
               : 'https://robohash.org/user?bgset=bg1'
           }
           alt=""
-          style={{ borderRadius: '50%' }}
+          style={{ borderRadius: '50%', maxHeight: '3rem' }}
         />
         <Dropdown>
           <Dropdown.Toggle

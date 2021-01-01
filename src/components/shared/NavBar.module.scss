@@ -26,9 +26,6 @@
   padding: 0;
   align-items: center;
 }
-img {
-  max-height: 3rem;
-}
 
 .logBtn {
   @include rectangle-out;

@@ -1,33 +1,32 @@
-@import '../styles/custom-properties.scss';
+@import '../../styles/custom-properties.scss';
 
-:root {
-  --card-width: 20rem;
-  --card-padding: 1rem;
-  --photo-width: 5rem;
-  --grid-padding: 2rem 5rem;
-  --card-margin: 2rem 1rem;
-}
+// :root {
+$card-width: 20rem;
+$card-padding: 0.5rem;
+$photo-width: 5rem;
+$grid-padding: 2rem 5rem;
+$card-margin: 2rem 1rem;
+// }
 @media screen and (max-width: $breakpoint-medium) {
-  :root {
-    --card-padding: 0.5rem;
-    --grid-padding: 1rem;
-  }
+  // :root {
+  $card-padding: 0.5rem;
+  $grid-padding: 1rem;
 }
+//
 
 .directory {
-  min-height: 100vh;
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
   z-index: 10;
-  // background: var(--white);
-  // border: 8px solid var(--color-pallette-dark);
-  border-top: none;
+  background: var(--white);
+  border-radius: 0.25rem 1rem 1rem;
+  margin: 0 2rem;
   padding: 0 10px;
 }
 
 .cardGrid {
-  padding: var(--grid-padding);
+  padding: $grid-padding;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -36,17 +35,15 @@
 }
 
 .card {
-  width: var(--card-width);
-  padding: var(--card-padding);
-  margin: var(--card-margin);
+  width: $card-width;
+  padding: $card-padding;
+  margin: $card-margin;
   text-align: left;
   box-shadow: 3px 5px 10px var(--color-pallette-dark);
   overflow: hidden;
 }
 .infoDiv {
-  max-width: calc(
-    var(--card-width) - (var(--card-padding) * 2) - var(--photo-width)
-  );
+  max-width: calc(($card-width - $card-padding * 2) - $photo-width);
   overflow: hidden;
 }
 .photoDiv {
@@ -59,7 +56,7 @@
 }
 .photo {
   border-radius: 50%;
-  max-width: var(--photo-width);
+  max-width: $photo-width;
   align-self: center;
 }
 .editProfile {

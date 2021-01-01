@@ -23,9 +23,13 @@ const ResponseAccordion = ({ m }) => {
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <div className={styles.accordionHead}>
+            <span className={styles.reactionSpan}>
+              <MessageIcons m={m} />
+            </span>
             <span
               onClick={(e) => e.stopPropagation()}
               style={{ visibility: thisUser ? 'visible' : 'hidden' }}
+              className={styles.likeButton}
             >
               <OverlayTrigger
                 trigger="click"
@@ -41,9 +45,7 @@ const ResponseAccordion = ({ m }) => {
                 </span>
               </OverlayTrigger>
             </span>
-            <span className={styles.reactionSpan}>
-              <MessageIcons m={m} />
-            </span>
+
             <span className={styles.liked}>
               {responsesLength > 1 ? (
                 <span>{responsesLength} Replies</span>

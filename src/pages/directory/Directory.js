@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import { profilesCollection } from '../firestore';
+import { profilesCollection } from '../../firestore';
 import { Card, Tab, Tabs, Button } from 'react-bootstrap';
 import $ from 'jquery';
 import { useHistory } from 'react-router-dom';
-import { UserContext } from '../App';
+import { UserContext } from '../../App';
 import styles from './Directory.module.scss';
 
 const Directory = () => {

@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { messagesCollection } from '../firestore/index';
-import MessagesHeader from '../components/MessagesHeader';
-import SingleMessage from '../components/shared/SingleMessage';
-import { createRandomString } from '../functions/CreateRandomString';
+import { messagesCollection } from '../../firestore/index';
+import MessagesHeader from '../../components/MessagesHeader';
+import SingleMessage from '../../components/shared/SingleMessage';
+import { createRandomString } from '../../functions/CreateRandomString';
 
 import styles from './Messages.module.scss';
 

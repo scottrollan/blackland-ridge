@@ -117,6 +117,7 @@ const SingleResponse = ({ m }) => {
         <span
           onClick={(e) => e.stopPropagation()}
           style={{ width: '33%', visibility: thisUser ? 'visible' : 'hidden' }}
+          className={styles.likeButton}
         >
           <OverlayTrigger
             trigger="click"
