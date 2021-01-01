@@ -7,7 +7,6 @@ import { Card, Tab, Tabs, Button } from 'react-bootstrap';
 import $ from 'jquery';
 import { useHistory } from 'react-router-dom';
 import { UserContext } from '../../App';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import styles from './Album.module.scss';
 
 export default function Album() {

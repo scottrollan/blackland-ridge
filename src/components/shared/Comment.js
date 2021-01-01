@@ -62,7 +62,7 @@ const Comment = ({ newThread, fieldName, m }) => {
 
   const sendComment = async (event) => {
     event.preventDefault();
-    const newID = createRandomString(20).concat('xxxxxxx');
+    const newID = createRandomString(20);
     const ahora = new Date();
     const now = timeStamp.fromDate(ahora);
     const authorRef = thisUser.ref;
