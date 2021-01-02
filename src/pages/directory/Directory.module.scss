@@ -23,6 +23,9 @@ $card-margin: 2rem 1rem;
   border-radius: 0.25rem 1rem 1rem;
   margin: 0 2rem;
   padding: 0 10px;
+  @media screen and (max-width: $breakpoint-medium) {
+    margin: 0 0.5rem;
+  }
 }
 
 .cardGrid {
@@ -32,6 +35,9 @@ $card-margin: 2rem 1rem;
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: space-around;
+  @media screen and (max-width: $breakpoint-medium) {
+    padding: 0.5rem;
+  }
 }
 
 .card {
@@ -41,6 +47,10 @@ $card-margin: 2rem 1rem;
   text-align: left;
   box-shadow: 3px 5px 10px var(--color-pallette-dark);
   overflow: hidden;
+  @media screen and (max-width: $breakpoint-medium) {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
 }
 .infoDiv {
   // max-width: calc(($card-width - $card-padding * 2) - $photo-width);
@@ -58,6 +68,9 @@ $card-margin: 2rem 1rem;
   border-radius: 50%;
   max-width: $photo-width;
   align-self: center;
+  @media screen and (max-width: $breakpoint-medium) {
+    max-width: 2.5rem;
+  }
 }
 .editProfile {
   @include rectangle-out;

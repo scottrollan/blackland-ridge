@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import QuickButtons from '../../components/shared/QuickButtons';
 import { profilesCollection } from '../../firestore';
 import { Card, Tab, Tabs, Button } from 'react-bootstrap';
 import $ from 'jquery';
@@ -76,6 +77,7 @@ const Directory = () => {
 
   return (
     <div className={styles.directory}>
+      <QuickButtons />
       <Tabs defaultActiveKey="address">
         <Tab id="nameTab" eventKey="name" title="Sort by Name">
           <div className={styles.cardGrid}>

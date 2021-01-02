@@ -87,7 +87,6 @@ export default function Album() {
             return a.data.timeCreated > b.data.timeCreated ? 1 : -1;
           });
           setFirstPage(urls1);
-          console.log(urls1);
         });
         if (firstPage.nextPageToken) {
           secondPage = await miscRef.list({
