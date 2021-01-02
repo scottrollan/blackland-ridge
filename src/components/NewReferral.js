@@ -238,13 +238,13 @@ export default function NewReferral({ show, handleClose }) {
               onChange={(e) => setWebsite(e.target.value)}
             />
           </Form.Group>
-          <Form.Group>
+          {/* <Form.Group>
             <Form.File
               id="image"
               label="Upload An Image"
               onChange={(e) => setImage(e.target.files[0])}
             />
-          </Form.Group>
+          </Form.Group> */}
           <Button variant="success" type="submit">
             Save
           </Button>

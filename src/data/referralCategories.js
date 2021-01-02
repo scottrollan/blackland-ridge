@@ -21,6 +21,7 @@ export const referralCategories = [
       'House Cleaning',
       'Plumbing',
       'Electrical',
+      'Exterminators',
       'Carpentry',
       'Gutters',
       'Roofs',
@@ -67,6 +68,17 @@ export const referralCategories = [
       'Mowing',
       'Hardscaping',
       'Yards-General',
+    ],
+  },
+  {
+    category: 'Bodies',
+    subcategories: [
+      'Medical Doctors',
+      'Dentists',
+      'Chiropractors',
+      'Massage Therapists',
+      'Hair Stylists',
+      'Nail Techs',
     ],
   },
 ];

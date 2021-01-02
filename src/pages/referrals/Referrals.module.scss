@@ -1,13 +1,13 @@
 @import '../../styles/custom-properties.scss';
 
 .referrals {
-  z-index: 9;
+  z-index: 3;
   background-color: var(--white);
   border-bottom: none;
-  min-height: 90vh;
   background-color: transparent;
 }
 .heading {
+  margin-top: 1rem;
   background-color: var(--white);
 }
 .referrals a {

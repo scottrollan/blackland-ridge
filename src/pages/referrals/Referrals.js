@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import NewReferral from '../../components/NewReferral';
+import QuickButtons from '../../components/shared/QuickButtons';
 import { referralsCollection } from '../../firestore/index';
 import { referralCategories } from '../../data/referralCategories';
 import { createRandomString } from '../../functions/CreateRandomString';
@@ -57,6 +58,7 @@ export default function Referrals() {
 
   return (
     <div className={styles.referrals}>
+      <QuickButtons />
       <div className={styles.heading}>
         <h3>Referrals from Your Neighbors</h3>
         <OverlayTrigger
@@ -171,6 +173,9 @@ export default function Referrals() {
                   </a>
                 </span>
               </Card.Footer>
+              <span style={{ fontSize: 'small', alignSelf: 'flex-end' }}>
+                by {r.rating[0].ratedBy}
+              </span>
             </Card>
           );
         })}

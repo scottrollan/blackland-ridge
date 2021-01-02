@@ -11,6 +11,7 @@ import { Button } from 'react-bootstrap';
 import { UserContext } from '../../App';
 import { LoginContext } from '../../App';
 import { createRandomString } from '../../functions/CreateRandomString';
+import { Form } from 'react-bootstrap';
 import { TextField, TextareaAutosize } from '@material-ui/core';
 import $ from 'jquery';
 import styles from './Comment.module.scss';
@@ -97,11 +98,19 @@ const Comment = ({ newThread, fieldName, m }) => {
         console.log(error);
       }
     }
+    $('#title').val('');
+    setTitle('');
+    $('#message').val();
+    setMessage('');
   };
 
   return (
     <>
-      <form onSubmit={(e) => sendComment(e)} className={styles.commentForm}>
+      <Form
+        onSubmit={(e) => sendComment(e)}
+        className={styles.commentForm}
+        id="commentForm"
+      >
         <Loading />
         <span
           style={{ display: thisUser ? 'none' : 'inherit' }}
@@ -115,35 +124,31 @@ const Comment = ({ newThread, fieldName, m }) => {
           className={styles.comment}
           style={{ display: thisUser ? 'inherit' : 'none' }}
         >
-          {/* <img src={} alt="" className={styles.avatar} /> */}
           <div className={styles.inputDiv}>
-            <TextField
-              // id={`title${messageID}`}
-              className={styles.textBox}
-              label="Title"
-              variant="outlined"
-              position="start"
-              edge="end"
-              required={newThread ? true : false}
-              style={{
-                display: newThread ? 'inherit' : 'none',
-              }}
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            ></TextField>
-            <TextareaAutosize
-              // id={`post${messageID}`}
-              className={styles.textBox}
-              label={fieldName}
-              variant="outlined"
-              position="start"
-              edge="end"
-              required
-              style={{ height: 'auto' }}
-              placeholder={fieldName}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-            ></TextareaAutosize>
+            <Form.Group controlId="title">
+              <Form.Control
+                type="text"
+                placeholder="Title *"
+                required={newThread ? true : false}
+                style={{
+                  display: newThread ? 'inherit' : 'none',
+                }}
+                value={title}
+                id="title"
+                onChange={(e) => setTitle(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+            <Form.Group>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                required
+                placeholder={fieldName}
+                value={message}
+                id="message"
+                onChange={(e) => setMessage(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
           </div>
           <div
             className={styles.iconDiv}
@@ -167,7 +172,7 @@ const Comment = ({ newThread, fieldName, m }) => {
               );
             })
           : null}
-      </form>
+      </Form>
     </>
   );
 };
