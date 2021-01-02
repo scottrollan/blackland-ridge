@@ -9,14 +9,14 @@ export default function AlbumModal({ show, handleClose, carouselImages }) {
       <Carousel className={styles.carousel}>
         {carouselImages.map((i) => {
           return (
-            <Carousel.Item className={styles.carouselItem} key={i}>
+            <Carousel.Item className={styles.carouselItem} key={i.url}>
               <a
                 className={styles.imageWrapper}
-                href={i}
+                href={i.url}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src={i} alt="" className={styles.carouselImage} />
+                <img src={i.url} alt="" className={styles.carouselImage} />
               </a>
             </Carousel.Item>
           );

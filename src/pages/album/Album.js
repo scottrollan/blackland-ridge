@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import QuickButtons from '../../components/shared/QuickButtons';
 // import FileUpload from '../../components/shared/FileUpload';
 import AlbumModal from './AlbumModal';
 import { createRandomString } from '../../functions/CreateRandomString';
@@ -59,7 +60,7 @@ export default function Album() {
   };
 
   const open = (pageName) => {
-    $(`#${pageName}`).show();
+    $(`.${pageName}`).show();
     $(`#${pageName}Button`).hide();
   };
 
@@ -79,8 +80,14 @@ export default function Album() {
         const items = firstPage.items;
         items.forEach(async (i) => {
           const thisURL = await i.getDownloadURL();
-          urls1 = [...urls1, thisURL];
+          const thisMetadata = await i.getMetadata();
+          const imageObj = { url: thisURL, data: thisMetadata };
+          urls1 = [...urls1, imageObj];
+          urls1.sort((a, b) => {
+            return a.data.timeCreated > b.data.timeCreated ? 1 : -1;
+          });
           setFirstPage(urls1);
+          console.log(urls1);
         });
         if (firstPage.nextPageToken) {
           secondPage = await miscRef.list({
@@ -90,7 +97,12 @@ export default function Album() {
           const items2 = secondPage.items;
           items2.forEach(async (i) => {
             const thisURL = await i.getDownloadURL();
-            urls2 = [...urls2, thisURL];
+            const thisMetadata = await i.getMetadata();
+            const imageObj = { url: thisURL, data: thisMetadata };
+            urls2 = [...urls2, imageObj];
+            urls2.sort((a, b) => {
+              return a.data.timeCreated > b.data.timeCreated ? 1 : -1;
+            });
             setSecondPage(urls2);
           });
         }
@@ -103,41 +115,42 @@ export default function Album() {
 
   return (
     <div className={styles.album}>
+      <QuickButtons />
       <Tabs defaultActiveKey="misc">
         <Tab id="miscTab" eventKey="misc" title="Main">
           <AlbumModal
             show={showModal}
             handleClose={handleClose}
-            carouselImages={firstPage}
+            carouselImages={firstPage.concat(secondPage)}
           />
           <div className={styles.cardGrid}>
             {firstPage.map((p) => {
               return (
-                <Card key={p} className={styles.card} onClick={handleShow}>
-                  <Card.Img src={p} alt="" style={{ height: '200px' }} />
+                <Card key={p.url} className={styles.card} onClick={handleShow}>
+                  <Card.Img src={p.url} alt="" className={styles.albumPhoto} />
                 </Card>
               );
             })}
-            <div className={styles.buttonWrap}>
+            <div className={styles.buttonWrap} id="pageTwoButton">
               <Button
                 className={styles.moreButton}
-                id="pageTwoButton"
                 onClick={() => open('pageTwo')}
               >
                 See {secondPage.length} More
               </Button>
             </div>
-            <span id="pageTwo" style={{ display: 'none' }}>
-              {secondPage.map((p) => {
-                return (
-                  <Card className={styles.card}>
-                    <Card.Link href={p}>
-                      <Card.Img src={p} alt="" style={{ height: '200px' }} />
-                    </Card.Link>
-                  </Card>
-                );
-              })}
-            </span>
+            {secondPage.map((p) => {
+              return (
+                <Card
+                  key={p.url}
+                  className={[`pageTwo ${styles.card}`]}
+                  style={{ display: 'none' }}
+                  onClick={handleShow}
+                >
+                  <Card.Img src={p.url} alt="" className={styles.albumPhoto} />
+                </Card>
+              );
+            })}
           </div>
         </Tab>
         <Tab id="petTab" eventKey="pets" title="Pets">

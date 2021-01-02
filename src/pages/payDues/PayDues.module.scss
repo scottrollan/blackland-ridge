@@ -1,7 +1,7 @@
 @import '../../styles/custom-properties.scss';
 
 .payDues {
-  min-height: 90vh;
+  z-index: 2;
 }
 .payDues h3 {
   color: var(--color-pallette-dark);

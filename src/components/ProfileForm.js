@@ -323,6 +323,7 @@ const ProfileForm = ({ thisUser, setError }) => {
           alt=""
           style={{
             minHeight: 'var(--avatar-size)',
+            maxHeight: '6rem',
             alignSelf: 'center',
           }}
         />

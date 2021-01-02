@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { messagesCollection } from '../../firestore/index';
+import QuickButtons from '../../components/shared/QuickButtons';
 import MessagesHeader from '../../components/MessagesHeader';
 import SingleMessage from '../../components/shared/SingleMessage';
 import { createRandomString } from '../../functions/CreateRandomString';
@@ -38,6 +39,7 @@ const Messages = () => {
 
   return (
     <div className={styles.messages}>
+      <QuickButtons />
       <MessagesHeader />
       {messages.map((m) => {
         const divKey = createRandomString(8);

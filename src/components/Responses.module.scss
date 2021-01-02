@@ -15,18 +15,17 @@
   max-width: $breakpoint-medium;
   background-color: var(--white);
   border-radius: 0.35rem;
-  // @media screen and (max-width: $breakpoint-medium) {
-  //   width: 92%;
-  //   padding: 0.5rem 1rem;
-  // }
+  @media screen and (max-width: $breakpoint-medium) {
+    width: 92%;
+    padding: 0.5rem 1rem;
+  }
 }
 .cardOuterDiv {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
 }
-// .mainAvatar {
-// }
+
 .messageImage {
   max-width: 25rem;
   max-height: 25rem;
@@ -44,8 +43,7 @@
   padding: 1rem 2rem;
   width: 100%;
   border-top: 1px solid var(--overlay-medium);
-  // border-radius: 8px;
-  // box-shadow: 1px 1px 1px var(--overlay-medium);
+
   text-align: left;
   max-width: $breakpoint-medium;
   @media screen and (max-width: $breakpoint-medium) {

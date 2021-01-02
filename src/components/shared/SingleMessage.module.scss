@@ -10,10 +10,8 @@ p {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  @media screen and (max-width: $breakpoint-medium) {
-    flex-direction: column !important;
-  }
 }
+
 .avatarDiv {
   width: auto;
   display: flex;
@@ -22,28 +20,30 @@ p {
   align-items: center;
   margin: 0 19px 19px 19px;
   @media screen and (max-width: $breakpoint-medium) {
-    flex-direction: row;
     justify-content: flex-start;
     max-height: 4rem;
-    margin: 0;
   }
 }
+
 .avatar {
   max-width: 100%;
   min-width: 5rem;
   max-height: 8rem;
   border-radius: 50%;
   @media screen and (max-width: $breakpoint-medium) {
-    min-width: 1rem;
-    max-height: 4rem;
-    margin-right: 1rem;
+    object-fit: contain;
+    height: 3rem;
+    width: 3rem;
+    margin-right: 0.5rem;
+    border-radius: 0;
   }
 }
 .paragraphDiv {
   padding: 0 0 0.5rem 0;
 }
 .quote,
-.quoteMe {
+.quoteMe,
+.mobileQuote {
   width: auto;
   padding: 0.5rem;
   background-color: var(--color-pallette-accent);
@@ -78,13 +78,12 @@ p {
   top: 6px;
   right: -19px;
 }
-.qoute,
-.quote:before,
-.quoteMe,
-.quoteMe:before {
+
+.mobileQuote {
+  display: none;
   @media screen and (max-width: $breakpoint-medium) {
-    border: none;
-    text-align: left;
+    display: block;
+    margin: 0.5rem 0;
   }
 }
 .messageImagesDiv {
@@ -94,9 +93,9 @@ p {
   flex-direction: row;
   justify-content: space-around;
   align-items: flex-start;
-  margin-bottom: 1rem;
+  margin: 1rem 0;
   @media screen and (max-width: $breakpoint-medium) {
-    flex-direction: column;
+    margin: 0.5rem 0;
   }
 }
 .messageImage {
@@ -105,7 +104,14 @@ p {
   width: auto;
   height: auto;
   @media screen and (max-width: $breakpoint-medium) {
-    max-width: 100%;
+    max-width: 45%;
     margin: 0 0 0.5rem 0;
+  }
+}
+
+@media screen and (max-width: $breakpoint-medium) {
+  .quote,
+  .quoteMe {
+    display: none;
   }
 }

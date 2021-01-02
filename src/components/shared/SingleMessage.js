@@ -95,6 +95,13 @@ const SingleMessage = ({ m }) => {
           </div>
         </div>
       </div>
+      {/*\/  ONLY FOR SCREENS SMALLER THAN BREAKPOINT MEDIUM \/ */}
+      <div className={styles.mobileQuote}>
+        {thisMessage.message.map((p) => {
+          const pKey = createRandomString(10);
+          return <p key={pKey}>{p}</p>;
+        })}
+      </div>
       <div className={styles.messageImagesDiv}>
         {thisMessage.attachedImages
           ? thisMessage.attachedImages.map((i) => {

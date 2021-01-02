@@ -1,0 +1,17 @@
+@import '../../styles/custom-properties.scss';
+
+.row {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.icon {
+  font-size: 2rem;
+  color: var(--default-font-color);
+  &:hover {
+    color: green;
+    transform: translateY(2px);
+  }
+}

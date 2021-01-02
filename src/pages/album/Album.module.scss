@@ -15,7 +15,6 @@
 }
 
 .album {
-  // min-height: 100vh;
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
@@ -50,10 +49,6 @@
 }
 
 .card {
-  // width: var(--card-width);
-  min-width: 100px;
-  min-height: 100px;
-  // padding: var(--card-padding);
   margin: var(--card-margin);
   text-align: center;
   box-shadow: 3px 5px 10px var(--color-pallette-dark);
@@ -64,11 +59,12 @@
     transform: scale(1.5);
   }
 }
+.albumPhoto {
+  height: 200px;
+  width: auto;
+}
 .infoDiv {
   width: 100%;
-  // max-width: calc(
-  //   var(--card-width) - (var(--card-padding) * 2) - var(--photo-width)
-  // );
   overflow: hidden;
 }
 .footer {
