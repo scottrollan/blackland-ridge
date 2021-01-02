@@ -4,9 +4,12 @@ $header-height: 3rem;
 $modal-padding: 5rem;
 
 .albumModal {
-  background-color: transparent;
+  background-color: var(--overlay);
 }
 .albumModal * {
+  background-color: var(--overlay-medium);
+}
+.albumModal a {
   background-color: transparent;
 }
 

@@ -4,6 +4,13 @@
   display: flex;
 }
 
+.modalBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .previewImage {
   max-width: 15rem;
   max-height: 15rem;
@@ -11,10 +18,9 @@
   height: auto;
 }
 .icon {
+  transition: all 0.2s ease-in-out;
   &:hover {
     opacity: 0.5;
-  }
-  &:active {
     transform: translateY(2px);
   }
 }

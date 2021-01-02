@@ -43,7 +43,7 @@ export default function FileUpload({ newThread, onFileUpload, progress }) {
         <Modal.Header closeButton>
           <Modal.Title>Select a File</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className={styles.modalBody}>
           <input
             type="file"
             onChange={(e) => selectThisFile(e)}

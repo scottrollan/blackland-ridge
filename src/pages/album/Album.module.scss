@@ -67,15 +67,32 @@
   width: 100%;
   overflow: hidden;
 }
-.footer {
+.upload {
   display: flex;
+  width: 100%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: 1rem 0;
+  animation-name: swipeUp;
+  animation-duration: 3.6s;
 }
+.uploadInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border: 1px solid var(--default-font-color);
+  border-radius: 0.5rem;
+}
+.uploadInner i {
+  margin: 0 !important;
+}
+
 @keyframes swipeUp {
   from {
-    top: 80vh;
+    top: 800px;
   }
   to {
     top: 0px;
@@ -83,9 +100,9 @@
 }
 @-webkit-keyframes swipeUp {
   from {
-    top: 0px;
+    top: 800px;
   }
   to {
-    top: 800px;
+    top: 0px;
   }
 }
