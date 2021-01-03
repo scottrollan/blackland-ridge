@@ -95,7 +95,6 @@ export default function FileUpload({
               <Form.Label>Pet's Name</Form.Label>
               <Form.Control
                 type="text"
-                id="petsName"
                 value={petName}
                 onChange={(e) => setPetName(e.target.value)}
               />
@@ -106,7 +105,6 @@ export default function FileUpload({
                   <Form.Label>My name</Form.Label>
                   <Form.Control
                     type="text"
-                    id="contact1"
                     value={contact1}
                     onChange={(e) => setContact1(e.target.value)}
                   />
@@ -117,7 +115,6 @@ export default function FileUpload({
                   <Form.Label>My phone number</Form.Label>
                   <Form.Control
                     type="text"
-                    id="phone1"
                     value={phone1}
                     onChange={(e) => setPhone1(e.target.value)}
                   />
@@ -130,7 +127,6 @@ export default function FileUpload({
                   <Form.Label>Second contact's name</Form.Label>
                   <Form.Control
                     type="text"
-                    id="contact2"
                     value={contact2}
                     onChange={(e) => setContact2(e.target.value)}
                   />
@@ -141,7 +137,6 @@ export default function FileUpload({
                   <Form.Label>Their phone number</Form.Label>
                   <Form.Control
                     type="text"
-                    id="phone2"
                     value={phone2}
                     onChange={(e) => setPhone2(e.target.value)}
                   />
@@ -152,7 +147,6 @@ export default function FileUpload({
               <Form.Label>Where we live</Form.Label>
               <Form.Control
                 type="text"
-                id="address"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
               />

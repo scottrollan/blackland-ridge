@@ -98,10 +98,11 @@ const Comment = ({ newThread, fieldName, m }) => {
         console.log(error);
       }
     }
-    $('#title').val('');
+    // $('#title').val('');
     setTitle('');
-    $('#message').val();
+    // $('#message').val();
     setMessage('');
+    $('#commentForm')[0].reset();
   };
 
   return (
@@ -134,7 +135,7 @@ const Comment = ({ newThread, fieldName, m }) => {
                   display: newThread ? 'inherit' : 'none',
                 }}
                 value={title}
-                id="title"
+                // id="title"
                 onChange={(e) => setTitle(e.target.value)}
               ></Form.Control>
             </Form.Group>
@@ -145,7 +146,7 @@ const Comment = ({ newThread, fieldName, m }) => {
                 required
                 placeholder={fieldName}
                 value={message}
-                id="message"
+                // id="message"
                 onChange={(e) => setMessage(e.target.value)}
               ></Form.Control>
             </Form.Group>
@@ -161,6 +162,8 @@ const Comment = ({ newThread, fieldName, m }) => {
               newThread={newThread}
               onFileUpload={onFileUpload}
               progress={progress}
+              metadata={null}
+              requireForm={false}
             />
             <Button type="submit">POST</Button>
           </div>
