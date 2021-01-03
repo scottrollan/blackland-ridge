@@ -2,21 +2,28 @@ import React, { useState, useContext, useEffect } from 'react';
 import FileUpload from '../../components/shared/FileUpload';
 import AlbumModal from './AlbumModal';
 import { createRandomString } from '../../functions/CreateRandomString';
-import { wildlifeRef } from '../../firestore/index';
+import { petsRef } from '../../firestore/index';
 import { Card, Button } from 'react-bootstrap';
 import $ from 'jquery';
+import { UserContext } from '../../App';
 import styles from './Album.module.scss';
 
-export default function WildlifePage() {
+export default function PetsPage() {
   const [attachedImages, setAttachedImages] = useState([]);
   const [albumImages, setAlbumImages] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [progress, setProgress] = useState(0);
+  const thisUser = useContext(UserContext);
+  const me = thisUser.name;
+  const myAddress = thisUser.address;
   //for carousel index selection
   const [index, setIndex] = useState(0);
   //for # of images on screen
   const [galleryViewLength, setGalleryViewLength] = useState(25);
-  const myMetadata = {};
+  const myMetadata = {
+    contact1: me,
+    address: myAddress,
+  };
 
   const onFileUpload = async (image, newMetadata) => {
     //image upload
@@ -24,11 +31,10 @@ export default function WildlifePage() {
     $('#progressCircle').show();
     const randomString = createRandomString(8);
     const metadata = {
-      customMetadata: {
-        newMetadata,
-      },
+      customMetadata: newMetadata,
     };
-    const uploadTask = wildlifeRef
+
+    const uploadTask = petsRef
       .child(`${randomString}${image.name}`)
       .put(image, metadata);
 
@@ -65,14 +71,19 @@ export default function WildlifePage() {
     let theseImgObjs = [];
     const getMiscPics = async () => {
       try {
-        allImages = await wildlifeRef.listAll();
+        allImages = await petsRef.listAll();
         //allImages is an obj with 'items' array (of pic objs, with getDownloadURL()),
         //and a 'nextPageToken' string
         const allItems = allImages.items;
         allItems.forEach(async (i) => {
           const thisURL = await i.getDownloadURL();
           const thisMetadata = await i.getMetadata();
-          const imageObj = { url: thisURL, data: thisMetadata };
+          const customMetadata = thisMetadata.customMetadata;
+          const data = {
+            ...customMetadata,
+            timeCreated: thisMetadata.timeCreated,
+          };
+          const imageObj = { url: thisURL, data };
           theseImgObjs = [...theseImgObjs, imageObj];
           theseImgObjs.sort((a, b) => {
             return a.data.timeCreated > b.data.timeCreated ? 1 : -1;
@@ -101,10 +112,37 @@ export default function WildlifePage() {
             className={styles.card}
             style={{
               display: index < galleryViewLength ? 'inherit' : 'none',
+              width: '250px',
             }}
             onClick={() => handleShow(index)}
           >
-            <Card.Img src={p.url} alt="" className={styles.albumPhoto} />
+            <Card.Img
+              src={p.url}
+              alt=""
+              className={styles.albumPhoto}
+              variant="top"
+              style={{ width: '250px', height: '320px', objectFit: 'cover' }}
+            />
+            <Card.Body>
+              <div style={{ display: p.data.petName ? 'block' : 'none' }}>
+                I'm {p.data.petName}
+              </div>{' '}
+              <div style={{ display: p.data.address ? 'block' : 'none' }}>
+                I live at {p.data.address}
+              </div>
+              <div style={{ display: p.data.contact1 ? 'block' : 'none' }}>
+                If you find me, please contact {p.data.contact1} at{' '}
+                <span style={{ whiteSpace: 'nowrap' }}>{p.data.phone1}</span>
+                <span
+                  style={{
+                    display: p.data.contact2 !== '' ? 'inherit' : 'none',
+                  }}
+                >
+                  or {p.data.contact2} at{' '}
+                  <span style={{ whiteSpace: 'nowrap' }}>{p.data.phone2}</span>.
+                </span>
+              </div>
+            </Card.Body>
           </Card>
         );
       })}
@@ -127,7 +165,7 @@ export default function WildlifePage() {
             onFileUpload={onFileUpload}
             progress={progress}
             metadata={myMetadata}
-            requireForm={false}
+            requireForm={true}
           />
         </div>
       </div>

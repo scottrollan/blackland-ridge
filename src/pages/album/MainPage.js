@@ -5,27 +5,27 @@ import { createRandomString } from '../../functions/CreateRandomString';
 import { miscRef } from '../../firestore/index';
 import { Card, Button } from 'react-bootstrap';
 import $ from 'jquery';
-import { UserContext } from '../../App';
 import styles from './Album.module.scss';
 
 export default function MainPage() {
   const [attachedImages, setAttachedImages] = useState([]);
-  const [firstPage, setFirstPage] = useState([]);
-  const [secondPage, setSecondPage] = useState([]);
-  const [thirdPage, setThirdPage] = useState([]);
+  const [albumImages, setAlbumImages] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [progress, setProgress] = useState(0);
-  const thisUser = useContext(UserContext);
-  const me = thisUser.name;
+  //for carousel index selection
+  const [index, setIndex] = useState(0);
+  //for # of images on screen
+  const [galleryViewLength, setGalleryViewLength] = useState(25);
+  const myMetadata = {};
 
-  const onFileUpload = async (image, uploadedBy) => {
+  const onFileUpload = async (image, newMetadata) => {
     //image upload
     $('#uploadButton').hide();
     $('#progressCircle').show();
     const randomString = createRandomString(8);
     const metadata = {
       customMetadata: {
-        uploadedBy: uploadedBy,
+        newMetadata,
       },
     };
     const uploadTask = miscRef
@@ -59,47 +59,31 @@ export default function MainPage() {
     $(`#${pageName}Button`).hide();
   };
 
-  const handleShow = () => setShowModal(true);
+  const handleShow = (i) => {
+    setIndex(i);
+    setShowModal(true);
+  };
   const handleClose = () => setShowModal(false);
 
   useEffect(() => {
-    let firstPage = {};
-    let secondPage = {};
-    let urls1 = [];
-    let urls2 = [];
+    let allImages = {};
+    let theseImgObjs = [];
     const getMiscPics = async () => {
       try {
-        firstPage = await miscRef.list({ maxResults: 25 });
-        //firstPage is an obj with 'items' array (of pic objs, with getDownloadURL()),
+        allImages = await miscRef.listAll();
+        //allImages is an obj with 'items' array (of pic objs, with getDownloadURL()),
         //and a 'nextPageToken' string
-        const items = firstPage.items;
-        items.forEach(async (i) => {
+        const allItems = allImages.items;
+        allItems.forEach(async (i) => {
           const thisURL = await i.getDownloadURL();
           const thisMetadata = await i.getMetadata();
           const imageObj = { url: thisURL, data: thisMetadata };
-          urls1 = [...urls1, imageObj];
-          urls1.sort((a, b) => {
+          theseImgObjs = [...theseImgObjs, imageObj];
+          theseImgObjs.sort((a, b) => {
             return a.data.timeCreated > b.data.timeCreated ? 1 : -1;
-          });
-          setFirstPage(urls1);
+          }); //puts most recently added on top
+          setAlbumImages(theseImgObjs);
         });
-        if (firstPage.nextPageToken) {
-          secondPage = await miscRef.list({
-            maxResults: 25,
-            pageToken: firstPage.nextPageToken,
-          });
-          const items2 = secondPage.items;
-          items2.forEach(async (i) => {
-            const thisURL = await i.getDownloadURL();
-            const thisMetadata = await i.getMetadata();
-            const imageObj = { url: thisURL, data: thisMetadata };
-            urls2 = [...urls2, imageObj];
-            urls2.sort((a, b) => {
-              return a.data.timeCreated > b.data.timeCreated ? 1 : -1;
-            });
-            setSecondPage(urls2);
-          });
-        }
       } catch (error) {
         console.log(error);
       }
@@ -112,32 +96,34 @@ export default function MainPage() {
       <AlbumModal
         show={showModal}
         handleClose={handleClose}
-        carouselImages={firstPage.concat(secondPage)}
+        carouselImages={albumImages}
+        carouselIndex={index}
       />
-      {firstPage.map((p) => {
-        return (
-          <Card key={p.url} className={styles.card} onClick={handleShow}>
-            <Card.Img src={p.url} alt="" className={styles.albumPhoto} />
-          </Card>
-        );
-      })}
-      <div className={styles.buttonWrap} id="pageTwoButton">
-        <Button className={styles.moreButton} onClick={() => open('pageTwo')}>
-          See {secondPage.length} More
-        </Button>
-      </div>
-      {secondPage.map((p) => {
+      {albumImages.map((p, index) => {
         return (
           <Card
             key={p.url}
-            className={[`pageTwo ${styles.card}`]}
-            style={{ display: 'none' }}
-            onClick={handleShow}
+            className={styles.card}
+            style={{
+              display: index < galleryViewLength ? 'inherit' : 'none',
+            }}
+            onClick={() => handleShow(index)}
           >
             <Card.Img src={p.url} alt="" className={styles.albumPhoto} />
           </Card>
         );
       })}
+      <div className={styles.buttonWrap}>
+        <Button
+          className={styles.moreButton}
+          style={{
+            display: albumImages.length > galleryViewLength ? 'block' : 'none',
+          }}
+          onClick={() => setGalleryViewLength(galleryViewLength + 25)}
+        >
+          See More
+        </Button>
+      </div>
       <div className={styles.upload}>
         <div className={styles.uploadInner}>
           <span style={{ marginBottom: '0.5rem' }}>Upload a Photo</span>
@@ -145,6 +131,8 @@ export default function MainPage() {
             newThread={false}
             onFileUpload={onFileUpload}
             progress={progress}
+            metadata={myMetadata}
+            requireForm={false}
           />
         </div>
       </div>
