@@ -125,7 +125,9 @@ export default function PetsPage() {
             />
             <Card.Body>
               <div style={{ display: p.data.petName ? 'block' : 'none' }}>
-                I'm {p.data.petName}
+                <span style={{ fontWeight: 'bold', lineHeight: 2 }}>
+                  {p.data.petName}
+                </span>
               </div>{' '}
               <div style={{ display: p.data.address ? 'block' : 'none' }}>
                 I live at {p.data.address}
