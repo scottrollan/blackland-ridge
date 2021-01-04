@@ -25,15 +25,13 @@ const Comment = ({ newThread, fieldName, m }) => {
   const [progress, setProgress] = useState(0);
   const replyToID = m.id;
 
-  const onFileUpload = async (image, uploadedBy) => {
+  const onFileUpload = async (image, newMetadata) => {
     //image upload
     $('#uploadButton').hide();
     $('#progressCircle').show();
     const randomString = createRandomString(8);
     const metadata = {
-      customMetadata: {
-        uploadedBy: uploadedBy,
-      },
+      customMetadata: newMetadata,
     };
     const uploadTask = attachmentsRef
       .child(`${randomString}${image.name}`)
