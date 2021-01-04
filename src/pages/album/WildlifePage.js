@@ -24,9 +24,7 @@ export default function WildlifePage() {
     $('#progressCircle').show();
     const randomString = createRandomString(8);
     const metadata = {
-      customMetadata: {
-        newMetadata,
-      },
+      customMetadata: newMetadata,
     };
     const uploadTask = wildlifeRef
       .child(`${randomString}${image.name}`)

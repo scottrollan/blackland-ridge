@@ -27,6 +27,8 @@ const Profile = () => {
   useEffect(() => {
     if (thisUser && (!thisUser.address || !thisUser.name)) {
       setShow(true);
+    } else if (!thisUser) {
+      setShow(false);
     }
   });
 

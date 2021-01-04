@@ -175,7 +175,6 @@ const ProfileForm = ({ thisUser, setError, handleClose }) => {
       {/* <h2 style={{ display: state.address ? 'inherit' : 'none' }}>
         My Profile
       </h2> */}
-      <Button onClick={handleClose}>Close Modal</Button>
       <label htmlFor="profileNameInput" style={{ marginBottom: 0 }}>
         Full Name{' '}
         <span style={{ color: 'var(--google-red', fontSize: 'small' }}>

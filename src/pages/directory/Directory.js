@@ -26,6 +26,7 @@ const Directory = () => {
         : -1
     );
     setNeighborList([...neighbors]);
+    neighbors = [];
     setAddressMode(true);
   };
 
@@ -38,6 +39,7 @@ const Directory = () => {
         : -1
     );
     setNeighborList([...neighbors]);
+    neighbors = [];
     setAddressMode(false);
   };
   $('#addressTab').click(() => sortByAddress());
@@ -66,6 +68,7 @@ const Directory = () => {
       } finally {
         if (mounted) {
           setNeighborList([...allNeighbors]);
+          allNeighbors = [];
         }
       }
     };

@@ -24,9 +24,7 @@ export default function MainPage() {
     $('#progressCircle').show();
     const randomString = createRandomString(8);
     const metadata = {
-      customMetadata: {
-        newMetadata,
-      },
+      customMetadata: newMetadata,
     };
     const uploadTask = miscRef
       .child(`${randomString}${image.name}`)
