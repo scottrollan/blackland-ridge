@@ -98,6 +98,7 @@ const Comment = ({ newThread, fieldName, m }) => {
     }
     setTitle('');
     setMessage('');
+    setAttachedImages('');
     $('#commentForm')[0].reset();
   };
 
