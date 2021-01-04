@@ -3,6 +3,7 @@ import StreetAddress from './StreetAddress';
 import { signOut, profilesCollection, usersRef } from '../firestore';
 import { Button, LinearProgress } from '@material-ui/core';
 import { createRandomString } from '../functions/CreateRandomString';
+import { useHistory } from 'react-router-dom';
 import $ from 'jquery';
 import styles from './ProfileForm.module.scss';
 
@@ -69,6 +70,7 @@ const ProfileForm = ({ thisUser, setError, handleClose }) => {
   const [state, dispatch] = useReducer(reducer, { ...thisUser });
   const [image, setImage] = useState(null);
   const [progress, setProgress] = useState(0);
+  let history = useHistory();
 
   const phoneMask = () => {
     let num = $('#profilePhoneInput').val().replace(/\D/g, '');
@@ -156,6 +158,7 @@ const ProfileForm = ({ thisUser, setError, handleClose }) => {
         } finally {
           setError('Your profile has been upated', 'OK');
           $('#errorMessage').css('display', 'flex');
+          history.push('/');
           window.location.reload();
           handleClose();
         }
