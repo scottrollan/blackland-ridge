@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { UserContext } from '../App';
 import Responses from './Responses';
 import Comment from './shared/Comment';
@@ -17,6 +17,15 @@ const ResponseAccordion = ({ m }) => {
   const myResponses = m.responses ?? [];
   const responsesLength = myResponses.length;
   const thisUser = useContext(UserContext);
+  const popoverID = `${m.id}pop`;
+  const [show, setShow] = useState(false);
+
+  const handlePopoverShow = () => {
+    setShow(true);
+  };
+  const handlePopoverHide = () => {
+    setShow(false);
+  };
 
   return (
     <div className={styles.root} style={{ display: 'block' }}>
@@ -34,8 +43,13 @@ const ResponseAccordion = ({ m }) => {
               <OverlayTrigger
                 trigger="click"
                 placement="auto"
+                show={show}
+                onToggle={() => handlePopoverShow()}
                 overlay={
-                  <Popover style={{ padding: '0.75rem' }}>
+                  <Popover
+                    style={{ padding: '0.75rem' }}
+                    onClick={() => handlePopoverHide()}
+                  >
                     <MessageReactions m={m} />
                   </Popover>
                 }

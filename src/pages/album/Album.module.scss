@@ -58,6 +58,9 @@
     z-index: 11;
     transform: scale(1.5);
   }
+  @media (pointer: coarse) {
+    transform: scale(1);
+  }
 }
 .albumPhoto {
   height: 200px;

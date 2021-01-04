@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { UserContext } from '../../App';
 import ResponseReactions from './ResponseReactions';
 import ResponseIcons from './ResponseIcons';
@@ -12,7 +12,14 @@ const SingleResponse = ({ m }) => {
   const thisResponse = { ...m };
   const thisUser = useContext(UserContext);
   const myID = thisUser.id ?? '';
+  const [show, setShow] = useState(false);
 
+  const handlePopoverShow = () => {
+    setShow(true);
+  };
+  const handlePopoverHide = () => {
+    setShow(false);
+  };
   let authorIsMe = false;
   let originalPostDate;
   let rString = createRandomString(11);
@@ -129,8 +136,13 @@ const SingleResponse = ({ m }) => {
           <OverlayTrigger
             trigger="click"
             placement="auto"
+            show={show}
+            onToggle={() => handlePopoverShow()}
             overlay={
-              <Popover style={{ padding: '0.75rem' }}>
+              <Popover
+                style={{ padding: '0.75rem' }}
+                onClick={() => handlePopoverHide()}
+              >
                 <ResponseReactions m={thisResponse} />
               </Popover>
             }

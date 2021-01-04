@@ -81,7 +81,7 @@ const ResponseReactions = ({ m }) => {
       mounted = false;
       unsubscribe();
     };
-  }, [id]);
+  }, []);
 
   return (
     <div className={styles.iconRow}>

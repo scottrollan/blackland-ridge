@@ -25,6 +25,10 @@
     // animation-iteration-count: 3;
     transform: scale(1.4);
   }
+  @media (pointer: coarse) {
+    font-size: 36px;
+    animation: none;
+  }
 }
 
 @keyframes shake {

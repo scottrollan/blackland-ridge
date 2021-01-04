@@ -107,12 +107,15 @@ const SingleMessage = ({ m }) => {
           ? thisMessage.attachedImages.map((i) => {
               const iKey = createRandomString(9);
               return (
-                <img
+                <a
                   key={iKey}
-                  src={i}
+                  href={i}
                   alt=""
-                  className={styles.messageImage}
-                />
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img src={i} alt="" className={styles.messageImage} />
+                </a>
               );
             })
           : null}
