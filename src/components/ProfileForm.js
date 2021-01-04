@@ -153,15 +153,14 @@ const ProfileForm = ({ thisUser, setError, handleClose }) => {
         //if no input errors
         try {
           await profilesCollection.doc(state.id).set({ ...state });
-        } catch (error) {
-          console.log(error);
-        } finally {
-          setError('Your profile has been upated', 'OK');
-          $('#errorMessage').css('display', 'flex');
           history.push('/');
           window.location.reload();
           handleClose();
+        } catch (error) {
+          console.log(error);
         }
+        setError('Your profile has been upated', 'OK');
+        $('#errorMessage').css('display', 'flex');
         break;
     }
   };
@@ -405,6 +404,7 @@ const ProfileForm = ({ thisUser, setError, handleClose }) => {
         }}
       >
         <Button onClick={saveHandler}>Save Profile</Button>
+
         <Button onClick={logout}>Logout</Button>
       </div>
     </form>
