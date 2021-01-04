@@ -98,9 +98,7 @@ const Comment = ({ newThread, fieldName, m }) => {
         console.log(error);
       }
     }
-    // $('#title').val('');
     setTitle('');
-    // $('#message').val();
     setMessage('');
     $('#commentForm')[0].reset();
   };

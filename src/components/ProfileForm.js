@@ -2,10 +2,8 @@ import React, { useReducer, useState } from 'react';
 import StreetAddress from './StreetAddress';
 import { signOut, profilesCollection, usersRef } from '../firestore';
 import { Button, LinearProgress } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
 import { createRandomString } from '../functions/CreateRandomString';
 import $ from 'jquery';
-// import { Client } from '../api/sanityClient';
 import styles from './ProfileForm.module.scss';
 
 const reducer = (state, action) => {
@@ -67,12 +65,10 @@ const reducer = (state, action) => {
   }
 };
 
-const ProfileForm = ({ thisUser, setError }) => {
+const ProfileForm = ({ thisUser, setError, handleClose }) => {
   const [state, dispatch] = useReducer(reducer, { ...thisUser });
   const [image, setImage] = useState(null);
   const [progress, setProgress] = useState(0);
-
-  let history = useHistory();
 
   const phoneMask = () => {
     let num = $('#profilePhoneInput').val().replace(/\D/g, '');
@@ -136,11 +132,8 @@ const ProfileForm = ({ thisUser, setError }) => {
         setError('Please Select a Display Name', 'Go Back');
         $('#errorMessage').css('display', 'show');
         break;
-      case state.emailInDirectory && $('#profileEmailInput').val() === '':
-        setError(
-          'Please enter an email address, or uncheck the "Let my neighbors see my email address" box',
-          'Go Back'
-        );
+      case $('#profileEmailInput').val() === '':
+        setError('Please enter an email address', 'Go Back');
         $('#errorMessage').css('display', 'show');
         break;
       case state.phoneInDirectory && $('#profilePhoneInput').val() === '':
@@ -156,15 +149,15 @@ const ProfileForm = ({ thisUser, setError }) => {
         break;
       default:
         //if no input errors
-
         try {
           await profilesCollection.doc(state.id).set({ ...state });
-          setError('Your profile has been upated', 'OK');
-          history.push('/');
-          window.location.reload();
-          $('#errorMessage').css('display', 'flex');
         } catch (error) {
           console.log(error);
+        } finally {
+          setError('Your profile has been upated', 'OK');
+          $('#errorMessage').css('display', 'flex');
+          window.location.reload();
+          handleClose();
         }
         break;
     }
@@ -172,8 +165,6 @@ const ProfileForm = ({ thisUser, setError }) => {
 
   const logout = () => {
     signOut();
-
-    history.push('/');
   };
 
   return (
@@ -181,6 +172,7 @@ const ProfileForm = ({ thisUser, setError }) => {
       {/* <h2 style={{ display: state.address ? 'inherit' : 'none' }}>
         My Profile
       </h2> */}
+      <Button onClick={handleClose}>Close Modal</Button>
       <label htmlFor="profileNameInput" style={{ marginBottom: 0 }}>
         Full Name{' '}
         <span style={{ color: 'var(--google-red', fontSize: 'small' }}>
@@ -229,7 +221,6 @@ const ProfileForm = ({ thisUser, setError }) => {
           style={{
             color: 'var(--google-red',
             fontSize: 'small',
-            display: state.emailInDirectory ? 'inline' : 'none',
           }}
         >
           required
@@ -238,7 +229,7 @@ const ProfileForm = ({ thisUser, setError }) => {
       <input
         id="profileEmailInput"
         type="email"
-        required={state.emailInDirectory ? true : false}
+        required
         value={state.email}
         onChange={(e) =>
           dispatch({ type: 'setEmail', payload: e.target.value })

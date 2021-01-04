@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../App';
 import { Modal } from 'react-bootstrap';
 import $ from 'jquery';
@@ -7,7 +7,7 @@ import ErrorMessage from '../components/ErrorMessage';
 
 const Profile = () => {
   const thisUser = useContext(UserContext);
-
+  const [show, setShow] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [tryAgainText, setTryAgainText] = useState('OK');
   const tryAgainBtn = 'inherit';
@@ -19,10 +19,21 @@ const Profile = () => {
     $('#errorMessage').css('display', 'flex');
   };
 
+  const handleClose = () => {
+    console.log('handleClose engaged');
+    setShow(false);
+  };
+
+  useEffect(() => {
+    if (thisUser && (!thisUser.address || !thisUser.name)) {
+      setShow(true);
+    }
+  });
+
   return (
     <Modal
-      show={thisUser && (!thisUser.address || !thisUser.name) ? true : false}
-      id="profile"
+      show={show}
+      id="profileModal"
       backdrop="static"
       data-keyboard={false}
     >
@@ -37,6 +48,7 @@ const Profile = () => {
       <Modal.Body>
         <ProfileForm
           thisUser={thisUser}
+          handleClose={handleClose}
           setError={(errorMessage, buttonText) =>
             setError(errorMessage, buttonText)
           }
