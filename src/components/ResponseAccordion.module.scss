@@ -8,15 +8,21 @@
     margin: 0.5rem 0;
   }
 }
-
+.accordionBackground {
+  background-color: var(--color-pallette-pastel-accent);
+}
+.reactionBar,
 .accordionHead {
-  width: 100%;
+  width: 66%;
   display: flex;
   justify-content: space-between;
 }
+.reactionBar {
+  margin-bottom: 0.5rem;
+}
 
-.accordionHead span {
-  width: 33%;
+.reactionBar span {
+  width: 50%;
 }
 
 .likeButton {

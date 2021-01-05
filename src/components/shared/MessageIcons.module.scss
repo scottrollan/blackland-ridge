@@ -17,3 +17,11 @@
   padding: 2px;
   border-radius: 50%;
 }
+
+.noReactionsYet {
+  @media screen and (max-width: $breakpoint-medium) {
+    @media (pointer: coarse) {
+      display: none;
+    }
+  }
+}

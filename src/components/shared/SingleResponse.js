@@ -1,18 +1,20 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { UserContext } from '../../App';
 import ResponseReactions from './ResponseReactions';
 import ResponseIcons from './ResponseIcons';
 import { profilesCollection } from '../../firestore/index';
 import { createRandomString } from '../../functions/CreateRandomString';
-import { OverlayTrigger, Popover } from 'react-bootstrap';
+import { Overlay, Tooltip, OverlayTrigger, Popover } from 'react-bootstrap';
 import $ from 'jquery';
-import styles from './SingleMessage.module.scss';
+import styles from './SingleResponse.module.scss';
 
 const SingleResponse = ({ m }) => {
   const thisResponse = { ...m };
   const thisUser = useContext(UserContext);
   const myID = thisUser.id ?? '';
   const [show, setShow] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
+  const target = useRef(null);
 
   const handlePopoverShow = () => {
     setShow(true);
@@ -65,12 +67,7 @@ const SingleResponse = ({ m }) => {
 
   return (
     <div style={{ width: '100%' }}>
-      <div
-        className={styles.messageWordsDiv}
-        style={{
-          flexDirection: authorIsMe ? 'row-reverse' : 'row',
-        }}
-      >
+      <div className={styles.quoteContainer}>
         <div className={styles.avatarDiv}>
           <a
             href={photoURL}
@@ -81,31 +78,30 @@ const SingleResponse = ({ m }) => {
             <img
               src={photoURL}
               alt=""
-              className={styles.avatar}
+              className={styles.avatarImg}
               id={`image${rString}`}
             />
           </a>
-          <div style={{ letterSpacing: '0.2rem' }} id={`name${rString}`}></div>
         </div>
-        <div className={styles.paragraphDiv}>
-          <h4>{m.title ? m.title : null}</h4>
-          <span style={{ fontSize: 'small' }}>{originalPostDate}</span>
+        <div
+          className={authorIsMe ? styles.quoteMe : styles.quote}
+          ref={target}
+          onClick={() => setShowInfo(!showInfo)}
+        >
+          {thisResponse.message.map((p) => {
+            const pKey = createRandomString(10);
+            return <p key={pKey}>{p}</p>;
+          })}
+        </div>
+        <Overlay target={target.current} show={showInfo}>
+          {(props) => (
+            <Tooltip {...props}>
+              <span id={`name${rString}`}></span> on {originalPostDate}
+            </Tooltip>
+          )}
+        </Overlay>
+      </div>
 
-          <div className={authorIsMe ? styles.quoteMe : styles.quote}>
-            {thisResponse.message.map((p) => {
-              const pKey = createRandomString(10);
-              return <p key={pKey}>{p}</p>;
-            })}
-          </div>
-        </div>
-      </div>
-      {/*\/  ONLY FOR SCREENS SMALLER THAN BREAKPOINT MEDIUM \/ */}
-      <div className={styles.mobileQuote}>
-        {thisResponse.message.map((p) => {
-          const pKey = createRandomString(10);
-          return <p key={pKey}>{p}</p>;
-        })}
-      </div>
       <div className={styles.messageImagesDiv}>
         {thisResponse.attachedImages
           ? thisResponse.attachedImages.map((i) => {
@@ -128,34 +124,38 @@ const SingleResponse = ({ m }) => {
           width: '100%',
         }}
       >
-        <span
-          onClick={(e) => e.stopPropagation()}
-          style={{ width: '33%', visibility: thisUser ? 'visible' : 'hidden' }}
-          className={styles.likeButton}
-        >
-          <OverlayTrigger
-            trigger="click"
-            placement="auto"
-            show={show}
-            onToggle={() => handlePopoverShow()}
-            overlay={
-              <Popover
-                style={{ padding: '0.75rem' }}
-                onClick={() => handlePopoverHide()}
-              >
-                <ResponseReactions m={thisResponse} />
-              </Popover>
-            }
-          >
-            <span>
-              <i className="far fa-thumbs-up" /> Like
-            </span>
-          </OverlayTrigger>
-        </span>
         <span style={{ width: '33%' }}>
           <ResponseIcons m={thisResponse} />
           {/* thisResponse contains responseToID */}
         </span>
+
+        <OverlayTrigger
+          trigger="click"
+          placement="auto"
+          show={show}
+          onToggle={() => handlePopoverShow()}
+          overlay={
+            <Popover
+              style={{ padding: '0.75rem' }}
+              onClick={() => handlePopoverHide()}
+            >
+              <ResponseReactions m={thisResponse} />
+            </Popover>
+          }
+        >
+          <span
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              width: '33%',
+              visibility: thisUser ? 'visible' : 'hidden',
+            }}
+            className={styles.likeButton}
+          >
+            <span>
+              <i className="far fa-thumbs-up" /> Like
+            </span>{' '}
+          </span>
+        </OverlayTrigger>
       </div>
     </div>
   );

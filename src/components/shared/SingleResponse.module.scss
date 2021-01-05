@@ -1,0 +1,83 @@
+@import '../../styles/custom-properties.scss';
+
+$bigAvatar: 4rem;
+$smallAvatar: 2.5rem;
+
+.quoteContainer {
+  display: grid;
+  grid-template-columns: 1rem $bigAvatar 12px auto 1rem;
+  grid-template-rows: $bigAvatar auto;
+  grid-template-areas:
+    '.. avatar .. quote ..'
+    '.. ...... .. quote ..';
+  justify-items: start;
+  @media screen and (max-width: $breakpoint-medium) {
+    grid-template-columns: 1px $smallAvatar 12px auto 1px;
+    grid-template-rows: $smallAvatar auto;
+  }
+}
+
+.avatarDiv {
+  grid-area: avatar;
+  width: $bigAvatar;
+  height: $bigAvatar;
+  @media screen and (max-width: $breakpoint-medium) {
+    width: $smallAvatar;
+  }
+}
+.avatarImg {
+  max-width: 100%;
+  height: auto;
+  border-radius: 50%;
+}
+
+.quote,
+.quoteMe {
+  grid-area: quote;
+  background-color: var(--color-pallette-accent);
+  border-radius: 0.75rem;
+  padding: 5px 12px;
+  height: auto;
+  @media screen and (max-width: $breakpoint-medium) {
+    font-size: smaller;
+  }
+}
+.quoteMe {
+  background-color: var(--color-pallette-light);
+}
+
+.messageImagesDiv {
+  width: 100%;
+  flex-wrap: wrap;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+  margin: 1rem 0;
+  @media screen and (max-width: $breakpoint-medium) {
+    margin: 0.5rem 0;
+  }
+}
+.messageImage {
+  max-width: 25rem;
+  max-height: 25rem;
+  width: auto;
+  height: auto;
+  @media screen and (max-width: $breakpoint-medium) {
+    max-width: 45%;
+    margin: 0 0 0.5rem 0;
+  }
+}
+.likeButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--overlay-medium);
+  padding: 0.25rem 0;
+  border-radius: 0.5rem;
+  text-align: center;
+  &:hover {
+    background-color: var(--overlay-dark);
+    color: var(--white);
+  }
+}

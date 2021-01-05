@@ -74,7 +74,11 @@ export default function ResponseIcons({ m }) {
               marginLeft: '12px',
             }}
           >
-            {numberOfReactions > 0 ? numberOfReactions : 'No reactions yet.'}
+            {numberOfReactions > 0 ? (
+              numberOfReactions
+            ) : (
+              <span className={styles.noReactionsYet}>No reactions yet.</span>
+            )}
           </span>
         </div>
       </div>

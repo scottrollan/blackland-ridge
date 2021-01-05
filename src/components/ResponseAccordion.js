@@ -29,37 +29,42 @@ const ResponseAccordion = ({ m }) => {
 
   return (
     <div className={styles.root} style={{ display: 'block' }}>
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <div className={styles.accordionHead}>
-            <span className={styles.reactionSpan}>
-              <MessageIcons m={m} />
-            </span>
-            <span
-              onClick={(e) => e.stopPropagation()}
-              style={{ visibility: thisUser ? 'visible' : 'hidden' }}
-              className={styles.likeButton}
-            >
-              <OverlayTrigger
-                trigger="click"
-                placement="auto"
-                show={show}
-                onToggle={() => handlePopoverShow()}
-                overlay={
-                  <Popover
-                    style={{ padding: '0.75rem' }}
-                    onClick={() => handlePopoverHide()}
-                  >
-                    <MessageReactions m={m} />
-                  </Popover>
-                }
-              >
-                <span>
-                  <i className="far fa-thumbs-up" /> Like
-                </span>
-              </OverlayTrigger>
-            </span>
+      <div className={styles.reactionBar}>
+        <span className={styles.reactionSpan}>
+          <MessageIcons m={m} />
+        </span>
 
+        <OverlayTrigger
+          trigger="click"
+          placement="auto"
+          show={show}
+          onToggle={() => handlePopoverShow()}
+          overlay={
+            <Popover
+              style={{ padding: '0.75rem' }}
+              onClick={() => handlePopoverHide()}
+            >
+              <MessageReactions m={m} />
+            </Popover>
+          }
+        >
+          <span
+            onClick={(e) => e.stopPropagation()}
+            style={{ visibility: thisUser ? 'visible' : 'hidden' }}
+            className={styles.likeButton}
+          >
+            <span>
+              <i className="far fa-thumbs-up" /> Like
+            </span>
+          </span>
+        </OverlayTrigger>
+      </div>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          className={styles.accordionBackground}
+        >
+          <div className={styles.accordionHead}>
             <span className={styles.liked}>
               {responsesLength > 1 ? (
                 <span>{responsesLength} Replies</span>
@@ -71,8 +76,10 @@ const ResponseAccordion = ({ m }) => {
             </span>
           </div>
         </AccordionSummary>
-        <AccordionDetails style={{ flexDirection: 'column' }}>
-          <Comment fieldName="Add Reply" m={m} />
+        <AccordionDetails
+          style={{ flexDirection: 'column' }}
+          className={styles.accordionBackground}
+        >
           <Responses m={m} />
           <div style={{ display: myResponses.length > 0 ? 'inherit' : 'none' }}>
             <Comment fieldName="Add Reply" m={m} />

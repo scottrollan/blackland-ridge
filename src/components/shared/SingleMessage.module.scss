@@ -108,7 +108,19 @@ p {
     margin: 0 0 0.5rem 0;
   }
 }
-
+.likeButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--overlay-medium);
+  padding: 0.25rem 0;
+  border-radius: 0.5rem;
+  text-align: center;
+  &:hover {
+    background-color: var(--overlay-dark);
+    color: var(--white);
+  }
+}
 @media screen and (max-width: $breakpoint-medium) {
   .quote,
   .quoteMe {
