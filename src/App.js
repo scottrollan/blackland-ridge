@@ -16,6 +16,8 @@ import Album from './pages/album/Album';
 import styles from './App.module.scss';
 import fadeStyles from './components/FadeInMessage.module.scss';
 
+//"build": "CI= react-scripts build",
+
 export const UserContext = createContext();
 export const LoginContext = createContext();
 
