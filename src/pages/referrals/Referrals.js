@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import NewReferral from '../../components/NewReferral';
 import QuickButtons from '../../components/shared/QuickButtons';
 import { referralsCollection } from '../../firestore/index';
@@ -201,7 +201,7 @@ export default function Referrals() {
               htmlPhone = `tel:+${noCloseParenth}`;
             }
             return (
-              <Card className={styles.card} key={r._id}>
+              <Card className={styles.card} key={r.id}>
                 <Card.Title>{r.name}</Card.Title>
                 {r.subcategory.map((s) => (
                   <Card.Subtitle key={s}>{s}</Card.Subtitle>

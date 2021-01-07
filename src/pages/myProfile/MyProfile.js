@@ -19,9 +19,19 @@ const MyProfile = () => {
     $('#errorMessage').css('display', 'flex');
   };
 
+  const handleClose = () => {
+    // console.log('handleClose engaged');
+    // setShow(false);
+    // window.location.reload();
+  };
+
   return thisUser ? (
     <div className={styles.myProfile}>
-      <ProfileForm thisUser={thisUser} setError={setError} />
+      <ProfileForm
+        thisUser={thisUser}
+        setError={setError}
+        handleClose={handleClose}
+      />
       <ErrorMessage
         errorMessage={errorMessage}
         tryAgainText={tryAgainText}

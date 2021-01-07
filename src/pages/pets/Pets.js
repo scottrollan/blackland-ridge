@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import FileUpload from '../../components/shared/FileUpload';
 import AlbumModal from '../album/AlbumModal';
 import QuickButtons from '../../components/shared/QuickButtons';
+import ErrorMessage from '../../components/ErrorMessage';
 import { createRandomString } from '../../functions/CreateRandomString';
 import { petsRef } from '../../firestore/index';
 import { Card, Button } from 'react-bootstrap';
@@ -50,6 +51,7 @@ export default function Pets() {
       },
       (error) => {
         console.log(error);
+        $('#errorMessage').css('display', 'flex');
       },
       () => {
         //when complete
@@ -101,6 +103,12 @@ export default function Pets() {
   return (
     <div className={styles.cardGrid}>
       <QuickButtons />
+      <ErrorMessage
+        errorMessage="Image file too large... try using an image that is smaller that 10MB"
+        tryAgainBtn={true}
+        tryAgainText="Try Again"
+        resetBtn={false}
+      />
       <AlbumModal
         show={showModal}
         handleClose={handleClose}
@@ -163,7 +171,10 @@ export default function Pets() {
           See More
         </Button>
       </div>
-      <div className={styles.upload}>
+      <div
+        className={styles.upload}
+        style={{ display: thisUser ? 'flex' : 'none' }}
+      >
         <div className={styles.uploadInner}>
           <span style={{ marginBottom: '0.5rem' }}>ADD MY PET</span>
           <FileUpload

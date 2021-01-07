@@ -17,7 +17,6 @@ const ResponseAccordion = ({ m }) => {
   const myResponses = m.responses ?? [];
   const responsesLength = myResponses.length;
   const thisUser = useContext(UserContext);
-  const popoverID = `${m.id}pop`;
   const [show, setShow] = useState(false);
 
   const handlePopoverShow = () => {

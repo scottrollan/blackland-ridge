@@ -1,18 +1,14 @@
 @import '../../styles/custom-properties.scss';
 
-// :root {
 $card-width: 20rem;
 $card-padding: 0.5rem;
 $photo-width: 5rem;
 $grid-padding: 2rem 5rem;
 $card-margin: 2rem 1rem;
-// }
 @media screen and (max-width: $breakpoint-medium) {
-  // :root {
   $card-padding: 0.5rem;
   $grid-padding: 1rem;
 }
-//
 
 .directory {
   display: flex;
@@ -35,9 +31,6 @@ $card-margin: 2rem 1rem;
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: space-around;
-  @media screen and (max-width: $breakpoint-medium) {
-    padding: 0.5rem;
-  }
 }
 
 .card {

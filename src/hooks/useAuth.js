@@ -7,8 +7,6 @@ export const useAuth = () => {
   React.useEffect(() => {
     checkAuth(async (user) => {
       await user;
-      console.log(user);
-
       if (user) {
         const token = await user.getIdToken();
 
@@ -52,7 +50,6 @@ export const useAuth = () => {
                 break;
               case false:
                 setThisUser(newUser); //returns user obj with no address,
-                console.log(newUser);
                 break;
               default:
                 break;

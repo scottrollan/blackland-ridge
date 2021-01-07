@@ -46,7 +46,12 @@ const NavBar = () => {
             id="dropdown-basic"
             className={styles.logBtn}
           >
-            My Account
+            <span style={{ display: thisUser ? 'none' : 'block' }}>
+              Login/Signup
+            </span>
+            <span style={{ display: thisUser ? 'block' : 'none' }}>
+              My Account
+            </span>
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
@@ -56,12 +61,11 @@ const NavBar = () => {
             <Link
               to="/myProfile"
               className="dropdown-item"
-              onClick={() => collapseNavbar()}
+              // onClick={() => collapseNavbar()}
               style={{ display: thisUser ? 'inherit' : 'none' }}
             >
               My Profile
             </Link>
-            {/* <Dropdown.Item href="#/action-3"></Dropdown.Item> */}
           </Dropdown.Menu>
         </Dropdown>
       </Navbar.Brand>

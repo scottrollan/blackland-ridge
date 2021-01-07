@@ -12,7 +12,6 @@ import { UserContext } from '../../App';
 import { LoginContext } from '../../App';
 import { createRandomString } from '../../functions/CreateRandomString';
 import { Form } from 'react-bootstrap';
-import { TextField, TextareaAutosize } from '@material-ui/core';
 import $ from 'jquery';
 import styles from './Comment.module.scss';
 

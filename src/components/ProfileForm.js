@@ -1,9 +1,8 @@
 import React, { useReducer, useState } from 'react';
 import StreetAddress from './StreetAddress';
-import { signOut, profilesCollection, usersRef, user } from '../firestore';
+import { signOut, profilesCollection, usersRef } from '../firestore';
 import { Button, LinearProgress } from '@material-ui/core';
 import { createRandomString } from '../functions/CreateRandomString';
-import { useHistory } from 'react-router-dom';
 import $ from 'jquery';
 import styles from './ProfileForm.module.scss';
 
@@ -73,7 +72,6 @@ const ProfileForm = ({ thisUser, setError, handleClose }) => {
   });
   const [image, setImage] = useState(null);
   const [progress, setProgress] = useState(0);
-  let history = useHistory();
 
   const phoneMask = () => {
     let num = $('#profilePhoneInput').val().replace(/\D/g, '');
@@ -113,6 +111,11 @@ const ProfileForm = ({ thisUser, setError, handleClose }) => {
       },
       (error) => {
         console.log(error);
+        setError(
+          'Profile image file too large.  Try an image smaller than 10MB.',
+          'OK'
+        );
+        $('#errorMessage').css('display', 'flex');
       },
       () => {
         //when complete

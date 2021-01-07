@@ -81,7 +81,10 @@ const Directory = () => {
   return (
     <>
       <QuickButtons />
-      <div className={styles.directory}>
+      <div
+        className={styles.directory}
+        style={{ display: thisUser ? 'initial' : 'none' }}
+      >
         <Tabs defaultActiveKey="address">
           <Tab id="nameTab" eventKey="name" title="Sort by Name">
             <div className={styles.cardGrid}>

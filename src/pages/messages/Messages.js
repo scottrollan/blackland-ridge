@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { messagesCollection } from '../../firestore/index';
 import QuickButtons from '../../components/shared/QuickButtons';
 import MessagesHeader from '../../components/MessagesHeader';

@@ -1,6 +1,7 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import FileUpload from '../../components/shared/FileUpload';
 import AlbumModal from './AlbumModal';
+import ErrorMessage from '../../components/ErrorMessage';
 import { createRandomString } from '../../functions/CreateRandomString';
 import { wildlifeRef } from '../../firestore/index';
 import { Card, Button } from 'react-bootstrap';
@@ -41,6 +42,7 @@ export default function WildlifePage() {
       },
       (error) => {
         console.log(error);
+        $('#errorMessage').css('display', 'flex');
       },
       () => {
         //when complete
@@ -86,6 +88,12 @@ export default function WildlifePage() {
 
   return (
     <div className={styles.cardGrid}>
+      <ErrorMessage
+        errorMessage="Image file too large... try using an image that is smaller that 10MB"
+        tryAgainBtn={true}
+        tryAgainText="Try Again"
+        resetBtn={false}
+      />
       <AlbumModal
         show={showModal}
         handleClose={handleClose}
