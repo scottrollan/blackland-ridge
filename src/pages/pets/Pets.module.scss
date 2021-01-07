@@ -1,0 +1,111 @@
+@import '../../styles/custom-properties.scss';
+
+:root {
+  --card-width: 20rem;
+  --card-padding: 1rem;
+  --photo-width: 5rem;
+  --grid-padding: 2rem 5rem;
+  --card-margin: 2px;
+}
+@media screen and (max-width: $breakpoint-medium) {
+  :root {
+    --card-padding: 0.1rem;
+    --grid-padding: 1rem;
+  }
+}
+
+.album {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  z-index: 10;
+  // background: var(--white);
+  // border: 8px solid var(--color-pallette-dark);
+  border-top: none;
+  padding: 10px;
+}
+
+.buttonWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+.moreButton {
+  @include rectangle-out;
+  color: var(--black);
+  text-transform: uppercase;
+}
+
+.cardGrid {
+  padding: var(--grid-padding);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  // animation: swipeUp 0.6s linear;
+}
+
+.card {
+  margin: var(--card-margin);
+  text-align: center;
+  box-shadow: 3px 5px 10px var(--color-pallette-dark);
+  overflow: hidden;
+  &:hover {
+    transition: all 0.4s ease-in-out;
+    z-index: 11;
+    // transform: scale(1.5);
+  }
+  @media (pointer: coarse) {
+    transform: scale(1);
+  }
+}
+.albumPhoto {
+  height: 200px;
+  width: auto;
+}
+.infoDiv {
+  width: 100%;
+  overflow: hidden;
+}
+.upload {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0;
+  animation-name: swipeUp;
+  animation-duration: 3.6s;
+}
+.uploadInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  // border: 1px solid var(--default-font-color);
+  // border-radius: 0.5rem;
+}
+.uploadInner i {
+  margin: 0 !important;
+}
+
+@keyframes swipeUp {
+  from {
+    top: 800px;
+  }
+  to {
+    top: 0px;
+  }
+}
+@-webkit-keyframes swipeUp {
+  from {
+    top: 800px;
+  }
+  to {
+    top: 0px;
+  }
+}

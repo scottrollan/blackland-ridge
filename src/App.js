@@ -11,6 +11,7 @@ import Referrals from './pages/referrals/Referrals';
 import ProfileModal from './components/ProfileModal';
 import MyProfile from './pages/myProfile/MyProfile';
 import Messages from './pages/messages/Messages';
+import Pets from './pages/pets/Pets';
 import Album from './pages/album/Album';
 import styles from './App.module.scss';
 import fadeStyles from './components/FadeInMessage.module.scss';
@@ -52,6 +53,7 @@ const App = () => {
               <Route path="/payDues" component={PayDues}></Route>
               <Route path="/referrals" component={Referrals}></Route>
               <Route path="/album" component={Album}></Route>
+              <Route path="/pets" component={Pets}></Route>
             </Switch>
           </Router>
 

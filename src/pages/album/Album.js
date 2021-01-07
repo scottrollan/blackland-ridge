@@ -17,9 +17,9 @@ export default function Album() {
         <Tab id="wildlifeTab" eventKey="wildlife" title="Wildlife">
           <WildlifePage />
         </Tab>
-        <Tab id="petTab" eventKey="pets" title="Pet Resgistry">
+        {/* <Tab id="petTab" eventKey="pets" title="Pet Resgistry">
           <PetsPage />
-        </Tab>
+        </Tab> */}
       </Tabs>
     </div>
   );

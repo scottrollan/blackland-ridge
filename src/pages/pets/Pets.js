@@ -1,22 +1,30 @@
 import React, { useState, useContext, useEffect } from 'react';
 import FileUpload from '../../components/shared/FileUpload';
-import AlbumModal from './AlbumModal';
+import AlbumModal from '../album/AlbumModal';
+import QuickButtons from '../../components/shared/QuickButtons';
 import { createRandomString } from '../../functions/CreateRandomString';
-import { miscRef } from '../../firestore/index';
+import { petsRef } from '../../firestore/index';
 import { Card, Button } from 'react-bootstrap';
 import $ from 'jquery';
-import styles from './Album.module.scss';
+import { UserContext } from '../../App';
+import styles from './Pets.module.scss';
 
-export default function MainPage() {
+export default function Pets() {
   const [attachedImages, setAttachedImages] = useState([]);
   const [albumImages, setAlbumImages] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [progress, setProgress] = useState(0);
+  const thisUser = useContext(UserContext);
+  const me = thisUser.name;
+  const myAddress = thisUser.address;
   //for carousel index selection
   const [index, setIndex] = useState(0);
   //for # of images on screen
   const [galleryViewLength, setGalleryViewLength] = useState(25);
-  const myMetadata = {};
+  const myMetadata = {
+    contact1: me,
+    address: myAddress,
+  };
 
   const onFileUpload = async (image, newMetadata) => {
     //image upload
@@ -26,7 +34,8 @@ export default function MainPage() {
     const metadata = {
       customMetadata: newMetadata,
     };
-    const uploadTask = miscRef
+
+    const uploadTask = petsRef
       .child(`${randomString}${image.name}`)
       .put(image, metadata);
 
@@ -52,11 +61,6 @@ export default function MainPage() {
     );
   };
 
-  const open = (pageName) => {
-    $(`.${pageName}`).show();
-    $(`#${pageName}Button`).hide();
-  };
-
   const handleShow = (i) => {
     setIndex(i);
     setShowModal(true);
@@ -68,17 +72,22 @@ export default function MainPage() {
     let theseImgObjs = [];
     const getMiscPics = async () => {
       try {
-        allImages = await miscRef.listAll();
+        allImages = await petsRef.listAll();
         //allImages is an obj with 'items' array (of pic objs, with getDownloadURL()),
         //and a 'nextPageToken' string
         const allItems = allImages.items;
         allItems.forEach(async (i) => {
           const thisURL = await i.getDownloadURL();
           const thisMetadata = await i.getMetadata();
-          const imageObj = { url: thisURL, data: thisMetadata };
+          const customMetadata = thisMetadata.customMetadata;
+          const data = {
+            ...customMetadata,
+            timeCreated: thisMetadata.timeCreated,
+          };
+          const imageObj = { url: thisURL, data };
           theseImgObjs = [...theseImgObjs, imageObj];
           theseImgObjs.sort((a, b) => {
-            return a.data.timeCreated > b.data.timeCreated ? 1 : -1;
+            return a.data.timeCreated > b.data.timeCreated ? -1 : 1;
           }); //puts most recently added on top
           setAlbumImages(theseImgObjs);
         });
@@ -91,6 +100,7 @@ export default function MainPage() {
 
   return (
     <div className={styles.cardGrid}>
+      <QuickButtons />
       <AlbumModal
         show={showModal}
         handleClose={handleClose}
@@ -104,10 +114,39 @@ export default function MainPage() {
             className={styles.card}
             style={{
               display: index < galleryViewLength ? 'inherit' : 'none',
+              width: '250px',
             }}
             onClick={() => handleShow(index)}
           >
-            <Card.Img src={p.url} alt="" className={styles.albumPhoto} />
+            <Card.Img
+              src={p.url}
+              alt=""
+              className={styles.albumPhoto}
+              variant="top"
+              style={{ width: '250px', height: '320px', objectFit: 'cover' }}
+            />
+            <Card.Body>
+              <div style={{ display: p.data.petName ? 'block' : 'none' }}>
+                <span style={{ fontWeight: 'bold', lineHeight: 2 }}>
+                  {p.data.petName}
+                </span>
+              </div>{' '}
+              <div style={{ display: p.data.address ? 'block' : 'none' }}>
+                I live at {p.data.address}
+              </div>
+              <div style={{ display: p.data.contact1 ? 'block' : 'none' }}>
+                If you find me, please contact {p.data.contact1} at{' '}
+                <span style={{ whiteSpace: 'nowrap' }}>{p.data.phone1}</span>
+                <span
+                  style={{
+                    display: p.data.contact2 !== '' ? 'inherit' : 'none',
+                  }}
+                >
+                  or {p.data.contact2} at{' '}
+                  <span style={{ whiteSpace: 'nowrap' }}>{p.data.phone2}</span>.
+                </span>
+              </div>
+            </Card.Body>
           </Card>
         );
       })}
@@ -126,13 +165,13 @@ export default function MainPage() {
       </div>
       <div className={styles.upload}>
         <div className={styles.uploadInner}>
-          <span style={{ marginBottom: '0.5rem' }}>Upload a Photo</span>
+          <span style={{ marginBottom: '0.5rem' }}>ADD MY PET</span>
           <FileUpload
             newThread={false}
             onFileUpload={onFileUpload}
             progress={progress}
             metadata={myMetadata}
-            requireForm={false}
+            requireForm={true}
           />
         </div>
       </div>

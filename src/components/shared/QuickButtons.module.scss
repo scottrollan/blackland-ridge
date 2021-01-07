@@ -2,16 +2,64 @@
 
 .row {
   width: 100%;
+  margin: 0.5rem 0;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
 }
-
+.pets {
+  display: block;
+  width: auto;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--default-font-color);
+  border-radius: 0.5rem;
+  &:visited,
+  &:link {
+    color: var(--default-font-color);
+    text-decoration: none !important;
+  }
+  &:hover {
+    color: green;
+    border: 2px solid green;
+    transform: translateY(2px);
+    margin: calc(0.5rem - 1px) 0; //offsets the thickening of border on hover
+  }
+  &:active {
+    color: var(--default-font-color);
+    text-decoration: none !important;
+  }
+}
 .icon {
   font-size: 2rem;
   color: var(--default-font-color);
   &:hover {
     color: green;
     transform: translateY(2px);
+  }
+}
+.petWords {
+  color: var(--default-font-color);
+  margin: 0 1rem;
+}
+.dog {
+  color: var(--default-font-color);
+  &:hover {
+    color: var(--default-font-color);
+    transform: none;
+  }
+}
+.backwardCat {
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+  -o-transform: rotateY(180deg);
+  -ms-transform: rotateY(180deg);
+  unicode-bidi: bidi-override;
+  &:hover {
+    color: var(--default-font-color);
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+    -o-transform: rotateY(180deg);
+    -ms-transform: rotateY(180deg);
+    unicode-bidi: bidi-override;
   }
 }

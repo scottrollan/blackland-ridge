@@ -106,12 +106,14 @@ export default function WildlifePage() {
           </Card>
         );
       })}
-      <div className={styles.buttonWrap}>
+      <div
+        className={styles.buttonWrap}
+        style={{
+          display: albumImages.length > galleryViewLength ? 'block' : 'none',
+        }}
+      >
         <Button
           className={styles.moreButton}
-          style={{
-            display: albumImages.length > galleryViewLength ? 'block' : 'none',
-          }}
           onClick={() => setGalleryViewLength(galleryViewLength + 25)}
         >
           See More

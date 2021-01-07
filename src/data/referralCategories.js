@@ -71,7 +71,7 @@ export const referralCategories = [
     ],
   },
   {
-    category: 'Bodies',
+    category: 'Health/Beauty',
     subcategories: [
       'Medical Doctors',
       'Dentists',
