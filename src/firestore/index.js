@@ -53,6 +53,7 @@ export const fsArrayUnion = firebase.firestore.FieldValue.arrayUnion;
 ////////// Authentication //////////
 
 export const auth = firebaseApp.auth();
+export const currentUser = auth.currentUser;
 
 ////////// login third party //////////
 export const signInWithGoogle = async () => {
@@ -73,6 +74,7 @@ export const signInWithTwitter = async () => {
 export const signInWithEmail = async (email, password) => {
   try {
     await auth.signInWithEmailAndPassword(email, password);
+    window.location.reload();
   } catch (e) {
     if (e.code === 'auth/wrong-password') {
       return 'incorrectPassword';
@@ -82,7 +84,6 @@ export const signInWithEmail = async (email, password) => {
       return 'tooManyAttempts';
     }
   }
-  window.location.reload();
 };
 
 export const createUserWithEmail = async (email, password) => {
@@ -119,4 +120,8 @@ export const signOut = async () => {
 
 export const checkAuth = (cb) => {
   return auth.onAuthStateChanged(cb);
+};
+
+export const user = () => {
+  return auth.currentUser;
 };

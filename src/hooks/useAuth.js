@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { checkAuth, profilesCollection } from '../firestore';
 
-const useAuth = () => {
+export const useAuth = () => {
   const [thisUser, setThisUser] = useState('');
 
   React.useEffect(() => {
     checkAuth(async (user) => {
       await user;
+      console.log(user);
 
       if (user) {
-        //if firebase returns a user (someone signs in)
+        const token = await user.getIdToken();
+
+        //if firebase returns a user (someone signs in with auth)
         let searchID = user.uid; //get that user's id
         const newUser = {
           address: user.address ? user.address : '',
@@ -25,11 +28,12 @@ const useAuth = () => {
               }.png?bgset=bg2`,
           uid: [searchID],
           id: searchID,
-          isNewUser: true,
+          firstTimeLogin: true,
           emailInDirectory: false,
           includeInDirectory: false,
           phoneInDirectory: false,
           receiveNotifications: true,
+          token: token,
         };
 
         //go to firestore user database and search for a match
@@ -42,10 +46,13 @@ const useAuth = () => {
               case true:
                 const data = doc.data();
                 data['ref'] = doc.ref;
+                data['firstTimeLogin'] = false;
+                data['token'] = token;
                 setThisUser(data);
                 break;
               case false:
-                setThisUser(newUser);
+                setThisUser(newUser); //returns user obj with no address,
+                console.log(newUser);
                 break;
               default:
                 break;
@@ -54,11 +61,6 @@ const useAuth = () => {
           .catch((error) => {
             console.log('Error getting user: ', error);
           });
-        // const snapshot = await profilesCollection.get();
-        // snapshot.forEach((doc) => {
-        //   //copy list of firebase users to array
-        //   userList = [...userList, { ...doc.data(), _id: doc.id }];
-        // });
       }
     });
   }, []);

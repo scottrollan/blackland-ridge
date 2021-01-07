@@ -5,9 +5,10 @@
   flex-direction: column;
   align-items: flex-start;
   text-align: center;
-  z-index: 1;
 }
-
+input {
+  margin-bottom: 0.75rem;
+}
 .photoDiv {
   display: flex;
   flex-direction: row;

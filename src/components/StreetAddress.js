@@ -1,13 +1,12 @@
 import React from 'react';
-import styles from './Profile.module.scss';
 
 const StreetAddress = ({ onChange }) => {
   return (
     <div
       style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}
     >
-      <label htmlFor="streetAddress" className={styles.label}>
-        Street Address{' '}
+      <label htmlFor="streetAddress">
+        Street Address
         <span style={{ color: 'var(--google-red', fontSize: 'small' }}>
           required
         </span>
@@ -15,7 +14,7 @@ const StreetAddress = ({ onChange }) => {
       <select
         required
         id="streetAddress"
-        className={styles.input}
+        style={{ marginBottom: '1.2rem' }}
         onChange={(e) => onChange(e)}
       >
         <option>Select Your Address</option>

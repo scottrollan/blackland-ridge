@@ -8,7 +8,7 @@ import Loading from './components/shared/Loading';
 import Directory from './pages/directory/Directory';
 import PayDues from './pages/payDues/PayDues';
 import Referrals from './pages/referrals/Referrals';
-import Profile from './components/Profile';
+import ProfileModal from './components/ProfileModal';
 import MyProfile from './pages/myProfile/MyProfile';
 import Messages from './pages/messages/Messages';
 import Album from './pages/album/Album';
@@ -20,6 +20,7 @@ export const LoginContext = createContext();
 
 const App = () => {
   const thisUser = useAuth();
+  console.log(thisUser);
   const [showLogin, setShowLogin] = useState(false);
 
   const showLoginPopup = () => setShowLogin(true);
@@ -55,7 +56,7 @@ const App = () => {
           </Router>
 
           <Loading />
-          <Profile />
+          <ProfileModal />
           <Authentication show={showLogin} thisUser={thisUser} />
         </LoginContext.Provider>
       </UserContext.Provider>

@@ -1,6 +1,6 @@
 import React, { useReducer, useState } from 'react';
 import StreetAddress from './StreetAddress';
-import { signOut, profilesCollection, usersRef } from '../firestore';
+import { signOut, profilesCollection, usersRef, user } from '../firestore';
 import { Button, LinearProgress } from '@material-ui/core';
 import { createRandomString } from '../functions/CreateRandomString';
 import { useHistory } from 'react-router-dom';
@@ -67,7 +67,10 @@ const reducer = (state, action) => {
 };
 
 const ProfileForm = ({ thisUser, setError, handleClose }) => {
-  const [state, dispatch] = useReducer(reducer, { ...thisUser });
+  const [state, dispatch] = useReducer(reducer, {
+    ...thisUser,
+    firstTimeLogin: false,
+  });
   const [image, setImage] = useState(null);
   const [progress, setProgress] = useState(0);
   let history = useHistory();
@@ -153,14 +156,12 @@ const ProfileForm = ({ thisUser, setError, handleClose }) => {
         //if no input errors
         try {
           await profilesCollection.doc(state.id).set({ ...state });
-          history.push('/');
-          window.location.reload();
-          handleClose();
         } catch (error) {
           console.log(error);
         }
         setError('Your profile has been upated', 'OK');
         $('#errorMessage').css('display', 'flex');
+        handleClose();
         break;
     }
   };
@@ -171,9 +172,6 @@ const ProfileForm = ({ thisUser, setError, handleClose }) => {
 
   return (
     <form id="profileForm" className={styles.profileForm}>
-      {/* <h2 style={{ display: state.address ? 'inherit' : 'none' }}>
-        My Profile
-      </h2> */}
       <label htmlFor="profileNameInput" style={{ marginBottom: 0 }}>
         Full Name{' '}
         <span style={{ color: 'var(--google-red', fontSize: 'small' }}>

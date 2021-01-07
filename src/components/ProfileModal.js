@@ -5,7 +5,7 @@ import $ from 'jquery';
 import ProfileForm from './ProfileForm';
 import ErrorMessage from '../components/ErrorMessage';
 
-const Profile = () => {
+const ProfileModal = () => {
   const thisUser = useContext(UserContext);
   const [show, setShow] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -22,10 +22,12 @@ const Profile = () => {
   const handleClose = () => {
     console.log('handleClose engaged');
     setShow(false);
+    window.location.reload();
   };
 
   useEffect(() => {
-    if (thisUser && (!thisUser.address || !thisUser.name)) {
+    // if (thisUser && (!thisUser.address || !thisUser.name)) {
+    if (thisUser && thisUser.firstTimeLogin) {
       setShow(true);
     } else if (!thisUser) {
       setShow(false);
@@ -60,4 +62,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default ProfileModal;
