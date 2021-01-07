@@ -7,6 +7,9 @@
   justify-content: space-evenly;
   align-items: center;
 }
+.row * {
+  z-index: 3;
+}
 .pets {
   display: block;
   width: auto;
