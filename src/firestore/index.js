@@ -2,6 +2,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/storage';
+import 'firebase/firebase-functions';
 import $ from 'jquery';
 
 const firebaseConfig = {
@@ -31,6 +32,8 @@ export const petsRef = albumsRef.child('/pets');
 export const itemsForSaleRef = albumsRef.child('/itemsForSale');
 export const wildlifeRef = albumsRef.child('/wildlife');
 export const miscRef = albumsRef.child('/misc');
+
+export const functions = firebase.functions();
 
 ////////// Database access //////////
 export const profilesCollection = firebaseApp

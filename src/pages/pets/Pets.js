@@ -115,6 +115,21 @@ export default function Pets() {
         carouselImages={albumImages}
         carouselIndex={index}
       />
+      <div
+        className={styles.upload}
+        style={{ display: thisUser ? 'flex' : 'none' }}
+      >
+        <div className={styles.uploadInner}>
+          <span style={{ marginBottom: '0.5rem' }}>ADD MY PET</span>
+          <FileUpload
+            newThread={false}
+            onFileUpload={onFileUpload}
+            progress={progress}
+            metadata={myMetadata}
+            requireForm={true}
+          />
+        </div>
+      </div>
       {albumImages.map((p, index) => {
         return (
           <Card
@@ -170,21 +185,6 @@ export default function Pets() {
         >
           See More
         </Button>
-      </div>
-      <div
-        className={styles.upload}
-        style={{ display: thisUser ? 'flex' : 'none' }}
-      >
-        <div className={styles.uploadInner}>
-          <span style={{ marginBottom: '0.5rem' }}>ADD MY PET</span>
-          <FileUpload
-            newThread={false}
-            onFileUpload={onFileUpload}
-            progress={progress}
-            metadata={myMetadata}
-            requireForm={true}
-          />
-        </div>
       </div>
     </div>
   );

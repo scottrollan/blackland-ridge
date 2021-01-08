@@ -65,7 +65,9 @@ export default function FileUpload({
       <i
         onClick={handleShow}
         className={`fal fa-camera-alt ${styles.icon}`}
-        style={{ margin: !newThread ? '0 2rem 0 1rem' : 'inherit' }}
+        style={{
+          margin: !newThread ? '0 2rem 0 1rem' : 'inherit',
+        }}
       ></i>
 
       <Modal
