@@ -1,0 +1,64 @@
+@import '../styles/custom-properties.scss';
+@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+
+$yellow: #ffca08;
+$star-size: 1.5rem;
+
+.glyphiconStar {
+  font-size: $star-size;
+  color: $yellow;
+  text-shadow: 1px 1px 1px $yellow;
+  &.partial {
+    position: relative;
+    &:before {
+      position: relative;
+      z-index: 9;
+      width: var(--percent-full);
+      display: block;
+      overflow: hidden;
+    }
+    &:after {
+      // content: '\e006';
+      position: absolute;
+      z-index: 8;
+      color: #bdc3c7;
+      top: 0;
+      left: 0;
+    }
+  }
+}
+
+/* Styling h1 and links
+––––––––––––––––––––––––––––––––– */
+h1[alt='Simple'] {
+  color: white;
+}
+
+.starrating > input {
+  display: none;
+  height: 1rem;
+} /* Remove radio buttons */
+
+.starrating > label:before {
+  content: '\f005'; /* Star */
+  margin: 2px;
+  font-size: $star-size;
+  font-family: FontAwesome;
+  display: inline-block;
+}
+
+.starrating > label {
+  color: var(--color-pallette-light); /* Start color when not clicked */
+  font-size: $star-size;
+}
+.starNumber {
+  font-size: small;
+}
+
+.starrating > input:checked ~ label {
+  color: $yellow;
+} /* Set yellow color when star checked */
+
+.starrating > input:hover ~ label {
+  color: $yellow;
+} /* Set yellow color when star hover */

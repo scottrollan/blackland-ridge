@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NewReferral from '../../components/NewReferral';
 import QuickButtons from '../../components/shared/QuickButtons';
+import StarRating from '../../components/StarRating';
 import { referralsCollection } from '../../firestore/index';
 import { referralCategories } from '../../data/referralCategories';
 import { createRandomString } from '../../functions/CreateRandomString';
@@ -237,6 +238,7 @@ export default function Referrals() {
                       {r.address}
                     </a>
                   </span>
+                  <StarRating ratingArray={r.rating} docID={r.id} />
                 </Card.Footer>
               </Card>
             );

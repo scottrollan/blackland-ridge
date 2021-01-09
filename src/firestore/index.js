@@ -50,7 +50,6 @@ export const referralsCollection = firebaseApp
 
 export const firebaseTimestamp = firebase.firestore.FieldValue.serverTimestamp();
 export const timeStamp = firebase.firestore.Timestamp;
-export const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
 export const fsArrayUnion = firebase.firestore.FieldValue.arrayUnion;
 
 ////////// Authentication //////////
