@@ -10,6 +10,7 @@ import styles from './NewReferral.module.scss';
 
 export default function NewReferral({ show, handleClose }) {
   const thisUser = useContext(UserContext);
+  const me = thisUser.name;
   const [subcategories, setSubcategories] = useState([]); //to populate choices
   const [name, setName] = useState('');
   const [comments, setComments] = useState('');
@@ -88,6 +89,7 @@ export default function NewReferral({ show, handleClose }) {
           stars: 5,
         },
       ],
+      referrer: me,
       subcategory,
     };
     try {
@@ -113,10 +115,15 @@ export default function NewReferral({ show, handleClose }) {
   $('[type="tel"]').keyup(phoneMask);
 
   return (
-    <Modal show={show} onHide={handleClose} className={styles.Modal}>
+    <Modal
+      show={show}
+      onHide={handleClose}
+      className={styles.Modal}
+      id="newReferralModal"
+    >
       <Loading />
       <Modal.Header
-        closeButton
+        // closeButton
         style={{
           flexDirection: 'column',
           width: '100%',
@@ -249,7 +256,7 @@ export default function NewReferral({ show, handleClose }) {
             Save
           </Button>
           <Button variant="secondary" onClick={handleClose}>
-            Close
+            Cancel
           </Button>
         </Form>
       </Modal.Body>

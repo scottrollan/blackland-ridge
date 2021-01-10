@@ -105,6 +105,18 @@ export default function MainPage() {
         carouselImages={albumImages}
         carouselIndex={index}
       />
+      <div className={styles.upload}>
+        <div className={styles.uploadInner}>
+          <span style={{ marginBottom: '0.5rem' }}>Upload a Photo</span>
+          <FileUpload
+            newThread={false}
+            onFileUpload={onFileUpload}
+            progress={progress}
+            metadata={myMetadata}
+            requireForm={false}
+          />
+        </div>
+      </div>
       {albumImages.map((p, index) => {
         return (
           <Card
@@ -131,18 +143,6 @@ export default function MainPage() {
         >
           See More
         </Button>
-      </div>
-      <div className={styles.upload}>
-        <div className={styles.uploadInner}>
-          <span style={{ marginBottom: '0.5rem' }}>Upload a Photo</span>
-          <FileUpload
-            newThread={false}
-            onFileUpload={onFileUpload}
-            progress={progress}
-            metadata={myMetadata}
-            requireForm={false}
-          />
-        </div>
       </div>
     </div>
   );

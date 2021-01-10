@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NewReferral from '../../components/NewReferral';
 import QuickButtons from '../../components/shared/QuickButtons';
 import StarRating from '../../components/StarRating';
+import PostReferralAgreement from '../../components/PostReferralAgreement';
 import { referralsCollection } from '../../firestore/index';
 import { referralCategories } from '../../data/referralCategories';
 import { createRandomString } from '../../functions/CreateRandomString';
@@ -12,10 +13,14 @@ import styles from './Referrals.module.scss';
 export default function Referrals() {
   const [allReferrals, setAllReferrals] = useState([]);
   const [category, setCategory] = useState([]);
-  const [show, setShow] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
+  const [formShow, setFormShow] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleModalClose = () => setModalShow(false);
+  const handleFormClose = () => setFormShow(false);
+
+  const handleModalShow = () => setModalShow(true);
+  const handleFormShow = () => setFormShow(true);
 
   const filterBy = (category) => {
     const result = allReferrals.filter(
@@ -70,13 +75,18 @@ export default function Referrals() {
           >
             <Button
               variant="success"
-              onClick={handleShow}
+              onClick={handleModalShow}
               className={styles.addBtn}
             >
               <i className="far fa-user-plus"></i>
             </Button>
           </OverlayTrigger>
-          <NewReferral show={show} handleClose={handleClose} />
+          <PostReferralAgreement
+            show={modalShow}
+            handleClose={handleModalClose}
+            handleFormShow={handleFormShow}
+          />
+          <NewReferral show={formShow} handleClose={handleFormClose} />
           <Nav justify variant="tabs">
             {referralCategories.map((c) => {
               return (
@@ -98,8 +108,11 @@ export default function Referrals() {
             const original = r.comments; //entire comment
             const cLength = original.split(' ').length; //comment word count
             let abbreviated = original;
+            let useAbbreviated = false;
+            const originalPoster = r.referrer;
             if (cLength > tolerance) {
               //if word count is over more than tolerance
+              useAbbreviated = true;
               abbreviated = original.split(' ').slice(0, tolerance).join(' ');
             }
             const elID = createRandomString(10);
@@ -127,12 +140,12 @@ export default function Referrals() {
                   <Card.Subtitle key={s}>{s}</Card.Subtitle>
                 ))}
 
-                <Card.Text id={`${elID}short`}>
+                <div id={`${elID}short`}>
                   {abbreviated}
                   <span>
                     <Button
                       className={styles.moreBtn}
-                      style={{ display: abbreviated ? 'inherit' : 'none' }}
+                      style={{ display: useAbbreviated ? 'inherit' : 'none' }}
                       onClick={() => {
                         $(`#${elID}short`).hide();
                         $(`#${elID}long`).show();
@@ -141,18 +154,13 @@ export default function Referrals() {
                       ...more...
                     </Button>
                   </span>
-                </Card.Text>
-                <Card.Text id={`${elID}long`} style={{ display: 'none' }}>
+                </div>
+                <div id={`${elID}long`} style={{ display: 'none' }}>
                   {original}
-                </Card.Text>
-                <Card.Link
-                  href={r.link1}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.clickable}
-                >
-                  {r.link1}
-                </Card.Link>
+                </div>
+                <div style={{ fontSize: 'small', alignSelf: 'flex-end' }}>
+                  by {originalPoster}
+                </div>
                 <Card.Footer className={styles.footer}>
                   <span>
                     <a href={htmlPhone} className={styles.clickable}>
@@ -164,7 +172,7 @@ export default function Referrals() {
                       {r.email}
                     </a>
                   </span>
-                  <span>
+                  <span style={{ display: r.address ? 'block' : 'none' }}>
                     <a
                       href={htmlAddress}
                       target="_blank"
@@ -174,10 +182,20 @@ export default function Referrals() {
                       {r.address}
                     </a>
                   </span>
+                  <Card.Link
+                    href={r.link1}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.clickable}
+                    style={{
+                      display: r.link1 ? 'block' : 'none',
+                    }}
+                  >
+                    <span className={styles.hyperlink}>
+                      visit {r.name}'s website
+                    </span>
+                  </Card.Link>
                 </Card.Footer>
-                <span style={{ fontSize: 'small', alignSelf: 'flex-end' }}>
-                  by {r.rating[0].ratedBy}
-                </span>
               </Card>
             );
           })}

@@ -7,20 +7,20 @@ import styles from './QuickButtons.module.scss';
 export default function QuickButtons() {
   const thisUser = useContext(UserContext);
   return (
-    <>
-      <div className={styles.row}>
-        <Link to="/pets" className={[`${styles.pets} ${styles.row}`]}>
+    <div className={styles.quickButtons}>
+      <div className={[`${styles.row} ${styles.bigButtons}`]}>
+        <Link to="/pets" className={[`${styles.bigButton} ${styles.row}`]}>
           <i className={[`far fa-dog ${styles.icon} ${styles.dog}`]}></i>
-          <span className={styles.petWords}>Pet Registry</span>
+          <span className={styles.bigButtonWords}>Pet Registry</span>
           <i
             className={[`far fa-cat ${styles.backwardCat} ${styles.icon}`]}
           ></i>
         </Link>
-        <Link to="/referrals" className={[`${styles.pets} ${styles.row}`]}>
+        <Link to="/referrals" className={[`${styles.bigButton} ${styles.row}`]}>
           <i
             className={[`fad fa-shopping-cart ${styles.icon} ${styles.dog}`]}
           ></i>
-          <span className={styles.petWords}>Business Referrals</span>
+          <span className={styles.bigButtonWords}>Business Referrals</span>
           <i
             className={[
               `fad fa-hands-helping ${styles.backwardCat} ${styles.icon}`,
@@ -57,6 +57,6 @@ export default function QuickButtons() {
           </Link>
         </OverlayTrigger>
       </div>
-    </>
+    </div>
   );
 }

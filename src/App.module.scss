@@ -64,3 +64,8 @@ body {
   text-align: center;
   z-index: 999;
 }
+
+.hyperlink {
+  color: var(--hyperlink-blue);
+  text-decoration: underline;
+}

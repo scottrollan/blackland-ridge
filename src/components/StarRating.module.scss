@@ -4,10 +4,20 @@
 $yellow: #ffca08;
 $star-size: 1.5rem;
 
+.rating {
+  display: flex;
+  flex-direction: column;
+}
+.starRow {
+  display: flex;
+  flex-direction: row-reverse;
+  width: 100%;
+  justify-content: center;
+}
+
 .glyphiconStar {
   font-size: $star-size;
   color: $yellow;
-  text-shadow: 1px 1px 1px $yellow;
   &.partial {
     position: relative;
     &:before {
@@ -18,20 +28,20 @@ $star-size: 1.5rem;
       overflow: hidden;
     }
     &:after {
-      // content: '\e006';
+      content: '\f005'; /* Star */
       position: absolute;
       z-index: 8;
-      color: #bdc3c7;
+      color: var(--color-pallette-light);
       top: 0;
       left: 0;
     }
   }
 }
-
-/* Styling h1 and links
-––––––––––––––––––––––––––––––––– */
-h1[alt='Simple'] {
-  color: white;
+.myRating:hover ~ .myRating,
+.myRating:hover {
+  &:after {
+    color: $yellow;
+  }
 }
 
 .starrating > input {

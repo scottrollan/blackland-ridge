@@ -38,24 +38,26 @@ const Messages = () => {
   }, []);
 
   return (
-    <div className={styles.messages}>
+    <>
       <QuickButtons />
-      <MessagesHeader />
-      {messages.map((m) => {
-        const divKey = createRandomString(8);
-        return (
-          <div
-            key={divKey}
-            className={styles.card}
-            style={{
-              display: m.newThread ? 'flex' : 'none',
-            }}
-          >
-            <SingleMessage m={m} responseIndex={-2} />
-          </div>
-        );
-      })}
-    </div>
+      <div className={styles.messages}>
+        <MessagesHeader />
+        {messages.map((m) => {
+          const divKey = createRandomString(8);
+          return (
+            <div
+              key={divKey}
+              className={styles.card}
+              style={{
+                display: m.newThread ? 'flex' : 'none',
+              }}
+            >
+              <SingleMessage m={m} responseIndex={-2} />
+            </div>
+          );
+        })}
+      </div>
+    </>
   );
 };
 

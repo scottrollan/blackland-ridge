@@ -19,6 +19,7 @@ export const referralCategories = [
     category: 'Houses',
     subcategories: [
       'House Cleaning',
+      'Heating/Air Conditioning',
       'Plumbing',
       'Electrical',
       'Exterminators',
@@ -51,9 +52,8 @@ export const referralCategories = [
     category: 'Repairs',
     subcategories: [
       'Appliance Repair',
-      'Upholstery',
-      'Mechanics',
-      'HVAC',
+      'Upholstery/Furniture',
+      'Mechanic/Auto',
       'Repairs-General',
     ],
   },

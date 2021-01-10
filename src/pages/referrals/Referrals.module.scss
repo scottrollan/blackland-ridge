@@ -1,5 +1,9 @@
 @import '../../styles/custom-properties.scss';
 
+.hyperlink {
+  @include hyperlink;
+}
+
 .referrals {
   z-index: 3;
   background-color: var(--white);

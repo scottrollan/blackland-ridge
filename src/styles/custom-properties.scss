@@ -33,6 +33,7 @@ $breakpoint-extra-large: 1600px;
   --color-pallette-accent: #b9d452;
   --color-pallette-muted-accent: rgba(185, 212, 82, 0.8);
   --color-pallette-pastel-accent: rgba(185, 212, 82, 0.3);
+  --hyperlink-blue: rgba(0, 0, 255, 0.4);
 
   --white: #fafafa;
   --default-background-color: var(--overlay-light);
@@ -53,6 +54,17 @@ $breakpoint-extra-large: 1600px;
   --page-border: 8px solid var(--backgrounds);
 
   --navbar-height: 5rem;
+}
+
+@mixin hyperlink {
+  color: var(--hyperlink-blue);
+  text-decoration: underline;
+  -webkit-text-decoration-color: var(--hyperlink-blue);
+  text-decoration-color: var(--hyperlink-blue);
+  &:hover {
+    color: var(--overlay-gray);
+    text-decoration: none;
+  }
 }
 
 @mixin primary-button {

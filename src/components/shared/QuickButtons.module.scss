@@ -1,8 +1,13 @@
 @import '../../styles/custom-properties.scss';
 
+.quickButtons {
+  padding: 0 4vw;
+  padding-bottom: 0 !important; //removes 2rem padding bottom inherited from .Aop
+}
+
 .row {
   width: 100%;
-  margin: 0.5rem 0;
+  margin: 0.75rem 0;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -10,8 +15,16 @@
 .row * {
   z-index: 3;
 }
-.pets {
+.bigButtons {
+  @media (pointer: coarse) {
+    @media screen and (max-width: $breakpoint-medium) {
+      flex-direction: column;
+    }
+  }
+}
+.bigButton {
   display: block;
+  max-width: 50%;
   width: auto;
   padding: 0.5rem 1rem;
   border: 1px solid var(--default-font-color);
@@ -31,16 +44,15 @@
     color: var(--default-font-color);
     text-decoration: none !important;
   }
-}
-.icon {
-  font-size: 2rem;
-  color: var(--default-font-color);
-  &:hover {
-    color: green;
-    transform: translateY(2px);
+  @media (pointer: coarse) {
+    @media screen and (max-width: $breakpoint-medium) {
+      max-width: 100%;
+      min-width: 100%;
+    }
   }
 }
-.petWords {
+
+.bigButtonWords {
   color: var(--default-font-color);
   margin: 0 1rem;
 }
@@ -66,5 +78,13 @@
     -o-transform: rotateY(180deg);
     -ms-transform: rotateY(180deg);
     unicode-bidi: bidi-override;
+  }
+}
+.icon {
+  font-size: 2rem;
+  color: var(--default-font-color);
+  &:hover {
+    color: green;
+    transform: translateY(2px);
   }
 }

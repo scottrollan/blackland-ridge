@@ -101,91 +101,96 @@ export default function Pets() {
   }, []);
 
   return (
-    <div className={styles.cardGrid}>
+    <>
       <QuickButtons />
-      <ErrorMessage
-        errorMessage="Image file too large... try using an image that is smaller that 10MB"
-        tryAgainBtn={true}
-        tryAgainText="Try Again"
-        resetBtn={false}
-      />
-      <AlbumModal
-        show={showModal}
-        handleClose={handleClose}
-        carouselImages={albumImages}
-        carouselIndex={index}
-      />
-      <div
-        className={styles.upload}
-        style={{ display: thisUser ? 'flex' : 'none' }}
-      >
-        <div className={styles.uploadInner}>
-          <span style={{ marginBottom: '0.5rem' }}>ADD MY PET</span>
-          <FileUpload
-            newThread={false}
-            onFileUpload={onFileUpload}
-            progress={progress}
-            metadata={myMetadata}
-            requireForm={true}
-          />
+      <div className={styles.cardGrid}>
+        <ErrorMessage
+          errorMessage="Image file too large... try using an image that is smaller that 10MB"
+          tryAgainBtn={true}
+          tryAgainText="Try Again"
+          resetBtn={false}
+        />
+        <AlbumModal
+          show={showModal}
+          handleClose={handleClose}
+          carouselImages={albumImages}
+          carouselIndex={index}
+        />
+        <div
+          className={styles.upload}
+          style={{ display: thisUser ? 'flex' : 'none' }}
+        >
+          <div className={styles.uploadInner}>
+            <span style={{ marginBottom: '0.5rem' }}>ADD MY PET</span>
+            <FileUpload
+              newThread={false}
+              onFileUpload={onFileUpload}
+              progress={progress}
+              metadata={myMetadata}
+              requireForm={true}
+            />
+          </div>
+        </div>
+        {albumImages.map((p, index) => {
+          return (
+            <Card
+              key={p.url}
+              className={styles.card}
+              style={{
+                display: index < galleryViewLength ? 'inherit' : 'none',
+                width: '250px',
+              }}
+              onClick={() => handleShow(index)}
+            >
+              <Card.Img
+                src={p.url}
+                alt=""
+                className={styles.albumPhoto}
+                variant="top"
+                style={{ width: '250px', height: '320px', objectFit: 'cover' }}
+              />
+              <Card.Body>
+                <div style={{ display: p.data.petName ? 'block' : 'none' }}>
+                  <span style={{ fontWeight: 'bold', lineHeight: 2 }}>
+                    {p.data.petName}
+                  </span>
+                </div>{' '}
+                <div style={{ display: p.data.address ? 'block' : 'none' }}>
+                  I live at {p.data.address}
+                </div>
+                <div style={{ display: p.data.contact1 ? 'block' : 'none' }}>
+                  If you find me, please contact {p.data.contact1} at{' '}
+                  <span style={{ whiteSpace: 'nowrap' }}>{p.data.phone1}</span>
+                  <span
+                    style={{
+                      display: p.data.contact2 !== '' ? 'inherit' : 'none',
+                    }}
+                  >
+                    or {p.data.contact2} at{' '}
+                    <span style={{ whiteSpace: 'nowrap' }}>
+                      {p.data.phone2}
+                    </span>
+                    .
+                  </span>
+                </div>
+              </Card.Body>
+            </Card>
+          );
+        })}
+        <div
+          className={styles.buttonWrap}
+          style={{
+            display: albumImages.length > galleryViewLength ? 'block' : 'none',
+          }}
+        >
+          <Button
+            className={styles.moreButton}
+            onClick={() => setGalleryViewLength(galleryViewLength + 25)}
+          >
+            See More
+          </Button>
         </div>
       </div>
-      {albumImages.map((p, index) => {
-        return (
-          <Card
-            key={p.url}
-            className={styles.card}
-            style={{
-              display: index < galleryViewLength ? 'inherit' : 'none',
-              width: '250px',
-            }}
-            onClick={() => handleShow(index)}
-          >
-            <Card.Img
-              src={p.url}
-              alt=""
-              className={styles.albumPhoto}
-              variant="top"
-              style={{ width: '250px', height: '320px', objectFit: 'cover' }}
-            />
-            <Card.Body>
-              <div style={{ display: p.data.petName ? 'block' : 'none' }}>
-                <span style={{ fontWeight: 'bold', lineHeight: 2 }}>
-                  {p.data.petName}
-                </span>
-              </div>{' '}
-              <div style={{ display: p.data.address ? 'block' : 'none' }}>
-                I live at {p.data.address}
-              </div>
-              <div style={{ display: p.data.contact1 ? 'block' : 'none' }}>
-                If you find me, please contact {p.data.contact1} at{' '}
-                <span style={{ whiteSpace: 'nowrap' }}>{p.data.phone1}</span>
-                <span
-                  style={{
-                    display: p.data.contact2 !== '' ? 'inherit' : 'none',
-                  }}
-                >
-                  or {p.data.contact2} at{' '}
-                  <span style={{ whiteSpace: 'nowrap' }}>{p.data.phone2}</span>.
-                </span>
-              </div>
-            </Card.Body>
-          </Card>
-        );
-      })}
-      <div
-        className={styles.buttonWrap}
-        style={{
-          display: albumImages.length > galleryViewLength ? 'block' : 'none',
-        }}
-      >
-        <Button
-          className={styles.moreButton}
-          onClick={() => setGalleryViewLength(galleryViewLength + 25)}
-        >
-          See More
-        </Button>
-      </div>
-    </div>
+    </>
   );
 }
