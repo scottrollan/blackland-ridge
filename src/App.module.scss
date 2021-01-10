@@ -41,11 +41,11 @@ body {
   background-image: url('./assets/brickwall.png');
 
   z-index: 0;
-  @media (pointer: coarse) {
-    @media screen and (max-width: $breakpoint-medium) {
-      display: none;
-    }
-  }
+  // @media (pointer: coarse) {
+  //   @media screen and (max-width: $breakpoint-medium) {
+  //     display: none;
+  //   }
+  // }
 }
 
 .alertThis {

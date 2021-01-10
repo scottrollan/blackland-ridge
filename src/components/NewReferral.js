@@ -130,7 +130,9 @@ export default function NewReferral({ show, handleClose }) {
           alignItems: 'center',
         }}
       >
-        <Modal.Title>Refer a New Person or Business</Modal.Title>
+        <Modal.Title style={{ color: 'green' }}>
+          Refer a New Person or Business
+        </Modal.Title>
         <p style={{ fontStyle: 'italic' }}>
           Please fill in as much information as possible
         </p>

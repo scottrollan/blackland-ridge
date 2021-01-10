@@ -159,7 +159,7 @@ export default function Referrals() {
                   {original}
                 </div>
                 <div style={{ fontSize: 'small', alignSelf: 'flex-end' }}>
-                  by {originalPoster}
+                  - {originalPoster}
                 </div>
                 <Card.Footer className={styles.footer}>
                   <span>

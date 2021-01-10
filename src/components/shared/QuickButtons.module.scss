@@ -23,7 +23,8 @@
   }
 }
 .bigButton {
-  display: block;
+  background-color: var(--overlay-light);
+  display: flex;
   max-width: 50%;
   width: auto;
   padding: 0.5rem 1rem;
