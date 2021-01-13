@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../../App';
 import { messagesCollection } from '../../firestore/index';
 import { reactions } from '../../data/reactions';
-import $ from 'jquery';
 import styles from './MessageReactions.module.scss';
 
 const remove = require('lodash.remove');
@@ -47,7 +46,6 @@ const MessageReactions = ({ m }) => {
         console.log(state);
     }
 
-    console.log(newData);
     messagesCollection.doc(id).update({
       [array]: newArray,
     });

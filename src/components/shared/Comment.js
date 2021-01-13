@@ -71,6 +71,7 @@ const Comment = ({ newThread, fieldName, m }) => {
       createdAt: now,
       id: newID,
       message: messageArray,
+      replyToID: replyToID,
     };
     if (newThread) {
       //if starting a new thread
@@ -91,6 +92,7 @@ const Comment = ({ newThread, fieldName, m }) => {
           responses: fsArrayUnion({ ...comment }),
           updatedAt: now,
         });
+        // console.log(response);
       } catch (error) {
         console.log(error);
       }

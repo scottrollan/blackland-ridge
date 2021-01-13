@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../../App';
 import { messagesCollection } from '../../firestore/index';
 import { reactions } from '../../data/reactions';
-import $ from 'jquery';
 import styles from './MessageReactions.module.scss';
 
 const remove = require('lodash.remove');
@@ -44,7 +43,7 @@ const ResponseReactions = ({ m }) => {
       case 'remove':
         newArray = remove(currentArray, (name) => {
           //delete me from the By array
-          return name != me;
+          return name !== me;
         });
         newData = { ...myNestedResponse, [array]: [...newArray] };
         break;
