@@ -1,11 +1,11 @@
 const nodemailer = require('nodemailer');
 
-export const sendEmail = () => {
+export const sendEmail = (user, pass) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.REACT_APP_GMAIL_EMAIL,
-      pass: process.env.REACT_APP_GMAIL_PASSWORD,
+      user: user,
+      pass: pass,
     },
   });
 
