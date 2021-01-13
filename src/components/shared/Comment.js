@@ -18,11 +18,11 @@ import styles from './Comment.module.scss';
 const Comment = ({ newThread, fieldName, m }) => {
   const setLoginPopup = useContext(LoginContext);
   const thisUser = useContext(UserContext);
+  const me = thisUser.name;
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
   const [attachedImages, setAttachedImages] = useState([]);
   const [progress, setProgress] = useState(0);
-  const replyToID = m.id;
 
   const onFileUpload = async (image, newMetadata) => {
     //image upload
@@ -71,7 +71,7 @@ const Comment = ({ newThread, fieldName, m }) => {
       createdAt: now,
       id: newID,
       message: messageArray,
-      replyToID: replyToID,
+      name: me,
     };
     if (newThread) {
       //if starting a new thread
@@ -88,7 +88,7 @@ const Comment = ({ newThread, fieldName, m }) => {
     } else {
       //add a comment/reply to an existing post
       try {
-        messagesCollection.doc(`${replyToID}`).update({
+        messagesCollection.doc(`${m.id}`).update({
           responses: fsArrayUnion({ ...comment }),
           updatedAt: now,
         });
