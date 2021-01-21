@@ -48,6 +48,10 @@ export const referralsCollection = firebaseApp
   .firestore()
   .collection('referrals');
 
+export const responseTriggers = firebaseApp
+  .firestore()
+  .collection('responseTriggers');
+
 export const firebaseTimestamp = firebase.firestore.FieldValue.serverTimestamp();
 export const timeStamp = firebase.firestore.Timestamp;
 export const fsArrayUnion = firebase.firestore.FieldValue.arrayUnion;

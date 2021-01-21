@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import NewReferral from '../../components/NewReferral';
 import QuickButtons from '../../components/shared/QuickButtons';
 import StarRating from '../../components/StarRating';
 import PostReferralAgreement from '../../components/PostReferralAgreement';
+import { UserContext } from '../../App';
 import { referralsCollection } from '../../firestore/index';
 import { referralCategories } from '../../data/referralCategories';
 import { createRandomString } from '../../functions/CreateRandomString';
@@ -15,6 +16,8 @@ export default function Referrals() {
   const [category, setCategory] = useState([]);
   const [modalShow, setModalShow] = useState(false);
   const [formShow, setFormShow] = useState(false);
+
+  const thisUser = useContext(UserContext);
 
   const handleModalClose = () => setModalShow(false);
   const handleFormClose = () => setFormShow(false);
@@ -77,6 +80,7 @@ export default function Referrals() {
               variant="success"
               onClick={handleModalShow}
               className={styles.addBtn}
+              // style={{ display: thisUser !== '' ? 'inherit' : 'none' }}
             >
               <i className="far fa-user-plus"></i>
             </Button>
@@ -256,7 +260,7 @@ export default function Referrals() {
                       {r.address}
                     </a>
                   </span>
-                  <StarRating ratingArray={r.rating} docID={r.id} />
+                  <StarRating ratingArray={r.rating ?? []} docID={r.id} />
                 </Card.Footer>
               </Card>
             );
