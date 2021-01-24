@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import MainPage from './MainPage';
 import WildlifePage from './WildlifePage';
 import QuickButtons from '../../components/shared/QuickButtons';
+import Footer from '../../components/shared/Footer';
 import { UserContext } from '../../App';
 import { Tab, Tabs } from 'react-bootstrap';
 import styles from './Album.module.scss';
@@ -25,6 +26,7 @@ export default function Album() {
           </Tab>
         </Tabs>
       </div>
+      <Footer />
     </>
   );
 }

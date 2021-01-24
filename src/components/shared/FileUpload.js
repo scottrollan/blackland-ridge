@@ -46,7 +46,7 @@ export default function FileUpload({
       setContact1(metadata.contact1);
       setAddress(metadata.address);
     }
-  }, [metadata]);
+  }, [requireForm, metadata]);
 
   const selectThisFile = (e) => {
     //setSelectedFile & render a preview in modal before uploading

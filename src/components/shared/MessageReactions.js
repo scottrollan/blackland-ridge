@@ -38,7 +38,7 @@ const MessageReactions = ({ m }) => {
         break;
       case 'remove':
         newArray = remove(currentArray, (name) => {
-          return name != me;
+          return name !== me;
         });
         newData = { ...state, [array]: [...newArray] };
         break;

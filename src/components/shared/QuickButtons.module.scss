@@ -22,6 +22,11 @@
     }
   }
 }
+
+.bigButtonWords {
+  color: var(--default-font-color);
+  margin: 0 1rem;
+}
 .bigButton {
   background-color: var(--overlay-light);
   display: flex;
@@ -36,10 +41,13 @@
     text-decoration: none !important;
   }
   &:hover {
-    color: green;
-    border: 2px solid green;
+    color: var(--color-pallette-accent);
+    border: 2px solid var(--color-pallette-accent);
     transform: translateY(2px);
     margin: calc(0.5rem - 1px) 0; //offsets the thickening of border on hover
+  }
+  &:hover .icon {
+    color: var(--color-pallette-accent);
   }
   &:active {
     color: var(--default-font-color);
@@ -53,10 +61,6 @@
   }
 }
 
-.bigButtonWords {
-  color: var(--default-font-color);
-  margin: 0 1rem;
-}
 .dog {
   color: var(--default-font-color);
   &:hover {
@@ -73,19 +77,37 @@
   unicode-bidi: bidi-override;
   &:hover {
     color: var(--default-font-color);
-    transform: rotateY(180deg);
-    -webkit-transform: rotateY(180deg);
-    -moz-transform: rotateY(180deg);
-    -o-transform: rotateY(180deg);
-    -ms-transform: rotateY(180deg);
-    unicode-bidi: bidi-override;
+    // transform: rotateY(180deg);
+    // -webkit-transform: rotateY(180deg);
+    // -moz-transform: rotateY(180deg);
+    // -o-transform: rotateY(180deg);
+    // -ms-transform: rotateY(180deg);
+    // unicode-bidi: bidi-override;
   }
 }
 .icon {
   font-size: 2rem;
   color: var(--default-font-color);
   &:hover {
-    color: green;
+    color: var(--color-pallette-accent);
     transform: translateY(2px);
+  }
+}
+
+.backwardCat {
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+  -o-transform: rotateY(180deg);
+  -ms-transform: rotateY(180deg);
+  unicode-bidi: bidi-override;
+  &:hover {
+    color: var(--default-font-color);
+    transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+    -o-transform: rotateY(180deg);
+    -ms-transform: rotateY(180deg);
+    unicode-bidi: bidi-override;
   }
 }

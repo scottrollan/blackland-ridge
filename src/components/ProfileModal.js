@@ -32,7 +32,7 @@ const ProfileModal = () => {
     } else if (!thisUser) {
       setShow(false);
     }
-  });
+  }, [thisUser]);
 
   return (
     <Modal

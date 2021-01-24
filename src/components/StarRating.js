@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../App';
-import { referralsCollection, fsArrayUnion } from '../firestore/index';
+import { referralsCollection } from '../firestore/index';
 import $ from 'jquery';
 import styles from './StarRating.module.scss';
 
@@ -47,7 +47,7 @@ export default function StarRating({ ratingArray, docID }) {
     let stars = 0;
     let arrayLength = ratingArray.length;
     const getRating = async () => {
-      await ratingArray.forEach((r, index) => {
+      await ratingArray.forEach((r) => {
         raterList.push(r.ratedBy);
         stars += r.stars;
         if (r.ratedBy === me) {
@@ -64,7 +64,7 @@ export default function StarRating({ ratingArray, docID }) {
       }
     };
     getRating();
-  }, [ratingArray]);
+  }, [ratingArray, me]);
 
   return (
     <div className="container">
@@ -74,6 +74,7 @@ export default function StarRating({ ratingArray, docID }) {
         <div>
           {[1, 2, 3, 4, 5].map((s) => (
             <i
+              key={s}
               className={[
                 `fas fa-star ${styles.glyphiconStar} ${styles.partial}`,
               ]}

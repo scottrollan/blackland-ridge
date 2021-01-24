@@ -7,7 +7,7 @@ import $ from 'jquery';
 import styles from './SingleMessage.module.scss';
 
 const SingleMessage = ({ m }) => {
-  const [thisMessage, setThisMessage] = useState({ ...m });
+  // const [m, setm] = useState({ ...m });
   const thisUser = useContext(UserContext);
   const myID = thisUser.id ?? '';
   const newThread = m.newThread ?? false;
@@ -17,12 +17,12 @@ const SingleMessage = ({ m }) => {
   let rString = createRandomString(11);
   let photoURL;
   let thisAuthor;
-  const authorRef = thisMessage.authorRef;
+  const authorRef = m.authorRef;
   const authID = authorRef.id;
   if (authID === myID) {
     authorIsMe = true;
   }
-  const date = thisMessage.createdAt;
+  const date = m.createdAt;
   const milliseconds = date.seconds * 1000;
   const rawDate = new Date(milliseconds);
   originalPostDate =
@@ -34,28 +34,28 @@ const SingleMessage = ({ m }) => {
     ', ' +
     rawDate.getFullYear();
 
-  React.useEffect(() => {
-    profilesCollection
-      .doc(authID)
-      .get()
-      .then((doc) => {
-        switch (doc.exists) {
-          case true:
-            const profile = { ...doc.data() };
-            photoURL = profile.photoURL;
-            thisAuthor = profile.displayName;
-            $(`#image${rString}`).attr('src', photoURL);
-            $(`#aTag${rString}`).attr('href', photoURL);
-            $(`#name${rString}`).html(authorIsMe ? 'ME' : thisAuthor);
-            break;
-          default:
-            console.log('Sorry, that user no longer exists');
-        }
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  }, []);
+  // React.useEffect(() => {
+  profilesCollection
+    .doc(authID)
+    .get()
+    .then((doc) => {
+      switch (doc.exists) {
+        case true:
+          const profile = { ...doc.data() };
+          photoURL = profile.photoURL;
+          thisAuthor = profile.displayName;
+          $(`#image${rString}`).attr('src', photoURL);
+          $(`#aTag${rString}`).attr('href', photoURL);
+          $(`#name${rString}`).html(authorIsMe ? 'ME' : thisAuthor);
+          break;
+        default:
+          console.log('Sorry, that user no longer exists');
+      }
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
+  // }, []);
 
   return (
     <div style={{ width: '100%' }}>
@@ -82,13 +82,13 @@ const SingleMessage = ({ m }) => {
           <div style={{ letterSpacing: '0.2rem' }} id={`name${rString}`}></div>
         </div>
         <div className={styles.paragraphDiv}>
-          <h4>{thisMessage.title ? thisMessage.title : null}</h4>
+          <h4>{m.title ? m.title : null}</h4>
           <span style={{ fontSize: 'small' }}>{originalPostDate}</span>
 
           <div
             className={!newThread && authorIsMe ? styles.quoteMe : styles.quote}
           >
-            {thisMessage.message.map((p) => {
+            {m.message.map((p) => {
               const pKey = createRandomString(10);
               return <p key={pKey}>{p}</p>;
             })}
@@ -97,14 +97,14 @@ const SingleMessage = ({ m }) => {
       </div>
       {/*\/  ONLY FOR SCREENS SMALLER THAN BREAKPOINT MEDIUM \/ */}
       <div className={styles.mobileQuote}>
-        {thisMessage.message.map((p) => {
+        {m.message.map((p) => {
           const pKey = createRandomString(10);
           return <p key={pKey}>{p}</p>;
         })}
       </div>
       <div className={styles.messageImagesDiv}>
-        {thisMessage.attachedImages
-          ? thisMessage.attachedImages.map((i) => {
+        {m.attachedImages
+          ? m.attachedImages.map((i) => {
               const iKey = createRandomString(9);
               return (
                 <a
@@ -121,7 +121,7 @@ const SingleMessage = ({ m }) => {
           : null}
       </div>
 
-      <ResponseAccordion fieldName={'Replies'} m={thisMessage} />
+      <ResponseAccordion fieldName={'Replies'} m={m} />
     </div>
   );
 };

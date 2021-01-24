@@ -54,11 +54,6 @@ export default function MainPage() {
     );
   };
 
-  const open = (pageName) => {
-    $(`.${pageName}`).show();
-    $(`#${pageName}Button`).hide();
-  };
-
   const handleShow = (i) => {
     setIndex(i);
     setShowModal(true);

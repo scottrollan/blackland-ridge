@@ -80,7 +80,7 @@ const ResponseReactions = ({ m }) => {
       mounted = false;
       unsubscribe();
     };
-  }, []);
+  }, [id, myIndex]);
 
   return (
     <div className={styles.iconRow}>

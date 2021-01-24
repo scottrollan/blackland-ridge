@@ -62,6 +62,10 @@ const Comment = ({ newThread, fieldName, m }) => {
       }
     );
   };
+  const handleSelect = (e) => {
+    console.log(e);
+    setMessageType(e);
+  };
 
   const ahora = new Date();
   const now = timeStamp.fromDate(ahora);
@@ -85,6 +89,16 @@ const Comment = ({ newThread, fieldName, m }) => {
               responseTriggers
                 .doc()
                 .set({ ...response, authorEmail: authorEmail });
+              // console.log('trigger');
+              // const responseTriggers = functions.httpsCallable(
+              //   'responseTriggers'
+              // );
+              // const response = await responseTriggers();
+              // console.log(response);
+            } else {
+              console.log(
+                'That user has too recently received a notification to receive another.'
+              );
             }
           } else {
             console.log("That user doesn't exist.");
@@ -235,30 +249,16 @@ const Comment = ({ newThread, fieldName, m }) => {
           <InputGroup className="mb-3">
             <DropdownButton
               variant="outline-secondary"
-              title="* Message Type"
+              title={messageType}
               id="messageType"
               style={{
                 display: newThread ? 'inherit' : 'none',
               }}
+              onSelect={handleSelect}
             >
-              <Dropdown.Item
-                value="General"
-                onSelect={(e) => setMessageType(e.target.value)}
-              >
-                General
-              </Dropdown.Item>
-              <Dropdown.Item
-                value="Items"
-                onSelect={(e) => setMessageType(e.target.value)}
-              >
-                Items for Sale
-              </Dropdown.Item>
-              <Dropdown.Item
-                value="News"
-                onSelect={(e) => setMessageType(e.target.value)}
-              >
-                Neighborhood News
-              </Dropdown.Item>
+              <Dropdown.Item eventKey="General">General</Dropdown.Item>
+              <Dropdown.Item eventKey="Items">Items for Sale</Dropdown.Item>
+              <Dropdown.Item eventKey="News">Neighborhood News</Dropdown.Item>
               <Dropdown.Item
                 disabled
                 style={{ textDecoration: 'line-through' }}
@@ -267,11 +267,7 @@ const Comment = ({ newThread, fieldName, m }) => {
               </Dropdown.Item>
 
               <Dropdown.Divider />
-              <Dropdown.Item
-                value="Urgent"
-                onSelect={(e) => setMessageType(e.target.value)}
-                style={{ color: 'red' }}
-              >
+              <Dropdown.Item eventKey="Urgent" style={{ color: 'red' }}>
                 URGENT ALERT!
               </Dropdown.Item>
             </DropdownButton>

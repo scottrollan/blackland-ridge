@@ -1,5 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import QuickButtons from '../../components/shared/QuickButtons';
+import Footer from '../../components/shared/Footer';
 import { profilesCollection } from '../../firestore';
 import { Card, Tab, Tabs, Button } from 'react-bootstrap';
 import $ from 'jquery';
@@ -240,6 +241,7 @@ const Directory = () => {
           </Tab>
         </Tabs>
       </div>
+      <Footer />
     </>
   );
 };

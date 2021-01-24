@@ -3,22 +3,22 @@ import { messagesCollection } from '../../firestore/index';
 import QuickButtons from '../../components/shared/QuickButtons';
 import MessagesHeader from '../../components/MessagesHeader';
 import SingleMessage from '../../components/shared/SingleMessage';
+import Footer from '../../components/shared/Footer';
 import { createRandomString } from '../../functions/CreateRandomString';
 
 import styles from './Messages.module.scss';
 
 const Messages = () => {
   const [messages, setMessages] = useState([]);
-  let filteredMessages = [];
 
   useEffect(() => {
+    let filteredMessages = [];
     messagesCollection
       .where('newThread', '==', true)
       .onSnapshot(function (snapshot) {
         snapshot.docChanges().forEach(function (change) {
           filteredMessages.push({ ...change.doc.data(), id: change.doc.id });
           if (change.type === 'added') {
-            // filteredMessages.push({ ...change.doc.data(), id: change.doc.id });
             let mergedMessages = [...messages, ...filteredMessages];
             mergedMessages.sort((a, b) => {
               return a.updatedAt > b.updatedAt ? -1 : 1; //most recent at top
@@ -27,12 +27,10 @@ const Messages = () => {
           }
           if (change.type === 'modified') {
             console.log('Thread modified.');
-            // const modifiedMessageID = change.doc.id;
-            // setMessages(filteredMessages);
           }
         });
       });
-    const unsubscribe = messagesCollection.onSnapshot(function () {});
+    const unsubscribe = messagesCollection.onSnapshot(() => {});
 
     return unsubscribe();
   }, []);
@@ -57,6 +55,7 @@ const Messages = () => {
           );
         })}
       </div>
+      <Footer />
     </>
   );
 };

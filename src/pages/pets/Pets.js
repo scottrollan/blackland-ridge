@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import FileUpload from '../../components/shared/FileUpload';
 import AlbumModal from '../album/AlbumModal';
 import QuickButtons from '../../components/shared/QuickButtons';
+import Footer from '../../components/shared/Footer';
 import ErrorMessage from '../../components/ErrorMessage';
 import { createRandomString } from '../../functions/CreateRandomString';
 import { petsRef } from '../../firestore/index';
@@ -191,6 +192,7 @@ export default function Pets() {
           </Button>
         </div>
       </div>
+      <Footer />
     </>
   );
 }
