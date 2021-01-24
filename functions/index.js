@@ -1,10 +1,9 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const nodemailer = require('nodemailer');
-const cors = require('cors')({ origin: true });
 require('dotenv').config();
 
-admin.initializeApp();
+admin.initializeApp(functions.config().firebase);
 
 const gmailUser = process.env.REACT_APP_GMAIL_EMAIL;
 const gmailPass = process.env.REACT_APP_GMAIL_PASSWORD;
@@ -19,16 +18,38 @@ const transporter = nodemailer.createTransport({
 });
 
 ///// Alert Administrator when newThread is created
+///// Send URGENT message to all
 exports.sendEmail = functions.firestore
   .document('messages/{msgId}')
   .onCreate((snapshot, context) => {
-    const mailOptions = {
-      from: 'blackland.ridge.notifications@gmail.com',
-      to: adminEmail,
-      subject: 'Blackland Ridge Notification',
-      html: `<h3>New message from ${snapshot.data().name}</h3>`,
-    };
-
+    const data = snapshot.data();
+    let parsedMessage = '';
+    data.message.forEach((p) => {
+      parsedMessage = `${parsedMessage}${p}<br>`;
+    });
+    let mailOptions = {};
+    if (data.category === 'Urgent') {
+      mailOptions = {
+        from: 'blackland.ridge.notifications@gmail.com',
+        to: 'blackland.ridge.notifications@gmail.com',
+        bcc: 'barry.rollan@gmail.com',
+        subject: 'URGENT ALERT',
+        html: `
+        <h1>Urgent Alert from ${data.name}</h1>
+        <p>${parsedMessage}</p>
+        `,
+      };
+    } else {
+      mailOptions = {
+        from: 'blackland.ridge.notifications@gmail.com',
+        to: adminEmail,
+        subject: 'Blackland Ridge Notification',
+        html: `
+        <h3>New Message from ${snapshot.data().name}</h3>
+        <p>${parsedMessage}</p>
+        `,
+      };
+    }
     return transporter.sendMail(mailOptions, (error, data) => {
       if (error) {
         console.log(error);
@@ -60,25 +81,9 @@ exports.alertAdministrator = functions.firestore
     });
   });
 
-///// add document to messageTriggers when message response is created
-exports.responseTriggers = functions.https.onRequest((req, res) => {
-  const authorEmail = req.query.E;
-  const title = req.query.T;
-  const responder = req.query.R;
-  const snippet = req.query.M;
-  return cors(req, res, async () => {
-    const addMessageTrigger = await admin
-      .firestore()
-      .collection('responseTriggers')
-      .add({
-        authorEmail: authorEmail,
-        title: title,
-        responder: responder,
-        snippet: snippet,
-      });
-
-    res.json({ result: `${addMessageTrigger.id}` });
-  });
+/////
+exports.responseTrigger = functions.https.onCall((data, context) => {
+  return `you hit the responseTrigger onCall function`;
 });
 
 ///// alert author when there is a Message Response /////
@@ -111,3 +116,22 @@ exports.messageResponse = functions.firestore
       console.log('Email sent: ' + data.response);
     });
   });
+
+///// Set Notifications email array upon profile write
+exports.setNotifyArray = functions.https.onRequest(async (req, res) => {
+  const authorEmail = req.query.E;
+  const title = req.query.T;
+  const responder = req.query.R;
+  const snippet = req.query.M;
+  const addMessageTrigger = await admin
+    .firestore()
+    .collection('responseTriggers')
+    .add({
+      authorEmail: authorEmail,
+      title: title,
+      responder: responder,
+      snippet: snippet,
+    });
+
+  res.json({ result: `${addMessageTrigger.id}` });
+});
