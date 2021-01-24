@@ -9,18 +9,18 @@ export default function Footer() {
     margin: 0,
     zIndex: 9,
   };
-  const bumberStyles = {
-    width: '100%',
-    background: 'linear-gradient(transparent, #75ecf2)',
-    height: '6rem',
-  };
+  // const bumberStyles = {
+  //   width: '100%',
+  //   background: 'linear-gradient(transparent, #75ecf2)',
+  //   height: '6rem',
+  // };
   const imageStyles = {
     maxWidth: '100%',
   };
 
   return (
     <div style={footerStyles}>
-      <div style={bumberStyles} />
+      {/* <div style={bumberStyles} /> */}
       <img src={scene} alt="" style={imageStyles} />
     </div>
   );
