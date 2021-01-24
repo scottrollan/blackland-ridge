@@ -8,9 +8,6 @@ export default function Footer() {
     padding: 0,
     margin: 0,
     zIndex: 9,
-    postion: 'webikt-sticky',
-    position: 'sticky',
-    bottom: 0,
   };
   const bumberStyles = {
     width: '100%',
