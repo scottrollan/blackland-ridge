@@ -84,9 +84,9 @@ const ResponseAccordion = ({ m }) => {
             <Comment
               fieldName="Add Reply"
               m={m}
-              formID="commentResponse"
-              titleID="titleResponse"
-              messageTypeID="response"
+              formID={`commentResponse${m.id}`}
+              titleID={`titleResponse${m.id}`}
+              messageTypeID={`response${m.id}`}
             />
           </div>
         </AccordionDetails>
