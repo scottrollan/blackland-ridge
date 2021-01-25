@@ -91,7 +91,10 @@ export default function StarRating({ ratingArray, docID }) {
           ))}
         </div>
       </div>
-      <div className={styles.rating}>
+      <div
+        className={styles.rating}
+        style={{ display: thisUser !== '' ? 'inherit' : 'none' }}
+      >
         <div>My Rating:</div>
 
         <div className={styles.starRow}>

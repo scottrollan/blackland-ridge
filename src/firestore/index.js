@@ -52,6 +52,10 @@ export const responseTriggers = firebaseApp
   .firestore()
   .collection('responseTriggers');
 
+// export const urgentRecipientsCollection = firebaseApp
+//   .firestore()
+//   .collection('urgentRecipients');
+
 export const firebaseTimestamp = firebase.firestore.FieldValue.serverTimestamp();
 export const timeStamp = firebase.firestore.Timestamp;
 export const fsArrayUnion = firebase.firestore.FieldValue.arrayUnion;
@@ -96,7 +100,7 @@ export const createUserWithEmail = async (email, password) => {
   try {
     const data = await auth.createUserWithEmailAndPassword(email, password);
     return data;
-    //data contains data.additionalUserInfo.isNewUser (t/f) and data.user
+    //data contains data.user
   } catch (error) {
     const errorCode = error.code;
     const errorMessage = error.message;

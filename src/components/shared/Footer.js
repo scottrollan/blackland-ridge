@@ -1,5 +1,5 @@
 import React from 'react';
-import scene from '../../assets/walkingInBR.jpg';
+// import scene from '../../assets/walkingInBR.jpg';
 
 export default function Footer() {
   const footerStyles = {
@@ -21,7 +21,11 @@ export default function Footer() {
   return (
     <div style={footerStyles}>
       {/* <div style={bumberStyles} /> */}
-      <img src={scene} alt="" style={imageStyles} />
+      <img
+        src="https://firebasestorage.googleapis.com/v0/b/trans-falcon-287713.appspot.com/o/images%2Falbums%2Fmisc%2FTpONi752walkingInBR.jpg?alt=media&token=4fc053de-8f06-4203-9920-9363097e775b"
+        alt=""
+        style={imageStyles}
+      />
     </div>
   );
 }

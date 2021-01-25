@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import NewReferral from '../../components/NewReferral';
 import QuickButtons from '../../components/shared/QuickButtons';
 import StarRating from '../../components/StarRating';
 import PostReferralAgreement from '../../components/PostReferralAgreement';
 import { referralsCollection } from '../../firestore/index';
 import { referralCategories } from '../../data/referralCategories';
+import { UserContext } from '../../App';
 import { createRandomString } from '../../functions/CreateRandomString';
 import { Nav, Card, Button, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import $ from 'jquery';
@@ -15,6 +16,8 @@ export default function Referrals() {
   const [category, setCategory] = useState([]);
   const [modalShow, setModalShow] = useState(false);
   const [formShow, setFormShow] = useState(false);
+
+  const thisUser = useContext(UserContext);
 
   const handleModalClose = () => setModalShow(false);
   const handleFormClose = () => setFormShow(false);
@@ -77,7 +80,7 @@ export default function Referrals() {
               variant="success"
               onClick={handleModalShow}
               className={styles.addBtn}
-              // style={{ display: thisUser !== '' ? 'inherit' : 'none' }}
+              style={{ display: thisUser !== '' ? 'initial' : 'none' }}
             >
               <i className="far fa-user-plus"></i>
             </Button>

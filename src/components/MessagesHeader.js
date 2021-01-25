@@ -35,6 +35,9 @@ const MessagesHeader = () => {
           m={{ _id: randomStr }}
           newThread={true}
           fieldName="Message *"
+          formID="commentNewThread"
+          titleID="titleNewThread"
+          messageTypeID="newThread"
         />
       </div>
     </div>

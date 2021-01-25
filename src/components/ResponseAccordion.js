@@ -81,7 +81,13 @@ const ResponseAccordion = ({ m }) => {
         >
           <Responses m={m} />
           <div style={{ display: myResponses.length > 0 ? 'inherit' : 'none' }}>
-            <Comment fieldName="Add Reply" m={m} />
+            <Comment
+              fieldName="Add Reply"
+              m={m}
+              formID="commentResponse"
+              titleID="titleResponse"
+              messageTypeID="response"
+            />
           </div>
         </AccordionDetails>
       </Accordion>

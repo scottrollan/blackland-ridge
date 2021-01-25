@@ -1,6 +1,11 @@
 import React, { useReducer, useState } from 'react';
 import StreetAddress from './StreetAddress';
-import { signOut, profilesCollection, usersRef } from '../firestore';
+import {
+  signOut,
+  profilesCollection,
+  usersRef,
+  urgentRecipientsCollection,
+} from '../firestore';
 import { Button, LinearProgress } from '@material-ui/core';
 import { createRandomString } from '../functions/CreateRandomString';
 import $ from 'jquery';
@@ -32,6 +37,12 @@ const reducer = (state, action) => {
           emailInDirectory: false,
           phoneInDirectory: false,
         };
+      }
+    case 'setUrgentAlerts':
+      if ($('#textUrgentAlerts').prop('checked')) {
+        return { ...state, textUrgentAlerts: true };
+      } else {
+        return { ...state, textUrgentAlerts: false };
       }
     case 'setNotifications':
       if ($('#receiveNotifications').prop('checked')) {
@@ -147,6 +158,13 @@ const ProfileForm = ({ thisUser, setError, handleClose }) => {
       case state.phoneInDirectory && $('#profilePhoneInput').val() === '':
         setError(
           'Please enter a phone number, or uncheck the "Let my neighbors see my phone number" box',
+          'Go Back'
+        );
+        $('#errorMessage').css('display', 'show');
+        break;
+      case state.textUrgentAlerts && $('#profilePhoneInput').val() === '':
+        setError(
+          'Please enter a mobile number, or uncheck the "Text URGENT ALERTS to my phone" box',
           'Go Back'
         );
         $('#errorMessage').css('display', 'show');
@@ -386,7 +404,7 @@ const ProfileForm = ({ thisUser, setError, handleClose }) => {
         </div>
         <div className={styles.checkboxRow}>
           <label htmlFor="receiveNotifications">
-            Send me occassional notifications:
+            Email me occassional notifications:
           </label>
           <input
             className={styles.checkbox}
@@ -394,6 +412,20 @@ const ProfileForm = ({ thisUser, setError, handleClose }) => {
             id="receiveNotifications"
             checked={state.receiveNotifications ? true : false}
             onChange={(e) => dispatch({ type: 'setNotifications', payload: e })}
+          />
+        </div>
+        <div className={styles.checkboxRow}>
+          <label htmlFor="textUrgentAlerts">
+            Text{' '}
+            <span style={{ textDecoration: 'underline' }}>Urgent Alerts</span>{' '}
+            to my phone:
+          </label>
+          <input
+            className={styles.checkbox}
+            type="checkbox"
+            id="textUrgentAlerts"
+            checked={state.textUrgentAlerts ? true : false}
+            onChange={(e) => dispatch({ type: 'setUrgentAlerts', payload: e })}
           />
         </div>
       </div>

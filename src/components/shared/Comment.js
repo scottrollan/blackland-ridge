@@ -17,7 +17,14 @@ import { Form } from 'react-bootstrap';
 import $ from 'jquery';
 import styles from './Comment.module.scss';
 
-const Comment = ({ newThread, fieldName, m }) => {
+const Comment = ({
+  newThread,
+  fieldName,
+  m,
+  formID,
+  titleID,
+  messageTypeID,
+}) => {
   const setLoginPopup = useContext(LoginContext);
   const thisUser = useContext(UserContext);
   const me = thisUser.name;
@@ -89,12 +96,6 @@ const Comment = ({ newThread, fieldName, m }) => {
               responseTriggers
                 .doc()
                 .set({ ...response, authorEmail: authorEmail });
-              // console.log('trigger');
-              // const responseTriggers = functions.httpsCallable(
-              //   'responseTriggers'
-              // );
-              // const response = await responseTriggers();
-              // console.log(response);
             } else {
               console.log(
                 'That user has too recently received a notification to receive another.'
@@ -160,7 +161,7 @@ const Comment = ({ newThread, fieldName, m }) => {
     setMessage('');
     setAttachedImages('');
     setMessage('');
-    $('#commentForm')[0].reset();
+    $(`#${formID}`)[0].reset();
   };
 
   const setMessageData = (str) => {
@@ -169,7 +170,7 @@ const Comment = ({ newThread, fieldName, m }) => {
   };
 
   if (newThread) {
-    $('#messageType').attr('required');
+    $(`#${messageTypeID}`).attr('required');
   }
   useEffect(() => {
     const authorRef = m.authorRef ?? 'x';
@@ -181,7 +182,7 @@ const Comment = ({ newThread, fieldName, m }) => {
       <Form
         onSubmit={(e) => sendComment(e)}
         className={styles.commentForm}
-        id="commentForm"
+        id={formID}
       >
         <Loading />
         <span
@@ -197,7 +198,7 @@ const Comment = ({ newThread, fieldName, m }) => {
           style={{ display: thisUser ? 'inherit' : 'none' }}
         >
           <div className={styles.inputDiv}>
-            <Form.Group controlId="title">
+            <Form.Group controlId={titleID}>
               <Form.Control
                 type="text"
                 placeholder="Title *"
@@ -206,7 +207,6 @@ const Comment = ({ newThread, fieldName, m }) => {
                   display: newThread ? 'inherit' : 'none',
                 }}
                 value={title}
-                // id="title"
                 onChange={(e) => setTitle(e.target.value)}
               ></Form.Control>
             </Form.Group>
@@ -245,12 +245,12 @@ const Comment = ({ newThread, fieldName, m }) => {
               );
             })
           : null}
-        <div>
+        <div style={{ display: thisUser ? 'inherit' : 'none' }}>
           <InputGroup className="mb-3">
             <DropdownButton
               variant="outline-secondary"
               title={messageType}
-              id="messageType"
+              id={messageTypeID}
               style={{
                 display: newThread ? 'inherit' : 'none',
               }}

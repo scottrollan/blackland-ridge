@@ -116,22 +116,3 @@ exports.messageResponse = functions.firestore
       console.log('Email sent: ' + data.response);
     });
   });
-
-///// Set Notifications email array upon profile write
-exports.setNotifyArray = functions.https.onRequest(async (req, res) => {
-  const authorEmail = req.query.E;
-  const title = req.query.T;
-  const responder = req.query.R;
-  const snippet = req.query.M;
-  const addMessageTrigger = await admin
-    .firestore()
-    .collection('responseTriggers')
-    .add({
-      authorEmail: authorEmail,
-      title: title,
-      responder: responder,
-      snippet: snippet,
-    });
-
-  res.json({ result: `${addMessageTrigger.id}` });
-});
