@@ -27,8 +27,9 @@ input {
   @include rectangle-out;
 }
 .checkboxes {
+  //this is the entire block
   width: 100%;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   border-radius: 0.5rem;
   background-color: #dddddd;
   :nth-child(1) {
@@ -42,12 +43,20 @@ input {
   }
 }
 .checkboxRow {
+  //each individual row
   display: flex;
   width: 100%;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   padding: 0.5rem;
+  margin-bottom: 0;
 }
 .checkbox {
-  margin: 0.6rem;
+  //the actual checkbox
+  margin: 0;
+  padding: 0;
+}
+
+input {
+  margin-bottom: 0;
 }

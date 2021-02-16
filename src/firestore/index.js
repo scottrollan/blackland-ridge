@@ -3,6 +3,7 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/storage';
 import 'firebase/firebase-functions';
+import 'firebase/firebase-messaging';
 import $ from 'jquery';
 
 const firebaseConfig = {
@@ -21,6 +22,26 @@ export default firebase;
 const firebaseApp = !firebase.apps.length
   ? firebase.initializeApp(firebaseConfig)
   : firebase.app();
+
+/////////// Messaging ///////
+const messaging = firebase.messaging();
+messaging
+  .requestPermission()
+  .then(() => {
+    console.log('Have permission');
+    return messaging.getToken();
+  })
+  .then((token) => {
+    console.log(token);
+  })
+  .catch((error) => {
+    console.log(`Error occured: ${error.message}`);
+  });
+
+messaging.onMessage((payload) => {
+  console.log(`onMessage: ${payload}`);
+  //could also load to notification badge or whatever
+});
 
 ////////// Storage //////////
 const storage = firebase.storage();

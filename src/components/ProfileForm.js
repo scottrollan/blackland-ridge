@@ -1,12 +1,8 @@
 import React, { useReducer, useState } from 'react';
 import StreetAddress from './StreetAddress';
-import {
-  signOut,
-  profilesCollection,
-  usersRef,
-  urgentRecipientsCollection,
-} from '../firestore';
+import { signOut, profilesCollection, usersRef } from '../firestore';
 import { Button, LinearProgress } from '@material-ui/core';
+import { Form } from 'react-bootstrap';
 import { createRandomString } from '../functions/CreateRandomString';
 import $ from 'jquery';
 import styles from './ProfileForm.module.scss';
@@ -77,8 +73,9 @@ const reducer = (state, action) => {
 };
 
 const ProfileForm = ({ thisUser, setError, handleClose }) => {
+  const initialData = { ...thisUser };
   const [state, dispatch] = useReducer(reducer, {
-    ...thisUser,
+    ...initialData,
     firstTimeLogin: false,
   });
   const [image, setImage] = useState(null);
@@ -95,7 +92,7 @@ const ProfileForm = ({ thisUser, setError, handleClose }) => {
         num.substring(6, 10)
     );
   };
-  $('[type="tel"]').keyup(phoneMask);
+  // $('[type="tel"]').keyup(phoneMask);
 
   const fileSelect = async (e) => {
     const thisImage = e.target.files[0];
@@ -192,134 +189,108 @@ const ProfileForm = ({ thisUser, setError, handleClose }) => {
   };
 
   return (
-    <form id="profileForm" className={styles.profileForm}>
-      <label htmlFor="profileNameInput" style={{ marginBottom: 0 }}>
-        Full Name{' '}
-        <span style={{ color: 'var(--google-red', fontSize: 'small' }}>
+    <Form
+      id="profileForm"
+      className={styles.profileForm}
+      style={{ textAlign: 'left' }}
+    >
+      <Form.Group controlId="profileNameInput">
+        <Form.Label style={{ marginBottom: 0 }}>
+          Full Name{'  '}
+          <span style={{ color: 'var(--google-red', fontSize: 'small' }}>
+            required
+          </span>
+          <div style={{ fontSize: 'small' }}>
+            as you would like it to appear in the directory
+          </div>
+        </Form.Label>
+        <Form.Control
+          type="text"
           required
-        </span>
-      </label>
-      <div style={{ fontSize: 'small', textAlign: 'left' }}>
-        as you want it to appear in the directory (ex:{' '}
-        <span style={{ fontStyle: 'italic' }}>John W. Doe</span>)
-      </div>
-      <input
-        id="profileNameInput"
-        required
-        type="input"
-        value={state.name}
-        onChange={(e) =>
-          dispatch({ type: 'setFullName', payload: e.target.value })
-        }
-        placeholder="John Doe"
-      ></input>
-
-      <label htmlFor="displayNameInput" style={{ marginBottom: 0 }}>
-        Display Name{' '}
-        <span style={{ color: 'var(--google-red', fontSize: 'small' }}>
-          required
-        </span>
-      </label>
-      <div style={{ fontSize: 'small', textAlign: 'left' }}>
-        as you want it to appear in conversations/posts (ex:{' '}
-        <span style={{ fontStyle: 'italic' }}>John D</span>)
-      </div>
-      <input
-        id="displayNameInput"
-        required
-        type="input"
-        value={state.displayName}
-        onChange={(e) =>
-          dispatch({ type: 'setDisplayName', payload: e.target.value })
-        }
-        placeholder="John Doe"
-      ></input>
-
-      <label htmlFor="profileEmailInput">
-        Email Address:{' '}
-        <span
-          style={{
-            color: 'var(--google-red',
-            fontSize: 'small',
-          }}
-        >
-          required
-        </span>
-      </label>
-      <input
-        id="profileEmailInput"
-        type="email"
-        required
-        value={state.email}
-        onChange={(e) =>
-          dispatch({ type: 'setEmail', payload: e.target.value })
-        }
-        placeholder="username@email.com"
-      ></input>
-      <label htmlFor="profilePhoneInput">
-        Phone Number:{' '}
-        <span
-          style={{
-            color: 'var(--google-red',
-            fontSize: 'small',
-            display: state.phoneInDirectory ? 'inline' : 'none',
-          }}
-        >
-          required
-        </span>
-      </label>
-      <input
-        type="tel"
-        id="profilePhoneInput"
-        placeholder="(770)555-1234"
-        required={state.phoneInDirectory ? true : false}
-        value={state.phone}
-        onInput={phoneMask}
-        onChange={(e) =>
-          dispatch({ type: 'setPhone', payload: e.target.value })
-        }
-      />
-      <div
-        style={{
-          display: state.address ? 'none' : 'inherit',
-          flexDirection: 'column',
-          textAlign: 'left',
-        }}
-      >
-        <StreetAddress
+          value={state.name}
           onChange={(e) =>
-            dispatch({ type: 'setAddress', payload: e.target.value })
+            dispatch({ type: 'setFullName', payload: e.target.value })
+          }
+          placeholder="John W. Doe"
+        />
+      </Form.Group>
+      <Form.Group controlId="displayNameInput">
+        <Form.Label style={{ marginBottom: 0 }}>
+          Display Name{' '}
+          <span style={{ color: 'var(--google-red', fontSize: 'small' }}>
+            required
+          </span>
+          <div style={{ fontSize: 'small', textAlign: 'left' }}>
+            as you want it to appear in conversations/posts (ex:{' '}
+            <span style={{ fontStyle: 'italic' }}>John D</span>)
+          </div>
+        </Form.Label>
+
+        <Form.Control
+          required
+          type="input"
+          value={state.displayName}
+          onChange={(e) =>
+            dispatch({ type: 'setDisplayName', payload: e.target.value })
+          }
+          placeholder="John Doe"
+        ></Form.Control>
+      </Form.Group>
+
+      <Form.Group controlId="profileEmailInput">
+        <Form.Label>
+          Email Address:{' '}
+          <span
+            style={{
+              color: 'var(--google-red',
+              fontSize: 'small',
+            }}
+          >
+            required
+          </span>
+        </Form.Label>
+        <Form.Control
+          type="email"
+          required
+          value={state.email}
+          onChange={(e) =>
+            dispatch({ type: 'setEmail', payload: e.target.value })
+          }
+          placeholder="username@email.com"
+        />
+      </Form.Group>
+
+      <Form.Group controlId="profilePhoneInput">
+        <Form.Label htmlFor="profilePhoneInput">
+          Phone Number:{' '}
+          <span
+            style={{
+              color: 'var(--google-red',
+              fontSize: 'small',
+              display: state.phoneInDirectory ? 'inline' : 'none',
+            }}
+          >
+            required
+          </span>
+        </Form.Label>
+        <Form.Control
+          type="tel"
+          placeholder="(770)555-1234"
+          required={state.phoneInDirectory ? true : false}
+          value={state.phone}
+          onInput={phoneMask}
+          onChange={(e) =>
+            dispatch({ type: 'setPhone', payload: e.target.value })
           }
         />
-      </div>
-      <div
-        style={{
-          display: state.address ? 'flex' : 'none',
-          flexDirection: 'column',
-          textAlign: 'left',
-        }}
-      >
-        <label htmlFor="profileAddress">Street Address:</label>
-        <input
-          type="text"
-          id="profileAddress"
-          value={state.address}
-          readOnly
-          onFocus={() => $('#addressNote').show()}
-          // onClick={showAddressNote}
-          style={{ marginBottom: '0.5rem' }}
-        />
-        <div
-          id="addressNote"
-          style={{ fontSize: 'x-small', marginBottom: '1rem', display: 'none' }}
-        >
-          contact the{' '}
-          <a href="mailto:barry@barryrollanstudio.com?subject=incorrect address on Blackland Ridge">
-            network administrator
-          </a>{' '}
-          if your address is listed incorrectly
-        </div>
-      </div>
+      </Form.Group>
+
+      <StreetAddress
+        onChange={(e) =>
+          dispatch({ type: 'setAddress', payload: e.target.value })
+        }
+      />
+
       <div style={{ width: '100%', minHeight: '14px', padding: '3px 10px' }}>
         <LinearProgress
           variant="determinate"
@@ -339,20 +310,21 @@ const ProfileForm = ({ thisUser, setError, handleClose }) => {
           }}
         />
         <div>
-          <label className="form-file-label">Upload New Image</label>
-          <input
-            name="file"
-            // button="uploadFunctionButton"
-            type="file"
-            onChange={(e) => fileSelect(e)}
-            className="form-control-file"
-          />
+          <Form.Group>
+            <Form.Label className="form-file-label">
+              Upload New Image
+            </Form.Label>
+            <Form.Control
+              name="file"
+              type="file"
+              onChange={(e) => fileSelect(e)}
+            />
+          </Form.Group>
           <Button
             id="uploadFunctionButton"
             value="image-6cfbe57620cf399cfc417a0ac19af893f539058a-650x433-jpg"
             type="button"
             style={{ visibility: 'hidden' }}
-            // onClick={() => dispatch({ type: 'uploadFile' })}
             onClick={uploadImage}
           >
             Upload Photo
@@ -360,73 +332,98 @@ const ProfileForm = ({ thisUser, setError, handleClose }) => {
         </div>
       </div>
       <div className={styles.checkboxes}>
-        <div className={styles.checkboxRow}>
-          <label htmlFor="includeInDirectory">
-            Include me in the neighborhood Directory:
-          </label>
-          <input
-            className={styles.checkbox}
-            type="checkbox"
-            id="includeInDirectory"
-            checked={state.includeInDirectory ? true : false}
-            onChange={(e) => dispatch({ type: 'setDirectory', payload: e })}
-          />
+        <div>
+          <Form.Group
+            controlId="includeInDirectory"
+            className={styles.checkboxRow}
+          >
+            <Form.Label>Include me in the neighborhood Directory:</Form.Label>
+            <Form.Check
+              inline
+              type="checkbox"
+              checked={state.includeInDirectory ? true : false}
+              onChange={(e) => dispatch({ type: 'setDirectory', payload: e })}
+              style={{ backgroundColor: 'transparent' }}
+            />
+          </Form.Group>
         </div>
-        <div
-          className={styles.checkboxRow}
-          style={{ display: state.includeInDirectory ? 'inherit' : 'none' }}
-        >
-          <label htmlFor="displayEmail">
-            Let my neighbors see my email address:
-          </label>
-          <input
-            className={styles.checkbox}
-            type="checkbox"
-            id="displayEmail"
-            checked={state.emailInDirectory ? true : false}
-            onChange={(e) => dispatch({ type: 'setDisplayEmail', payload: e })}
-          />
+
+        <div style={{ display: state.includeInDirectory ? 'inherit' : 'none' }}>
+          <Form.Group
+            controlId="displayEmail"
+            className={styles.checkboxRow}
+            style={{ paddingLeft: '3rem', paddingRight: '3rem' }}
+          >
+            <Form.Label>Let my neighbors see my email address:</Form.Label>
+            <Form.Check
+              inline
+              type="checkbox"
+              checked={state.emailInDirectory ? true : false}
+              onChange={(e) =>
+                dispatch({ type: 'setDisplayEmail', payload: e })
+              }
+              style={{ backgroundColor: 'transparent' }}
+            />
+          </Form.Group>
         </div>
-        <div
-          className={styles.checkboxRow}
-          style={{ display: state.includeInDirectory ? 'inherit' : 'none' }}
-        >
-          <label htmlFor="displayPhone">
-            Let my neighbors see my phone number:
-          </label>
-          <input
-            className={styles.checkbox}
-            type="checkbox"
-            id="displayPhone"
-            checked={state.phoneInDirectory ? true : false}
-            onChange={(e) => dispatch({ type: 'setDisplayPhone', payload: e })}
-          />
+
+        <div style={{ display: state.includeInDirectory ? 'inherit' : 'none' }}>
+          <Form.Group
+            controlId="displayPhone"
+            className={styles.checkboxRow}
+            style={{ paddingLeft: '3rem', paddingRight: '3rem' }}
+          >
+            <Form.Label>Let my neighbors see my phone number:</Form.Label>
+            <Form.Check
+              inline
+              type="checkbox"
+              checked={state.phoneInDirectory ? true : false}
+              onChange={(e) =>
+                dispatch({ type: 'setDisplayPhone', payload: e })
+              }
+              style={{ backgroundColor: 'transparent' }}
+            />
+          </Form.Group>
         </div>
-        <div className={styles.checkboxRow}>
-          <label htmlFor="receiveNotifications">
-            Email me occassional notifications:
-          </label>
-          <input
-            className={styles.checkbox}
-            type="checkbox"
-            id="receiveNotifications"
-            checked={state.receiveNotifications ? true : false}
-            onChange={(e) => dispatch({ type: 'setNotifications', payload: e })}
-          />
+
+        <div>
+          <Form.Group
+            className={styles.checkboxRow}
+            controlId="receiveNotifications"
+          >
+            <Form.Label>Email me occassional notifications:</Form.Label>
+            <Form.Check
+              inline
+              type="checkbox"
+              checked={state.receiveNotifications ? true : false}
+              onChange={(e) =>
+                dispatch({ type: 'setNotifications', payload: e })
+              }
+              style={{ backgroundColor: 'transparent' }}
+            />
+          </Form.Group>
         </div>
-        <div className={styles.checkboxRow}>
-          <label htmlFor="textUrgentAlerts">
-            Text{' '}
-            <span style={{ textDecoration: 'underline' }}>Urgent Alerts</span>{' '}
-            to my phone:
-          </label>
-          <input
-            className={styles.checkbox}
-            type="checkbox"
-            id="textUrgentAlerts"
-            checked={state.textUrgentAlerts ? true : false}
-            onChange={(e) => dispatch({ type: 'setUrgentAlerts', payload: e })}
-          />
+
+        <div>
+          <Form.Group
+            className={styles.checkboxRow}
+            controlId="textUrgentAlerts"
+          >
+            <Form.Label>
+              Text{' '}
+              <span style={{ textDecoration: 'underline' }}>Urgent Alerts</span>{' '}
+              to my phone:
+            </Form.Label>
+            <Form.Check
+              inline
+              type="checkbox"
+              checked={state.textUrgentAlerts ? true : false}
+              onChange={(e) =>
+                dispatch({ type: 'setUrgentAlerts', payload: e })
+              }
+              style={{ backgroundColor: 'transparent' }}
+            />
+          </Form.Group>
         </div>
       </div>
       <div
@@ -440,7 +437,7 @@ const ProfileForm = ({ thisUser, setError, handleClose }) => {
 
         <Button onClick={logout}>Logout</Button>
       </div>
-    </form>
+    </Form>
   );
 };
 

@@ -28,13 +28,14 @@ const Comment = ({
   const setLoginPopup = useContext(LoginContext);
   const thisUser = useContext(UserContext);
   const me = thisUser.name;
+  const myEmail = thisUser.email;
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
   const [response, setResponse] = useState({});
   const [attachedImages, setAttachedImages] = useState([]);
   const [progress, setProgress] = useState(0);
   const [messageType, setMessageType] = useState('General');
-  const [authorID, setAuthorID] = useState('');
+  const [authorID, setAuthorID] = useState();
 
   const onFileUpload = async (image, newMetadata) => {
     //image upload
@@ -70,42 +71,48 @@ const Comment = ({
     );
   };
   const handleSelect = (e) => {
-    console.log(e);
     setMessageType(e);
   };
 
-  const ahora = new Date();
-  const now = timeStamp.fromDate(ahora);
-  const janOne = new Date('1970-01-01');
-  const wayBack = timeStamp.fromDate(janOne);
-  const lastSent = m.lastResponseNotification ?? wayBack;
+  const nowDate = new Date();
+  const now = timeStamp.fromDate(nowDate);
+  const dayOne = new Date('1970-01-01');
+  const wayBack = timeStamp.fromDate(dayOne);
+  const lastNotificationSent = m.lastResponseNotification ?? wayBack;
+  const lastNotificationDate = lastNotificationSent.toDate();
 
-  const responseNotification = (send) => {
-    let receiveNotifications;
-    let authorEmail;
-    if (send) {
-      //if more than a day since last notification
-      profilesCollection
-        .doc(authorID)
-        .get()
-        .then(async (doc) => {
-          if (doc.exists) {
-            receiveNotifications = await doc.data().receiveNotifications;
-            authorEmail = await doc.data().email;
-            if (receiveNotifications) {
-              responseTriggers
-                .doc()
-                .set({ ...response, authorEmail: authorEmail });
-            } else {
-              console.log(
-                'That user has too recently received a notification to receive another.'
-              );
-            }
-          } else {
-            console.log("That user doesn't exist.");
-          }
-        });
-    } else {
+  const responseNotification = (comment) => {
+    //runs only if more than a day since last message notification && notifyAuthor = true && author hasn't received a notification in the last day
+    console.log(
+      `Triggering response notification and Updating last notification and update timestamps on message document ${m.id}`
+    );
+    try {
+      //adds a doc to responseTriggers
+      responseTriggers.doc().set({ ...response, title: m.title });
+      profilesCollection.doc(authorID).update({ lastNotified: now });
+      //update message with reply and new timestamps
+      messagesCollection.doc(`${m.id}`).update({
+        responses: fsArrayUnion({ ...comment }),
+        updatedAt: now,
+        lastResponseNotification: now,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateWithoutNotification = (comment) => {
+    console.log(
+      `Updating timestamp for "updatedAt" on message document ${m.id}`
+    );
+    try {
+      //update message with reply and new updatedAt timestamp
+      messagesCollection.doc(`${m.id}`).update({
+        responses: fsArrayUnion({ ...comment }),
+        updatedAt: now,
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -114,8 +121,10 @@ const Comment = ({
     const newID = createRandomString(20);
     const authorRef = thisUser.ref;
     const messageArray = message.split('\n');
+
     let comment = {
       attachedImages,
+      authorEmail: myEmail,
       authorRef: authorRef,
       createdAt: now,
       id: newID,
@@ -136,27 +145,43 @@ const Comment = ({
         console.log(error);
       }
     } else {
-      //add a comment/reply to an existing post/ run responseNotification
-      try {
-        if (now.seconds - lastSent.seconds > 86400) {
-          // if more than a day since last notification
-          messagesCollection.doc(`${m.id}`).update({
-            responses: fsArrayUnion({ ...comment }),
-            updatedAt: now,
-            lastResponseNotification: now, //add updated notification date
-          });
-          responseNotification(true); //and send notification
-        } else {
-          //otherwise, just update regular fields
-          messagesCollection.doc(`${m.id}`).update({
-            responses: fsArrayUnion({ ...comment }),
-            updatedAt: now,
-          });
+      //IF COMMENT IS A RESPONSE TO A NEW THREAD//
+      if (nowDate - lastNotificationDate > 86400000) {
+        //last notification was over a day ago
+        try {
+          //get author info
+          profilesCollection
+            .doc(authorID)
+            .get()
+            .then((doc) => {
+              const data = { ...doc.data() };
+              if (doc.exists) {
+                console.log('Profile found!');
+                const authorNotifications = data.receiveNotifications;
+                const lastNotificationSent = data.lastNotified ?? wayBack;
+                if (
+                  authorNotifications &&
+                  nowDate - lastNotificationSent.toDate() > 86400000
+                ) {
+                  // if author receives notifications AND more than a day since last notification
+                  //then send response trigger to cloud functions
+                  responseNotification(comment);
+                } else {
+                  updateWithoutNotification(comment);
+                }
+              } else {
+                console.log('Profile not found.');
+              }
+            });
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
+      } else {
+        updateWithoutNotification(comment);
       }
     }
+
+    //resert form and state
     setTitle('');
     setMessage('');
     setAttachedImages('');
@@ -166,7 +191,12 @@ const Comment = ({
 
   const setMessageData = (str) => {
     setMessage(str);
-    setResponse({ title: m.title, responder: me, snippet: str.substr(0, 76) });
+    let snippet = str.substr(0, 76);
+    setResponse({
+      responder: me,
+      authorEmail: myEmail,
+      snippet: snippet,
+    });
   };
 
   if (newThread) {
@@ -245,8 +275,13 @@ const Comment = ({
               );
             })
           : null}
-        <div style={{ display: thisUser ? 'inherit' : 'none' }}>
-          <InputGroup className="mb-3">
+        <div
+          style={{
+            display: thisUser ? 'flex' : 'none',
+            width: '100%',
+          }}
+        >
+          <InputGroup className="mb-3" style={{ justifyContent: 'center' }}>
             <DropdownButton
               variant="outline-secondary"
               title={messageType}

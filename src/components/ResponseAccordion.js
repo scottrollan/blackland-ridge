@@ -80,15 +80,15 @@ const ResponseAccordion = ({ m }) => {
           className={styles.accordionBackground}
         >
           <Responses m={m} />
-          <div style={{ display: myResponses.length > 0 ? 'inherit' : 'none' }}>
-            <Comment
-              fieldName="Add Reply"
-              m={m}
-              formID={`commentResponse${m.id}`}
-              titleID={`titleResponse${m.id}`}
-              messageTypeID={`response${m.id}`}
-            />
-          </div>
+          {/* <div style={{ display: myResponses.length > 0 ? 'inherit' : 'none' }}> */}
+          <Comment
+            fieldName="Add Reply"
+            m={m}
+            formID={`commentResponse${m.id}`}
+            titleID={`titleResponse${m.id}`}
+            messageTypeID={`response${m.id}`}
+          />
+          {/* </div> */}
         </AccordionDetails>
       </Accordion>
     </div>

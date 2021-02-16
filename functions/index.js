@@ -17,46 +17,50 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+let recipients = 'blackland.ridge.notifications@gmail.com';
+
 ///// Alert Administrator when newThread is created
 ///// Send URGENT message to all
 exports.sendEmail = functions.firestore
   .document('messages/{msgId}')
-  .onCreate((snapshot, context) => {
+  .onCreate(async (snapshot, context) => {
     const data = snapshot.data();
     let parsedMessage = '';
     data.message.forEach((p) => {
       parsedMessage = `${parsedMessage}${p}<br>`;
     });
-    let mailOptions = {};
-    if (data.category === 'Urgent') {
-      mailOptions = {
-        from: 'blackland.ridge.notifications@gmail.com',
-        to: 'blackland.ridge.notifications@gmail.com',
-        bcc: 'barry.rollan@gmail.com',
-        subject: 'URGENT ALERT',
-        html: `
-        <h1>Urgent Alert from ${data.name}</h1>
-        <p>${parsedMessage}</p>
-        `,
-      };
-    } else {
-      mailOptions = {
-        from: 'blackland.ridge.notifications@gmail.com',
-        to: adminEmail,
-        subject: 'Blackland Ridge Notification',
-        html: `
-        <h3>New Message from ${snapshot.data().name}</h3>
-        <p>${parsedMessage}</p>
-        `,
-      };
-    }
-    return transporter.sendMail(mailOptions, (error, data) => {
-      if (error) {
+    admin
+      .firestore()
+      .doc('profiles/{profileID}')
+      .where('receiveNotifications', '==', true)
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          const email = doc.data().email;
+          recipients.concat(',', email);
+          const mailOptions = {
+            from: 'blackland.ridge.notifications@gmail.com',
+            to: adminEmail,
+            subject: 'Blackland Ridge Notification',
+            html: `
+              <h3>New Message from ${snapshot.data().name}</h3>
+              <p>${parsedMessage}</p>
+              <p>${recipients}</p>
+              `,
+            // };
+          };
+          return transporter.sendMail(mailOptions, (error, data) => {
+            if (error) {
+              console.log(error);
+              return false;
+            }
+            console.log('Email sent: ' + data.response);
+          });
+        });
+      })
+      .catch((error) => {
         console.log(error);
-        return false;
-      }
-      console.log('Email sent: ' + data.response);
-    });
+      });
   });
 
 ///// Alert administrator when New Profile created /////
@@ -81,17 +85,12 @@ exports.alertAdministrator = functions.firestore
     });
   });
 
-/////
-exports.responseTrigger = functions.https.onCall((data, context) => {
-  return `you hit the responseTrigger onCall function`;
-});
-
 ///// alert author when there is a Message Response /////
 exports.messageResponse = functions.firestore
   .document('responseTriggers/{rTriggerId}')
   .onCreate(async (snap, context) => {
     const data = snap.data();
-
+    console.log(context.params);
     const authorEmail = data.authorEmail;
     const responder = data.responder;
     const snippet = data.snippet;

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { UserContext } from '../../App';
 import ResponseAccordion from '../ResponseAccordion';
 import { profilesCollection } from '../../firestore/index';

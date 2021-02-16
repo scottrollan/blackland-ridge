@@ -49,7 +49,7 @@ export const useAuth = () => {
                 setThisUser(data);
                 break;
               case false:
-                setThisUser(newUser); //returns user obj with no address,
+                setThisUser(newUser); //returns user obj (with no address)
                 break;
               default:
                 break;

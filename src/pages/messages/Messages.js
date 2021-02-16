@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { messagesCollection } from '../../firestore/index';
+import { timeStamp, messagesCollection } from '../../firestore/index';
 import QuickButtons from '../../components/shared/QuickButtons';
 import MessagesHeader from '../../components/MessagesHeader';
 import SingleMessage from '../../components/shared/SingleMessage';
@@ -12,9 +12,13 @@ const Messages = () => {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
+    const uniqBy = require('lodash.uniqby');
     let filteredMessages = [];
+    const today = new Date();
+    const lastSixtyDays = new Date(today - 5184000000); //today - 60 days
+    const sixtyDaysAgo = timeStamp.fromDate(lastSixtyDays);
     messagesCollection
-      .where('newThread', '==', true)
+      .where('updatedAt', '>', sixtyDaysAgo)
       .onSnapshot(function (snapshot) {
         snapshot.docChanges().forEach(function (change) {
           filteredMessages.push({ ...change.doc.data(), id: change.doc.id });
@@ -23,6 +27,7 @@ const Messages = () => {
             mergedMessages.sort((a, b) => {
               return a.updatedAt > b.updatedAt ? -1 : 1; //most recent at top
             });
+            mergedMessages = uniqBy(mergedMessages, 'id');
             setMessages([...mergedMessages]);
           }
           if (change.type === 'modified') {
