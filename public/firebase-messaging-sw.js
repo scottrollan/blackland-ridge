@@ -13,11 +13,11 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-const messaging = firebase.messaging();
-messaging.setBackgroundMessageHandler((payload) => {
-  const title = 'New Message';
-  const options = {
-    body: payload.data.status,
-  };
-  return self.registration.showNotification(title, options);
-});
+// const messaging = firebase.messaging();
+// messaging.setBackgroundMessageHandler((payload) => {
+//   const title = 'New Message';
+//   const options = {
+//     body: payload.data.status,
+//   };
+//   return self.registration.showNotification(title, options);
+// });
