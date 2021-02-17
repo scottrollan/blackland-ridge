@@ -3,7 +3,7 @@ import FileUpload from '../../components/shared/FileUpload';
 import AlbumModal from './AlbumModal';
 import { createRandomString } from '../../functions/CreateRandomString';
 import { petsRef } from '../../firestore/index';
-import { Card, Button } from 'react-bootstrap';
+import { CardDeck, Card, Button } from 'react-bootstrap';
 import $ from 'jquery';
 import { UserContext } from '../../App';
 import styles from './Album.module.scss';
@@ -99,55 +99,65 @@ export default function PetsPage() {
 
   return (
     <div className={styles.cardGrid}>
+      <CardDeck>
+        {albumImages.map((p, index) => {
+          return (
+            <Card
+              key={p.url}
+              className={styles.card}
+              style={{
+                display: index < galleryViewLength ? 'flex' : 'none',
+                flexDirection: 'column',
+                width: '250px',
+              }}
+              onClick={() => handleShow(index)}
+            >
+              <Card.Img
+                src={p.url}
+                // alt=""
+                // className={styles.albumPhoto}
+                variant="top"
+                // style={{ width: '250px', height: '320px', objectFit: 'cover' }}
+              />
+              <Card.Body>
+                <Card.Title
+                  style={{ display: p.data.petName ? 'block' : 'none' }}
+                >
+                  {p.data.petName}
+                </Card.Title>
+                <Card.Text
+                  style={{ display: p.data.address ? 'block' : 'none' }}
+                >
+                  I live at {p.data.address}
+                </Card.Text>
+                <Card.Text
+                  style={{ display: p.data.contact1 ? 'block' : 'none' }}
+                >
+                  If you find me, please contact {p.data.contact1} at{' '}
+                  <span style={{ whiteSpace: 'nowrap' }}>{p.data.phone1}</span>
+                  <span
+                    style={{
+                      display: p.data.contact2 !== '' ? 'inherit' : 'none',
+                    }}
+                  >
+                    or {p.data.contact2} at{' '}
+                    <span style={{ whiteSpace: 'nowrap' }}>
+                      {p.data.phone2}
+                    </span>
+                    .
+                  </span>
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          );
+        })}
+      </CardDeck>
       <AlbumModal
         show={showModal}
         handleClose={handleClose}
         carouselImages={albumImages}
         carouselIndex={index}
       />
-      {albumImages.map((p, index) => {
-        return (
-          <Card
-            key={p.url}
-            className={styles.card}
-            style={{
-              display: index < galleryViewLength ? 'inherit' : 'none',
-              width: '250px',
-            }}
-            onClick={() => handleShow(index)}
-          >
-            <Card.Img
-              src={p.url}
-              alt=""
-              className={styles.albumPhoto}
-              variant="top"
-              style={{ width: '250px', height: '320px', objectFit: 'cover' }}
-            />
-            <Card.Body>
-              <div style={{ display: p.data.petName ? 'block' : 'none' }}>
-                <span style={{ fontWeight: 'bold', lineHeight: 2 }}>
-                  {p.data.petName}
-                </span>
-              </div>{' '}
-              <div style={{ display: p.data.address ? 'block' : 'none' }}>
-                I live at {p.data.address}
-              </div>
-              <div style={{ display: p.data.contact1 ? 'block' : 'none' }}>
-                If you find me, please contact {p.data.contact1} at{' '}
-                <span style={{ whiteSpace: 'nowrap' }}>{p.data.phone1}</span>
-                <span
-                  style={{
-                    display: p.data.contact2 !== '' ? 'inherit' : 'none',
-                  }}
-                >
-                  or {p.data.contact2} at{' '}
-                  <span style={{ whiteSpace: 'nowrap' }}>{p.data.phone2}</span>.
-                </span>
-              </div>
-            </Card.Body>
-          </Card>
-        );
-      })}
       <div className={styles.buttonWrap}>
         <Button
           className={styles.moreButton}

@@ -6,7 +6,7 @@ import Footer from '../../components/shared/Footer';
 import ErrorMessage from '../../components/ErrorMessage';
 import { createRandomString } from '../../functions/CreateRandomString';
 import { petsRef } from '../../firestore/index';
-import { Card, Button } from 'react-bootstrap';
+import { CardGroup, Card, Button } from 'react-bootstrap';
 import $ from 'jquery';
 import { UserContext } from '../../App';
 import styles from './Pets.module.scss';
@@ -132,52 +132,68 @@ export default function Pets() {
             />
           </div>
         </div>
-        {albumImages.map((p, index) => {
-          return (
-            <Card
-              key={p.url}
-              className={styles.card}
-              style={{
-                display: index < galleryViewLength ? 'inherit' : 'none',
-                width: '250px',
-              }}
-              onClick={() => handleShow(index)}
-            >
-              <Card.Img
-                src={p.url}
-                alt=""
-                className={styles.albumPhoto}
-                variant="top"
-                style={{ width: '250px', height: '320px', objectFit: 'cover' }}
-              />
-              <Card.Body>
-                <div style={{ display: p.data.petName ? 'block' : 'none' }}>
-                  <span style={{ fontWeight: 'bold', lineHeight: 2 }}>
-                    {p.data.petName}
-                  </span>
-                </div>{' '}
-                <div style={{ display: p.data.address ? 'block' : 'none' }}>
-                  I live at {p.data.address}
-                </div>
-                <div style={{ display: p.data.contact1 ? 'block' : 'none' }}>
-                  If you find me, please contact {p.data.contact1} at{' '}
-                  <span style={{ whiteSpace: 'nowrap' }}>{p.data.phone1}</span>
-                  <span
-                    style={{
-                      display: p.data.contact2 !== '' ? 'inherit' : 'none',
-                    }}
+        <CardGroup style={{ display: 'flex', justifyContent: 'center' }}>
+          {albumImages.map((p, index) => {
+            return (
+              <Card
+                key={p.url}
+                className={styles.card}
+                style={{
+                  display: index < galleryViewLength ? 'inherit' : 'none',
+                  minWidth: '275px',
+                  maxWidth: '275px',
+                  margin: '1rem',
+                }}
+                onClick={() => handleShow(index)}
+              >
+                <Card.Img
+                  src={p.url}
+                  // alt=""
+                  // className={styles.albumPhoto}
+                  variant="top"
+                  // style={{ width: '250px', height: '320px', objectFit: 'cover' }}
+                />
+                <Card.Body
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Card.Title
+                    style={{ display: p.data.petName ? 'block' : 'none' }}
                   >
-                    or {p.data.contact2} at{' '}
+                    {p.data.petName}
+                  </Card.Title>
+                  <Card.Text
+                    style={{ display: p.data.address ? 'block' : 'none' }}
+                  >
+                    I live at {p.data.address}
+                  </Card.Text>
+                  <Card.Text
+                    style={{ display: p.data.contact1 ? 'block' : 'none' }}
+                  >
+                    If you find me, please contact {p.data.contact1} at{' '}
                     <span style={{ whiteSpace: 'nowrap' }}>
-                      {p.data.phone2}
+                      {p.data.phone1}
                     </span>
-                    .
-                  </span>
-                </div>
-              </Card.Body>
-            </Card>
-          );
-        })}
+                    <span
+                      style={{
+                        display: p.data.contact2 !== '' ? 'inherit' : 'none',
+                      }}
+                    >
+                      or {p.data.contact2} at{' '}
+                      <span style={{ whiteSpace: 'nowrap' }}>
+                        {p.data.phone2}
+                      </span>
+                      .
+                    </span>
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            );
+          })}
+        </CardGroup>
         <div
           className={styles.buttonWrap}
           style={{

@@ -2,12 +2,10 @@
 
 $card-width: 20rem;
 $card-padding: 0.5rem;
-$photo-width: 5rem;
-$grid-padding: 2rem 5rem;
-$card-margin: 2rem 1rem;
+$photo-width: 6rem;
+$card-margin: 18px;
 @media screen and (max-width: $breakpoint-medium) {
   $card-padding: 0.5rem;
-  $grid-padding: 1rem;
 }
 
 .directory {
@@ -18,39 +16,28 @@ $card-margin: 2rem 1rem;
   background: var(--white);
   border-radius: 0.25rem 1rem 1rem;
   margin: 0 2rem;
-  padding: 0 10px;
-  @media screen and (max-width: $breakpoint-medium) {
-    margin: 0 0.5rem;
-  }
+  // padding: 0 10px;
 }
 
 .cardGrid {
-  padding: $grid-padding;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: space-around;
+  justify-content: center;
 }
 
 .card {
-  width: $card-width;
+  min-width: $card-width;
+  max-width: $card-width;
   padding: $card-padding;
   margin: $card-margin;
   text-align: left;
   box-shadow: 3px 5px 10px var(--color-pallette-dark);
   overflow: hidden;
-  @media screen and (max-width: $breakpoint-medium) {
-    width: 100%;
-    margin: 0.5rem 0;
-  }
 }
 .infoDiv {
-  // max-width: calc(($card-width - $card-padding * 2) - $photo-width);
   overflow: hidden;
 }
 .photoDiv {
-  min-width: 25%;
+  min-width: $photo-width;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -61,9 +48,6 @@ $card-margin: 2rem 1rem;
   border-radius: 50%;
   max-width: $photo-width;
   align-self: center;
-  @media screen and (max-width: $breakpoint-medium) {
-    max-width: 2.5rem;
-  }
 }
 .editProfile {
   @include rectangle-out;

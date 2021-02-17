@@ -64,6 +64,7 @@ export const referralCategories = [
       'Landscape Maintenance',
       'Landscape Installation',
       'Landscape Design',
+      'Lawn/Sod Installation',
       'Arborist/Tree Removal',
       'Mowing',
       'Hardscaping',

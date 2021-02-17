@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import QuickButtons from '../../components/shared/QuickButtons';
 import Footer from '../../components/shared/Footer';
 import { profilesCollection } from '../../firestore';
-import { Card, Tab, Tabs, Button } from 'react-bootstrap';
+import { CardDeck, Card, Tab, Tabs, Button } from 'react-bootstrap';
 import $ from 'jquery';
 import { useHistory } from 'react-router-dom';
 import { UserContext } from '../../App';
@@ -88,14 +88,14 @@ const Directory = () => {
       >
         <Tabs defaultActiveKey="address">
           <Tab id="nameTab" eventKey="name" title="Sort by Name">
-            <div className={styles.cardGrid}>
+            <CardDeck className={styles.cardGrid}>
               {neighborList.map((n) => {
                 return (
                   <Card
                     key={n.photoURL}
                     className={styles.card}
                     style={{
-                      display: n.includeInDirectory ? 'inherit' : 'none',
+                      display: n.includeInDirectory ? 'flex' : 'none',
                     }}
                   >
                     <Card.Header
@@ -104,8 +104,9 @@ const Directory = () => {
                       {n.address}
                       {/* add some logic to place all profiles at same address onto same card??? */}
                     </Card.Header>
-                    <div
+                    <Card.Body
                       style={{
+                        padding: 0,
                         display: 'flex',
                         justifyContent: 'space-between',
                         width: '100%',
@@ -156,14 +157,14 @@ const Directory = () => {
                           Edit Profile
                         </Button>
                       </div>
-                    </div>
+                    </Card.Body>
                   </Card>
                 );
               })}
-            </div>
+            </CardDeck>
           </Tab>
           <Tab id="addressTab" eventKey="address" title="Sort by Address">
-            <div className={styles.cardGrid}>
+            <CardDeck className={styles.cardGrid}>
               {neighborList.map((n) => {
                 return (
                   <Card
@@ -178,12 +179,13 @@ const Directory = () => {
                     >
                       {n.address}
                     </Card.Header>
-                    <div
+                    <Card.Body
                       style={{
+                        padding: 0,
                         display: 'flex',
                         flexDirection: 'row',
                         justifyContent: 'space-between',
-                        width: '100%',
+                        // width: '100%',
                       }}
                     >
                       <div className={styles.infoDiv}>
@@ -233,11 +235,11 @@ const Directory = () => {
                           Edit Profile
                         </Button>
                       </div>
-                    </div>
+                    </Card.Body>
                   </Card>
                 );
               })}
-            </div>
+            </CardDeck>
           </Tab>
         </Tabs>
       </div>
