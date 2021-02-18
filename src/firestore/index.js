@@ -73,9 +73,9 @@ export const responseTriggers = firebaseApp
   .firestore()
   .collection('responseTriggers');
 
-// export const urgentRecipientsCollection = firebaseApp
-//   .firestore()
-//   .collection('urgentRecipients');
+export const urgentAlertsCollection = firebaseApp
+  .firestore()
+  .collection('urgentAlerts');
 
 export const firebaseTimestamp = firebase.firestore.FieldValue.serverTimestamp();
 export const timeStamp = firebase.firestore.Timestamp;

@@ -12,6 +12,7 @@ import {
 import { Button, InputGroup, DropdownButton, Dropdown } from 'react-bootstrap';
 import { UserContext } from '../../App';
 import { LoginContext } from '../../App';
+import { sendUrgentAlert } from '../../functions/SendUrgentAlert';
 import { createRandomString } from '../../functions/CreateRandomString';
 import { Form } from 'react-bootstrap';
 import $ from 'jquery';
@@ -180,7 +181,10 @@ const Comment = ({
         updateWithoutNotification(comment);
       }
     }
-
+    if (messageType === 'Urgent') {
+      const urgentData = { me, message, title };
+      sendUrgentAlert(urgentData);
+    }
     //resert form and state
     setTitle('');
     setMessage('');
@@ -196,6 +200,7 @@ const Comment = ({
       responder: me,
       authorEmail: myEmail,
       snippet: snippet,
+      title: title,
     });
   };
 

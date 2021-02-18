@@ -90,7 +90,6 @@ exports.messageResponse = functions.firestore
   .document('responseTriggers/{rTriggerId}')
   .onCreate(async (snap, context) => {
     const data = snap.data();
-    console.log(context.params);
     const authorEmail = data.authorEmail;
     const responder = data.responder;
     const snippet = data.snippet;
@@ -100,11 +99,43 @@ exports.messageResponse = functions.firestore
       from: 'blackland.ridge.notifications@gmail.com',
       to: authorEmail,
       subject: 'A response to your message:',
-      html: `<h3>People are talking...</h3>
-            <p>In response to your post <span style="font-style: italic;">${title}</span></p>
+      html: `<h2>People are talking...</h2>
+            <p>In response to your post <span style="font-style: italic; font-weight: bold;">${title}</span></p>
             <p><span style="font-weight: bold;">${responder}</span> said,  "<span style="font-style: italic;">${snippet}</span>"</p>
             <a href="https://blackland-ridge.com/" rel="noreferrer noopener"><button style="background-color: #b9d452; border: none; color: white; padding: 15px 32px; border-radius: 8px; text-align: center; text-decoration: none; display: inline-block;font-size: 16px;">Go To BR Messages</button></a>
     `,
+    };
+
+    return transporter.sendMail(mailOptions, (error, data) => {
+      if (error) {
+        console.log(error);
+        return false;
+      }
+      console.log('Email sent: ' + data.response);
+    });
+  });
+
+///// URGENT alerts /////
+exports.urgentAlerts = functions.firestore
+  .document('urgentAlerts/{urgentId}')
+  .onCreate(async (snap, context) => {
+    const data = snap.data();
+    const emails = data.emails;
+    const poster = data.poster;
+    const urgentMessage = data.urgentMessage;
+    const title = data.title;
+
+    const mailOptions = {
+      from: 'blackland.ridge.notifications@gmail.com',
+      to: 'blackland.ridge.notifications@gmail.com',
+      bcc: 'barry.rollan@gmail.com', //add emails here
+      subject: 'URGENT Alert - Blackland Ridge',
+      html: `<h2>${title}</h2>
+          <p style="font-weight: bold;">${title}</p>
+          <p>${poster} said,  "<span style="font-style: italic;">${urgentMessage}</span>"</p>
+          <p>${emails}</p>
+          <a href="https://blackland-ridge.com/" rel="noreferrer noopener"><button style="background-color: #b9d452; border: none; color: white; padding: 15px 32px; border-radius: 8px; text-align: center; text-decoration: none; display: inline-block;font-size: 16px;">Go To BR Messages</button></a>
+  `,
     };
 
     return transporter.sendMail(mailOptions, (error, data) => {
