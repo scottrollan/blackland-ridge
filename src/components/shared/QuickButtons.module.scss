@@ -85,12 +85,18 @@
     // unicode-bidi: bidi-override;
   }
 }
+
 .icon {
   font-size: 2rem;
   color: var(--default-font-color);
+  padding: 5px 14px;
+  border: 1px solid var(--default-font-color);
+  border-radius: 0.5rem;
+  background-color: var(--overlay-light);
   &:hover {
     color: var(--color-pallette-accent);
     transform: translateY(2px);
+    border: 1px solid var(--color-pallette-accent);
   }
 }
 

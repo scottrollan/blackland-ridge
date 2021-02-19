@@ -75,7 +75,7 @@ export default function MainPage() {
           const imageObj = { url: thisURL, data: thisMetadata };
           theseImgObjs = [...theseImgObjs, imageObj];
           theseImgObjs.sort((a, b) => {
-            return a.data.timeCreated > b.data.timeCreated ? 1 : -1;
+            return a.data.timeCreated > b.data.timeCreated ? -1 : 1;
           }); //puts most recently added on top
           setAlbumImages(theseImgObjs);
         });

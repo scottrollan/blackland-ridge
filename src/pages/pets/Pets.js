@@ -132,7 +132,13 @@ export default function Pets() {
             />
           </div>
         </div>
-        <CardGroup style={{ display: 'flex', justifyContent: 'center' }}>
+        <CardGroup
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+          }}
+        >
           {albumImages.map((p, index) => {
             return (
               <Card

@@ -9,11 +9,17 @@ export default function QuickButtons() {
   return (
     <div className={styles.quickButtons}>
       <div className={[`${styles.row} ${styles.bigButtons}`]}>
-        <Link to="/pets" className={[`${styles.bigButton} ${styles.row}`]}>
-          <i className={[`far fa-dog ${styles.icon} ${styles.dog}`]}></i>
-          <span className={styles.bigButtonWords}>Pet Registry</span>
+        <Link to="/" className={[`${styles.bigButton} ${styles.row}`]}>
           <i
-            className={[`far fa-cat ${styles.backwardCat} ${styles.icon}`]}
+            className={[
+              `fal fa-comment-alt-lines ${styles.icon} ${styles.dog}`,
+            ]}
+          ></i>
+          <span className={styles.bigButtonWords}>Message Board</span>
+          <i
+            className={[
+              `fal fa-comment-alt-lines ${styles.backwardCat} ${styles.icon}`,
+            ]}
           ></i>
         </Link>
         <Link to="/referrals" className={[`${styles.bigButton} ${styles.row}`]}>
@@ -34,10 +40,10 @@ export default function QuickButtons() {
       >
         <OverlayTrigger
           delay={{ show: 250, hide: 400 }}
-          overlay={<Tooltip>Message Board</Tooltip>}
+          overlay={<Tooltip>Pet Registry</Tooltip>}
         >
-          <Link to="/">
-            <i className={[`fad fa-comments-alt ${styles.icon}`]}></i>
+          <Link to="/pets">
+            <i className={[`fal fa-dog ${styles.icon}`]}></i>
           </Link>
         </OverlayTrigger>
         <OverlayTrigger
