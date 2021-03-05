@@ -55,7 +55,7 @@ $date-width: '30px';
   color: var(--color-pallette-medium);
 }
 .lastCommentComment {
-  width: calc(50px + $date-width);
+  width: 80px;
   // flex-grow: 1;
   white-space: nowrap;
   overflow: hidden;
