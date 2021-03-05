@@ -13,7 +13,7 @@ $card-margin: 18px;
   justify-content: flex-start;
   flex-direction: column;
   z-index: 10;
-  background: var(--white);
+  background: transparent;
   border-radius: 0.25rem 1rem 1rem;
   margin: 0 2rem;
   // padding: 0 10px;
@@ -22,6 +22,7 @@ $card-margin: 18px;
 .cardGrid {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .card {
@@ -45,12 +46,22 @@ $card-margin: 18px;
   padding-top: 0.5rem;
 }
 .photo {
+  background-size: cover;
+  background-position: center;
+  width: $photo-width;
+  height: $photo-width;
   border-radius: 50%;
-  max-width: $photo-width;
-  align-self: center;
 }
 .editProfile {
   @include rectangle-out;
+  font-size: x-small;
+  padding: 0.5rem;
+  margin: 0.5rem 0 0 0;
+}
+.sendMessage {
+  @include primary-button;
+  // background-color: var(--color-pallette-dark);
+  // color: var(--white);
   font-size: x-small;
   padding: 0.5rem;
   margin: 0.5rem 0 0 0;

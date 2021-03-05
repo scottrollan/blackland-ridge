@@ -18,14 +18,6 @@ export default function NavDropdownItems({ collapseNavbar }) {
       >
         Message Board
       </Link>
-      {/* <Link
-        to="/calendar"
-        className="dropdown-item"
-        onClick={() => collapseNavbar()}
-        style={{ display: thisUser ? 'inherit' : 'none' }}
-      >
-        Calendar
-      </Link> */}
       <Link
         to="/directory"
         className="dropdown-item"

@@ -140,19 +140,27 @@ const Directory = () => {
                           href={n.photoURL}
                           target="_blank"
                           rel="noopener noreferrer"
+                          className={styles.photo}
+                          style={{ backgroundImage: `url(${n.photoURL})` }}
                         >
-                          <img
-                            src={n.photoURL}
-                            alt=""
-                            className={styles.photo}
-                          />
+                          <span></span>
                         </a>
+
                         <Button
-                          className={styles.editProfile}
+                          style={{
+                            display: n.name === me ? 'none' : 'block',
+                          }}
+                          onClick={() => history.push('/myProfile')}
+                          className={styles.sendMessage}
+                        >
+                          Message
+                        </Button>
+                        <Button
                           style={{
                             display: n.name === me ? 'block' : 'none',
                           }}
                           onClick={() => history.push('/myProfile')}
+                          className={styles.editProfile}
                         >
                           Edit Profile
                         </Button>
@@ -217,20 +225,29 @@ const Directory = () => {
                           href={n.photoURL}
                           target="_blank"
                           rel="noopener noreferrer"
+                          className={styles.photo}
+                          style={{
+                            backgroundImage: `url(${n.photoURL})`,
+                          }}
                         >
-                          <img
-                            src={n.photoURL}
-                            alt=""
-                            className={styles.photo}
-                          />
+                          <span></span>
                         </a>
 
                         <Button
-                          className={styles.editProfile}
+                          style={{
+                            display: n.name === me ? 'none' : 'block',
+                          }}
+                          onClick={() => history.push('/myProfile')}
+                          className={styles.sendMessage}
+                        >
+                          Message
+                        </Button>
+                        <Button
                           style={{
                             display: n.name === me ? 'block' : 'none',
                           }}
                           onClick={() => history.push('/myProfile')}
+                          className={styles.editProfile}
                         >
                           Edit Profile
                         </Button>

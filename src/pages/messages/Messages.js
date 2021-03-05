@@ -12,15 +12,15 @@ const Messages = () => {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    const uniqBy = require('lodash.uniqby');
+    const uniqBy = require('lodash/uniqBy');
     let filteredMessages = [];
     const today = new Date();
     const lastSixtyDays = new Date(today - 5184000000); //today - 60 days
     const sixtyDaysAgo = timeStamp.fromDate(lastSixtyDays);
     messagesCollection
       .where('updatedAt', '>', sixtyDaysAgo)
-      .onSnapshot(function (snapshot) {
-        snapshot.docChanges().forEach(function (change) {
+      .onSnapshot((snapshot) => {
+        snapshot.docChanges().forEach((change) => {
           filteredMessages.push({ ...change.doc.data(), id: change.doc.id });
           if (change.type === 'added') {
             let mergedMessages = [...messages, ...filteredMessages];

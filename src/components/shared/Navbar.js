@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
+import { MyAccount } from '../MyAccount';
 import NavDropdownItems from './NavDropdownItems';
 import { UserContext } from '../../App';
 import { LoginContext } from '../../App';
-import { Navbar, Nav, NavDropdown, Dropdown } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import $ from 'jquery';
 import * as db from '../../firestore';
@@ -26,48 +26,14 @@ const NavBar = () => {
   };
 
   const collapseNavbar = () => {
+    // $('.navbar-toggler').click();
     $('.navbar-toggler').click();
   };
-  return (
-    <Navbar className={styles.navBar} collapseOnSelect expand="lg">
-      <Navbar.Brand className={styles.navbarBrand}>
-        <img
-          src={
-            thisUser && thisUser.photoURL
-              ? thisUser.photoURL
-              : 'https://robohash.org/user?bgset=bg1'
-          }
-          alt=""
-          style={{ borderRadius: '50%', maxHeight: '3rem' }}
-        />
-        <Dropdown>
-          <Dropdown.Toggle
-            variant="secondary"
-            id="dropdown-basic"
-            className={styles.logBtn}
-          >
-            <span style={{ display: thisUser ? 'none' : 'block' }}>
-              Login/Signup
-            </span>
-            <span style={{ display: thisUser ? 'block' : 'none' }}>
-              My Account
-            </span>
-          </Dropdown.Toggle>
 
-          <Dropdown.Menu>
-            <Dropdown.Item id="logBtn" onClick={() => logInOut()}>
-              {thisUser ? 'Logout' : 'Login or Sign Up'}
-            </Dropdown.Item>
-            <Link
-              to="/myProfile"
-              className="dropdown-item"
-              // onClick={() => collapseNavbar()}
-              style={{ display: thisUser ? 'inherit' : 'none' }}
-            >
-              My Profile
-            </Link>
-          </Dropdown.Menu>
-        </Dropdown>
+  return (
+    <Navbar className={styles.navBar} collapseOnSelect expand="lg" id="mainNav">
+      <Navbar.Brand className={styles.navbarBrand} id="brand">
+        <MyAccount thisUser={thisUser} logInOut={logInOut} />
       </Navbar.Brand>
 
       <Navbar.Toggle

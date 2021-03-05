@@ -1,13 +1,13 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 
-const StreetAddress = ({ onChange }) => {
+const StreetAddress = ({ address, onChange }) => {
   return (
     <div
       style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}
     >
       <Form.Group controlId="streetAddress">
-        <Form.Label htmlFor="streetAddress">
+        <Form.Label>
           Street Address{'  '}
           <span style={{ color: 'var(--google-red', fontSize: 'small' }}>
             required
@@ -18,8 +18,9 @@ const StreetAddress = ({ onChange }) => {
           required
           style={{ marginBottom: '1.2rem' }}
           onChange={(e) => onChange(e)}
+          placeholder={address}
         >
-          <option>Select Your Address</option>
+          <option>{address ? address : 'Select Your Address'}</option>
           <option>4160 Blackland Drive</option>
           <option>4161 Blackland Drive</option>
           <option>4170 Blackland Drive</option>

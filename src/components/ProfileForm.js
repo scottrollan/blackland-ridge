@@ -261,7 +261,7 @@ const ProfileForm = ({ thisUser, setError, handleClose }) => {
       </Form.Group>
 
       <Form.Group controlId="profilePhoneInput">
-        <Form.Label htmlFor="profilePhoneInput">
+        <Form.Label>
           Phone Number:{' '}
           <span
             style={{
@@ -286,6 +286,7 @@ const ProfileForm = ({ thisUser, setError, handleClose }) => {
       </Form.Group>
 
       <StreetAddress
+        address={thisUser.address}
         onChange={(e) =>
           dispatch({ type: 'setAddress', payload: e.target.value })
         }

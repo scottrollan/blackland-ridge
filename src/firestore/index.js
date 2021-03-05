@@ -73,6 +73,8 @@ export const responseTriggers = firebaseApp
   .firestore()
   .collection('responseTriggers');
 
+export const chatsCollection = firebaseApp.firestore().collection('chats');
+
 export const urgentAlertsCollection = firebaseApp
   .firestore()
   .collection('urgentAlerts');

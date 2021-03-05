@@ -1,0 +1,98 @@
+@import '../../styles/custom-properties.scss';
+
+$photoSize: 1.75rem;
+
+.chat {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  min-height: 4rem;
+  padding: 0.5rem;
+  align-items: center;
+  border-radius: 1rem;
+  &:hover {
+    background-color: var(--overlay-medium);
+    cursor: pointer;
+  }
+}
+.imageWrapper {
+  display: flex;
+  margin-right: 1rem;
+  :nth-child(n + 3) {
+    display: none;
+  }
+}
+.chatterImage {
+  background-size: cover;
+  background-position: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+}
+
+.wordsWrapper {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.chatterList {
+  display: flex;
+  flex-direction: row;
+}
+
+.speechHead {
+  background-image: var(--photoURL);
+  background-size: cover;
+  background-position: 50% 40%;
+  min-height: $photoSize;
+  min-width: $photoSize;
+  max-height: $photoSize;
+  max-width: $photoSize;
+  border-radius: 50%;
+  align-self: flex-start;
+  margin: 0 1rem;
+}
+.speechBubble {
+  position: relative;
+  background-color: var(--color-pallette-muted-accent);
+  padding: 0.5rem;
+  // flex-basis: calc(100% - 4.5rem);
+  margin: 1rem 0;
+  border-radius: 0.5rem;
+}
+.notMyBubble {
+  :before {
+    content: '';
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    border-left: 10px solid transparent;
+    border-right: 10px solid var(--color-pallette-muted-accent);
+    border-top: 10px solid var(--color-pallette-muted-accent);
+    border-bottom: 10px solid transparent;
+    left: -1rem;
+    top: 6px;
+  }
+}
+.myBubble {
+  background-color: var(--color-pallette-accent);
+  position: relative;
+  text-align: right;
+  :before {
+    content: '';
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    border-left: 10px solid var(--color-pallette-accent);
+    border-right: 10px solid transparent;
+    border-top: 10px solid var(--color-pallette-accent);
+    border-bottom: 10px solid transparent;
+    right: -1rem;
+    top: 6px;
+  }
+}
+.bubbleBumper {
+  width: $photoSize;
+}

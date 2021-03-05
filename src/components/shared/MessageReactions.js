@@ -4,7 +4,7 @@ import { messagesCollection } from '../../firestore/index';
 import { reactions } from '../../data/reactions';
 import styles from './MessageReactions.module.scss';
 
-const remove = require('lodash.remove');
+const remove = require('lodash/remove');
 
 const MessageReactions = ({ m }) => {
   const thisUser = useContext(UserContext);

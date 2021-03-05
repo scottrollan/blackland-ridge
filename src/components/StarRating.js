@@ -4,7 +4,7 @@ import { referralsCollection } from '../firestore/index';
 import $ from 'jquery';
 import styles from './StarRating.module.scss';
 
-const uniqBy = require('lodash.uniqby');
+const uniqBy = require('lodash/uniqBy');
 
 export default function StarRating({ ratingArray, docID }) {
   const [starRating, setStarRating] = useState(0);

@@ -1,0 +1,11 @@
+@import '../styles/custom-properties.scss';
+
+.logBtn {
+  @include rectangle-out;
+  margin-left: 1rem;
+  font-size: large;
+}
+.navLink {
+  font-size: x-large;
+  color: var(--default-font-color) !important;
+}

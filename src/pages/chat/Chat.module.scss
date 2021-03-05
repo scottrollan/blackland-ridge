@@ -1,0 +1,73 @@
+@import '../../styles/custom-properties.scss';
+
+$date-width: '30px';
+
+.chatList {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.chat {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  padding: 0.5rem;
+  align-items: center;
+  border-radius: 1rem;
+  &:hover {
+    background-color: var(--overlay-medium);
+    cursor: pointer;
+  }
+}
+.imageWrapper {
+  display: flex;
+  margin-right: 1rem;
+  :nth-child(n + 3) {
+    display: none;
+  }
+}
+.chatterImage {
+  background-size: cover;
+  background-position: center;
+  width: var(--photoSize);
+  height: var(--photoSize);
+  border-radius: 50%;
+}
+
+.wordsWrapper {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.chatterList {
+  display: flex;
+  flex-direction: row;
+}
+
+.lastComment {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-size: smaller;
+  color: var(--color-pallette-medium);
+}
+.lastCommentComment {
+  width: calc(50px + $date-width);
+  // flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lastCommentDate {
+  width: $date-width;
+  margin-left: 1rem;
+  height: 100%;
+}
+
+.openMessage {
+  display: none;
+  width: 100%;
+}
