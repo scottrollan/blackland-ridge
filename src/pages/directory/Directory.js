@@ -2,8 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import QuickButtons from '../../components/shared/QuickButtons';
 import Footer from '../../components/shared/Footer';
 import { profilesCollection } from '../../firestore';
-import { CardDeck, Card, Tab, Tabs, Button } from 'react-bootstrap';
-import $ from 'jquery';
+import { CardDeck, Card, Button } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { UserContext } from '../../App';
 import styles from './Directory.module.scss';
@@ -43,8 +42,6 @@ const Directory = () => {
     neighbors = [];
     setAddressMode(false);
   };
-  $('#addressTab').click(() => sortByAddress());
-  $('#nameTab').click(() => sortByName());
 
   useEffect(() => {
     let mounted = true;
@@ -86,93 +83,86 @@ const Directory = () => {
         className={styles.directory}
         style={{ display: thisUser ? 'initial' : 'none' }}
       >
-        <Tabs defaultActiveKey="address">
-          <Tab id="nameTab" eventKey="name" title="Sort by Name">
-            <CardDeck className={styles.cardGrid}>
-              {neighborList.map((n) => {
-                return (
-                  <Card
-                    key={n.photoURL}
-                    className={styles.card}
-                    style={{
-                      display: n.includeInDirectory ? 'flex' : 'none',
-                    }}
-                  >
-                    <Card.Header
-                      style={{ display: addressMode ? 'inherit' : 'none' }}
+        <div className={styles.sortButtonDiv}>
+          <Button onClick={() => sortByName()} className={styles.sortButton}>
+            Sort by Name
+          </Button>
+          <Button onClick={() => sortByAddress()} className={styles.sortButton}>
+            Sort by Address
+          </Button>
+        </div>
+        <CardDeck className={styles.cardGrid}>
+          {neighborList.map((n) => {
+            return (
+              <Card
+                key={n.photoURL}
+                className={styles.card}
+                style={{
+                  display: n.includeInDirectory ? 'flex' : 'none',
+                }}
+              >
+                <Card.Header>{addressMode ? n.address : n.name}</Card.Header>
+                <Card.Body className={styles.cardBody}>
+                  <div className={styles.infoDiv}>
+                    <Card.Text
+                      style={{ fontSize: 'larger', fontWeight: '500' }}
                     >
-                      {n.address}
-                      {/* add some logic to place all profiles at same address onto same card??? */}
-                    </Card.Header>
-                    <Card.Body
+                      {addressMode ? n.name : n.address}
+                    </Card.Text>
+
+                    <Card.Text
                       style={{
-                        padding: 0,
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        width: '100%',
+                        display: n.phoneInDirectory ? 'block' : 'none',
                       }}
                     >
-                      <div className={styles.infoDiv}>
-                        <Card.Title>{n.name}</Card.Title>
+                      {n.phone}
+                    </Card.Text>
+                    <Card.Text
+                      style={{
+                        display: n.emailInDirectory ? 'block' : 'none',
+                      }}
+                    >
+                      {n.email}
+                    </Card.Text>
+                  </div>
+                  <div className={styles.photoDiv}>
+                    <a
+                      href={n.photoURL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.photo}
+                      style={{ backgroundImage: `url(${n.photoURL})` }}
+                    >
+                      <span></span>
+                    </a>
 
-                        <Card.Text
-                          style={{ display: addressMode ? 'none' : 'inherit' }}
-                        >
-                          {n.address}
-                        </Card.Text>
-                        <Card.Text
-                          style={{
-                            display: n.phoneInDirectory ? 'inherit' : 'none',
-                          }}
-                        >
-                          {n.phone}
-                        </Card.Text>
-                        <Card.Text
-                          style={{
-                            display: n.emailInDirectory ? 'inherit' : 'none',
-                          }}
-                        >
-                          {n.email}
-                        </Card.Text>
-                      </div>
-                      <div className={styles.photoDiv}>
-                        <a
-                          href={n.photoURL}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={styles.photo}
-                          style={{ backgroundImage: `url(${n.photoURL})` }}
-                        >
-                          <span></span>
-                        </a>
+                    <Button
+                      style={{
+                        display: n.name === me ? 'none' : 'block',
+                      }}
+                      onClick={() => history.push('/myProfile')}
+                      className={styles.sendMessage}
+                    >
+                      Message
+                    </Button>
+                    <Button
+                      style={{
+                        display: n.name === me ? 'block' : 'none',
+                      }}
+                      onClick={() => history.push('/myProfile')}
+                      className={styles.editProfile}
+                    >
+                      Edit Profile
+                    </Button>
+                  </div>
+                </Card.Body>
+              </Card>
+            );
+          })}
+        </CardDeck>
 
-                        <Button
-                          style={{
-                            display: n.name === me ? 'none' : 'block',
-                          }}
-                          onClick={() => history.push('/myProfile')}
-                          className={styles.sendMessage}
-                        >
-                          Message
-                        </Button>
-                        <Button
-                          style={{
-                            display: n.name === me ? 'block' : 'none',
-                          }}
-                          onClick={() => history.push('/myProfile')}
-                          className={styles.editProfile}
-                        >
-                          Edit Profile
-                        </Button>
-                      </div>
-                    </Card.Body>
-                  </Card>
-                );
-              })}
-            </CardDeck>
-          </Tab>
-          <Tab id="addressTab" eventKey="address" title="Sort by Address">
-            <CardDeck className={styles.cardGrid}>
+        {/* ////////////////secon "tab"/////////////////// */}
+        {/* <CardDeck className={styles.cardGrid}>
               {neighborList.map((n) => {
                 return (
                   <Card
@@ -183,19 +173,13 @@ const Directory = () => {
                     }}
                   >
                     <Card.Header
-                      style={{ display: addressMode ? 'inherit' : 'none' }}
+                      style={{
+                        display: addressMode ? 'inherit' : 'none',
+                      }}
                     >
                       {n.address}
                     </Card.Header>
-                    <Card.Body
-                      style={{
-                        padding: 0,
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        // width: '100%',
-                      }}
-                    >
+                    <Card.Body className={styles.cardBody}>
                       <div className={styles.infoDiv}>
                         <Card.Title>{n.name}</Card.Title>
 
@@ -256,9 +240,7 @@ const Directory = () => {
                   </Card>
                 );
               })}
-            </CardDeck>
-          </Tab>
-        </Tabs>
+            </CardDeck> */}
       </div>
       <Footer />
     </>

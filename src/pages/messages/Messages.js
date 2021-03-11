@@ -21,7 +21,10 @@ const Messages = () => {
       .where('updatedAt', '>', sixtyDaysAgo)
       .onSnapshot((snapshot) => {
         snapshot.docChanges().forEach((change) => {
-          filteredMessages.push({ ...change.doc.data(), id: change.doc.id });
+          filteredMessages = [
+            ...filteredMessages,
+            { ...change.doc.data(), id: change.doc.id },
+          ];
           if (change.type === 'added') {
             let mergedMessages = [...messages, ...filteredMessages];
             mergedMessages.sort((a, b) => {
@@ -30,9 +33,9 @@ const Messages = () => {
             mergedMessages = uniqBy(mergedMessages, 'id');
             setMessages([...mergedMessages]);
           }
-          if (change.type === 'modified') {
-            console.log('Thread modified.');
-          }
+          // if (change.type === 'modified') {
+          //   console.log('Thread modified.');
+          // }
         });
       });
     const unsubscribe = messagesCollection.onSnapshot(() => {});

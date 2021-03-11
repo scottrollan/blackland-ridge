@@ -1,6 +1,6 @@
 @import '../../styles/custom-properties.scss';
 
-$date-width: '30px';
+$date-width: 25px;
 
 .chatList {
   width: 100%;
@@ -22,6 +22,7 @@ $date-width: '30px';
 .imageWrapper {
   display: flex;
   margin-right: 1rem;
+  min-width: var(--imageWrapperSize);
   :nth-child(n + 3) {
     display: none;
   }
@@ -32,6 +33,12 @@ $date-width: '30px';
   width: var(--photoSize);
   height: var(--photoSize);
   border-radius: 50%;
+  @media screen and (max-width: $breakpoint-medium) {
+    @media (pointer: coarse) {
+      width: calc(var(--photoSize) * 0.75);
+      height: calc(var(--photoSize) * 0.75);
+    }
+  }
 }
 
 .wordsWrapper {
@@ -45,6 +52,20 @@ $date-width: '30px';
   display: flex;
   flex-direction: row;
 }
+.nameText {
+  display: inherit;
+}
+.unreadDotWrapper {
+  width: $date-width;
+  height: $date-width;
+}
+
+.unreadDot {
+  width: $date-width;
+  height: $date-width;
+  background-color: var(--color-pallette-accent);
+  border-radius: 50%;
+}
 
 .lastComment {
   display: flex;
@@ -55,19 +76,27 @@ $date-width: '30px';
   color: var(--color-pallette-medium);
 }
 .lastCommentComment {
-  width: 80px;
-  // flex-grow: 1;
+  flex-grow: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  @media screen and (max-width: $breakpoint-medium) {
+    @media (pointer: coarse) {
+      font-size: x-small;
+    }
+  }
 }
 .lastCommentDate {
   width: $date-width;
-  margin-left: 1rem;
+  margin: 0 0.5rem;
   height: 100%;
 }
 
 .openMessage {
   display: none;
   width: 100%;
+}
+
+.createMessageButton {
+  @include rectangle-out;
 }

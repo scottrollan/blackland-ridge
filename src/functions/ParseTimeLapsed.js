@@ -27,5 +27,7 @@ export const parseTimeLapsed = (num) => {
       minutes = num / 60000;
       minutes = minutes.toFixed(0);
       return `${minutes}m`;
+    default:
+      return '';
   }
 };

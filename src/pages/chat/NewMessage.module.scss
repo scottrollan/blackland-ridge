@@ -1,0 +1,37 @@
+@import '../../styles/custom-properties.scss';
+
+.recipientList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.recipientButton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  background-color: var(--color-pallette-light);
+  border-radius: 2rem;
+  margin: 0 0.5rem 0.5rem 0;
+}
+
+.recipientButton > span {
+  margin: 0 0.5rem;
+}
+
+.recipientPhoto {
+  background-image: var(--backgroundImage);
+  background-size: cover;
+  margin-left: 0;
+  height: 1.5rem;
+  width: 1.5rem;
+  border-radius: 50%;
+}
+
+.xIcon {
+  margin-right: 0;
+  &:hover {
+    cursor: pointer;
+  }
+}

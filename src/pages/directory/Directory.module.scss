@@ -1,11 +1,12 @@
 @import '../../styles/custom-properties.scss';
 
-$card-width: 20rem;
-$card-padding: 0.5rem;
-$photo-width: 6rem;
-$card-margin: 18px;
-@media screen and (max-width: $breakpoint-medium) {
-  $card-padding: 0.5rem;
+@mixin photo-size() {
+  width: 6rem;
+  height: 6rem;
+  @media screen and (max-width: $breakpoint-small) {
+    width: 3rem;
+    height: 3rem;
+  }
 }
 
 .directory {
@@ -16,7 +17,19 @@ $card-margin: 18px;
   background: transparent;
   border-radius: 0.25rem 1rem 1rem;
   margin: 0 2rem;
-  // padding: 0 10px;
+  @media screen and (max-width: $breakpoint-small) {
+    margin: 0 0.5rem;
+  }
+}
+.sortButtonDiv {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.sortButton {
+  @include rectangle-out;
+  margin: 0 1rem;
 }
 
 .cardGrid {
@@ -26,19 +39,29 @@ $card-margin: 18px;
 }
 
 .card {
-  min-width: $card-width;
-  max-width: $card-width;
-  padding: $card-padding;
-  margin: $card-margin;
+  min-width: 20rem;
+  max-width: 20rem;
+  padding: 0.5rem;
+  margin: 1rem;
   text-align: left;
-  box-shadow: 3px 5px 10px var(--color-pallette-dark);
+  box-shadow: 3px 5px 10px --color-pallette-dark;
   overflow: hidden;
+}
+.cardBody {
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  @media screen and (max-width: $breakpoint-small) {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 .infoDiv {
   overflow: hidden;
 }
 .photoDiv {
-  min-width: $photo-width;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -46,10 +69,9 @@ $card-margin: 18px;
   padding-top: 0.5rem;
 }
 .photo {
+  @include photo-size;
   background-size: cover;
   background-position: center;
-  width: $photo-width;
-  height: $photo-width;
   border-radius: 50%;
 }
 .editProfile {
@@ -60,22 +82,17 @@ $card-margin: 18px;
 }
 .sendMessage {
   @include primary-button;
-  // background-color: var(--color-pallette-dark);
-  // color: var(--white);
   font-size: x-small;
   padding: 0.5rem;
   margin: 0.5rem 0 0 0;
 }
 .largerScreens {
-  // @media (pointer: coarse) {
   @media screen and (max-width: $breakpoint-large) {
     display: none;
   }
-  // }
 }
 .smallerScreens {
   display: none;
-  // @media (pointer: coarse) {
   @media screen and (max-width: $breakpoint-large) {
     display: flex;
     justify-content: center;

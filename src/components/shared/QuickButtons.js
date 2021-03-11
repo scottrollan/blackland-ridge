@@ -10,28 +10,14 @@ export default function QuickButtons() {
     <div className={styles.quickButtons}>
       <div className={[`${styles.row} ${styles.bigButtons}`]}>
         <Link to="/" className={[`${styles.bigButton} ${styles.row}`]}>
-          <i
-            className={[
-              `fal fa-comment-alt-lines ${styles.icon} ${styles.dog}`,
-            ]}
-          ></i>
+          <i className="fal fa-comment-alt-lines"></i>
           <span className={styles.bigButtonWords}>Message Board</span>
-          <i
-            className={[
-              `fal fa-comment-alt-lines ${styles.backwardCat} ${styles.icon}`,
-            ]}
-          ></i>
+          <i className="fal fa-comment-alt-lines"></i>
         </Link>
         <Link to="/referrals" className={[`${styles.bigButton} ${styles.row}`]}>
-          <i
-            className={[`fad fa-shopping-cart ${styles.icon} ${styles.dog}`]}
-          ></i>
+          <i className="fad fa-shopping-cart"></i>
           <span className={styles.bigButtonWords}>Business Referrals</span>
-          <i
-            className={[
-              `fad fa-hands-helping ${styles.backwardCat} ${styles.icon}`,
-            ]}
-          ></i>
+          <i className="fad fa-hands-helping"></i>
         </Link>
       </div>
       <div

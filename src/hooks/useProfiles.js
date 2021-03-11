@@ -1,33 +1,27 @@
-import React, { useState } from 'react';
-import { profilesCollection } from '../firestore/index';
+import { useState, useEffect } from 'react';
+import { profilesCollection } from '../firestore';
 
-const useProfiles = () => {
-  const [theseProfiles, setTheseProfiles] = useState('');
+export const useProfiles = () => {
+  const [theseProfiles, setTheseProfiles] = useState([]);
 
-  let data = {};
-
-  React.useEffect(() => {
-    let allProfiles = [];
-    let thisProfile = {};
-    const getProfiles = async () => {
-      try {
-        await profilesCollection.get().then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            thisProfile = { ...doc.data(), id: doc.id };
-            allProfiles = [...allProfiles, thisProfile];
-          });
-        });
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setTheseProfiles([...allProfiles]);
-      }
-    };
-    getProfiles();
+  useEffect(() => {
+    let profileArray = [];
+    let profileInfo;
+    profilesCollection.get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const profile = { ...doc.data(), id: doc.id };
+        profileInfo = {
+          id: profile.id,
+          name: profile.name,
+          displayName: profile.displayName,
+          photoURL: profile.photoURL,
+        };
+        profileArray = [...profileArray, profileInfo];
+      });
+      setTheseProfiles([...profileArray]);
+    });
   }, []);
-  data = { allProfiles: theseProfiles };
-  console.log(data);
-  return data;
+  return theseProfiles;
 };
 
 export default useProfiles;

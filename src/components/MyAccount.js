@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Chat from '../pages/chat/Chat';
 import OpenMessage from '../pages/chat/OpenMessage';
+import NewMessage from '../pages/chat/NewMessage';
 import { Dropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import $ from 'jquery';
@@ -11,6 +12,7 @@ export const MyAccount = ({ thisUser, logInOut }) => {
   const myChats = thisUser.chats;
   const [chatShow, setChatShow] = useState(false);
   const [messageShow, setMessageShow] = useState(false);
+  const [newMessageShow, setNewMessageShow] = useState(false);
   const [openMessage, setOpenMessage] = useState({});
   const handleChatShow = () => {
     setChatShow(true);
@@ -22,8 +24,15 @@ export const MyAccount = ({ thisUser, logInOut }) => {
     setOpenMessage({ ...m });
     setMessageShow(true);
   };
-  const handleMessageClose = () => {
+  const handleNewMessageShow = () => {
+    setNewMessageShow(true);
+  };
+  const handleMessageClose = (id) => {
     setMessageShow(false);
+    setChatShow(true);
+  };
+  const handleNewMessageClose = () => {
+    setNewMessageShow(false);
     setChatShow(true);
   };
   const collapseNavbar = () => {
@@ -38,13 +47,18 @@ export const MyAccount = ({ thisUser, logInOut }) => {
         show={chatShow}
         handleClose={handleChatClose}
         handleMessageShow={handleMessageShow}
+        handleNewMessageShow={handleNewMessageShow}
         myID={myID}
         myChats={myChats}
       />
       <OpenMessage
         message={openMessage}
-        handleMessageClose={handleMessageClose}
+        handleMessageClose={() => handleMessageClose()}
         show={messageShow}
+      />
+      <NewMessage
+        show={newMessageShow}
+        handleNewMessageClose={() => handleNewMessageClose()}
       />
       <span style={{ display: 'flex' }}>
         <img
@@ -82,7 +96,7 @@ export const MyAccount = ({ thisUser, logInOut }) => {
               >
                 My Profile
               </Link>
-              {/* <div
+              <div
                 className="dropdown-item"
                 onClick={handleChatShow}
                 style={{ display: thisUser ? 'inherit' : 'none' }}
@@ -96,7 +110,7 @@ export const MyAccount = ({ thisUser, logInOut }) => {
                 to="/"
               >
                 My Notifications
-              </Link> */}
+              </Link>
             </span>
           </Dropdown.Menu>
         </Dropdown>

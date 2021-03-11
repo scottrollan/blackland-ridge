@@ -1,6 +1,7 @@
 import React, { useState, createContext } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import useAuth from './hooks/useAuth';
+import useProfiles from './hooks/useProfiles';
 import $ from 'jquery';
 import Navbar from './components/shared/Navbar';
 import Authentication from './pages/authentication/Authentication';
@@ -18,9 +19,11 @@ import fadeStyles from './components/FadeInMessage.module.scss';
 
 export const UserContext = createContext();
 export const LoginContext = createContext();
+export const ProfilesContext = createContext();
 
 const App = () => {
   const thisUser = useAuth();
+  const theseProfiles = useProfiles();
   const [showLogin, setShowLogin] = useState(false);
 
   const showLoginPopup = () => setShowLogin(true);
@@ -43,22 +46,24 @@ const App = () => {
       ></div>
       <UserContext.Provider value={thisUser}>
         <LoginContext.Provider value={setLoginPopup}>
-          <Router>
-            <Navbar />
-            <Switch>
-              <Route path="/" exact component={Messages}></Route>
-              <Route path="/directory" component={Directory}></Route>
-              <Route path="/myProfile" component={MyProfile}></Route>
-              <Route path="/payDues" component={PayDues}></Route>
-              <Route path="/referrals" component={Referrals}></Route>
-              <Route path="/album" component={Album}></Route>
-              <Route path="/pets" component={Pets}></Route>
-            </Switch>
-          </Router>
+          <ProfilesContext.Provider value={theseProfiles}>
+            <Router>
+              <Navbar />
+              <Switch>
+                <Route path="/" exact component={Messages}></Route>
+                <Route path="/directory" component={Directory}></Route>
+                <Route path="/myProfile" component={MyProfile}></Route>
+                <Route path="/payDues" component={PayDues}></Route>
+                <Route path="/referrals" component={Referrals}></Route>
+                <Route path="/album" component={Album}></Route>
+                <Route path="/pets" component={Pets}></Route>
+              </Switch>
+            </Router>
 
-          <Loading />
-          <ProfileModal />
-          <Authentication show={showLogin} thisUser={thisUser} />
+            <Loading />
+            <ProfileModal />
+            <Authentication show={showLogin} thisUser={thisUser} />
+          </ProfilesContext.Provider>
         </LoginContext.Provider>
       </UserContext.Provider>
     </div>

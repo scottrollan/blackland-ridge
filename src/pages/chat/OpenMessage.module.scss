@@ -1,6 +1,6 @@
 @import '../../styles/custom-properties.scss';
 
-$photoSize: 1.75rem;
+$photoSize: 2.5rem;
 
 .chat {
   width: 100%;
@@ -95,4 +95,11 @@ $photoSize: 1.75rem;
 }
 .bubbleBumper {
   width: $photoSize;
+}
+
+.form {
+  width: 100%;
+}
+.replyButton {
+  @include rectangle-out;
 }
