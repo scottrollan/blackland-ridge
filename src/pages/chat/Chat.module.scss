@@ -63,6 +63,8 @@ $date-width: 25px;
 .unreadDot {
   width: $date-width;
   height: $date-width;
+  min-width: $date-width;
+  min-height: $date-width;
   background-color: var(--color-pallette-accent);
   border-radius: 50%;
 }

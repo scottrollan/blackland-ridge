@@ -2,6 +2,7 @@ import React, { useState, createContext } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import useAuth from './hooks/useAuth';
 import useProfiles from './hooks/useProfiles';
+import useChats from './hooks/useChats';
 import $ from 'jquery';
 import Navbar from './components/shared/Navbar';
 import Authentication from './pages/authentication/Authentication';
@@ -15,16 +16,21 @@ import Messages from './pages/messages/Messages';
 import Pets from './pages/pets/Pets';
 import Album from './pages/album/Album';
 import styles from './App.module.scss';
-import fadeStyles from './components/FadeInMessage.module.scss';
 
 export const UserContext = createContext();
 export const LoginContext = createContext();
 export const ProfilesContext = createContext();
+export const ChatsContext = createContext();
+export const UnreadContext = createContext();
 
 const App = () => {
   const thisUser = useAuth();
   const theseProfiles = useProfiles();
+  const fromChats = useChats();
+  const theseChats = fromChats[0];
+  const unreadAlerts = fromChats[1];
   const [showLogin, setShowLogin] = useState(false);
+  const [unread, setUnread] = useState([...unreadAlerts]);
 
   const showLoginPopup = () => setShowLogin(true);
   const hideLoginPopup = () => setShowLogin(false);
@@ -34,35 +40,37 @@ const App = () => {
   if (thisUser) {
     $('#firebaseui-auth-container').hide();
   }
+  React.useEffect(() => {
+    setUnread([...unreadAlerts]);
+  }, [unreadAlerts]);
 
   return (
     <div className={styles.App}>
       <div className={styles.backgroundOverlay}></div>
-      <div
-        className={[
-          `${styles.alertThis} ${fadeStyles.fade} ${fadeStyles.fadeOut}`,
-        ]}
-        id="alertThis"
-      ></div>
+      <div className={styles.alertThis}></div>
       <UserContext.Provider value={thisUser}>
         <LoginContext.Provider value={setLoginPopup}>
           <ProfilesContext.Provider value={theseProfiles}>
-            <Router>
-              <Navbar />
-              <Switch>
-                <Route path="/" exact component={Messages}></Route>
-                <Route path="/directory" component={Directory}></Route>
-                <Route path="/myProfile" component={MyProfile}></Route>
-                <Route path="/payDues" component={PayDues}></Route>
-                <Route path="/referrals" component={Referrals}></Route>
-                <Route path="/album" component={Album}></Route>
-                <Route path="/pets" component={Pets}></Route>
-              </Switch>
-            </Router>
+            <ChatsContext.Provider value={theseChats}>
+              <UnreadContext.Provider value={unread}>
+                <Router>
+                  <Navbar />
+                  <Switch>
+                    <Route path="/" exact component={Messages}></Route>
+                    <Route path="/directory" component={Directory}></Route>
+                    <Route path="/myProfile" component={MyProfile}></Route>
+                    <Route path="/payDues" component={PayDues}></Route>
+                    <Route path="/referrals" component={Referrals}></Route>
+                    <Route path="/album" component={Album}></Route>
+                    <Route path="/pets" component={Pets}></Route>
+                  </Switch>
+                </Router>
 
-            <Loading />
-            <ProfileModal />
-            <Authentication show={showLogin} thisUser={thisUser} />
+                <Loading />
+                <ProfileModal />
+                <Authentication show={showLogin} thisUser={thisUser} />
+              </UnreadContext.Provider>
+            </ChatsContext.Provider>
           </ProfilesContext.Provider>
         </LoginContext.Provider>
       </UserContext.Provider>

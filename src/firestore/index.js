@@ -23,26 +23,6 @@ const firebaseApp = !firebase.apps.length
   ? firebase.initializeApp(firebaseConfig)
   : firebase.app();
 
-/////////// Messaging ///////
-// const messaging = firebase.messaging();
-// messaging
-//   .requestPermission()
-//   .then(() => {
-//     console.log('Have permission');
-//     return messaging.getToken();
-//   })
-//   .then((token) => {
-//     console.log(token);
-//   })
-//   .catch((error) => {
-//     console.log(`Error occured: ${error.message}`);
-//   });
-
-// messaging.onMessage((payload) => {
-//   console.log(`onMessage: ${payload}`);
-//   //could also load to notification badge or whatever
-// });
-
 ////////// Storage //////////
 const storage = firebase.storage();
 export const storageRef = storage.ref();
@@ -56,7 +36,7 @@ export const miscRef = albumsRef.child('/misc');
 
 export const functions = firebase.functions();
 
-////////// Database access //////////
+////////// Firestore access //////////
 export const profilesCollection = firebaseApp
   .firestore()
   .collection('profiles');

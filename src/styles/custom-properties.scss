@@ -293,3 +293,121 @@ $breakpoint-extra-large: 1600px;
     transform: translateY(0);
   }
 }
+
+@mixin fadeOut {
+  animation: fadeOut ease 6s;
+  -webkit-animation: fadeOut ease 6s;
+  -moz-animation: fadeOut ease 6s;
+  -o-animation: fadeOut ease 6s;
+  -ms-animation: fadeOut ease 6s;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@-moz-keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@-o-keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@-ms-keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+///////////////////FADE IN AND OUT///////////////////
+
+@mixin fadeInAndOut {
+  animation: fadeInAndOut ease 12s;
+  -webkit-animation: fadeInAndOut ease 12s;
+  -moz-animation: fadeInAndOut ease 12s;
+  -o-animation: fadeInAndOut ease 12s;
+  -ms-animation: fadeInAndOut ease 12s;
+  animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: forwards;
+  -o-animation-fill-mode: forwards;
+}
+
+@mixin keyframe-fadeInAndOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-12rem);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    display: none !important;
+  }
+}
+
+@keyframes fadeInAndOut {
+  @include keyframe-fadeInAndOut;
+}
+
+@-moz-keyframes fadeInAndOut {
+  @include keyframe-fadeInAndOut;
+}
+
+@-webkit-keyframes fadeInAndOut {
+  @include keyframe-fadeInAndOut;
+}
+
+@-o-keyframes fadeInAndOut {
+  @include keyframe-fadeInAndOut;
+}
+
+@-ms-keyframes fadeInAndOut {
+  @include keyframe-fadeInAndOut;
+}

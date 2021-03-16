@@ -27,7 +27,7 @@ body {
   overflow-x: hidden;
 }
 .App > div {
-  padding-bottom: 2rem;
+  // padding-bottom: 2rem;
   max-width: 100%;
 }
 
@@ -37,32 +37,28 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  // background-image: var(--default-background-image);
   background-image: url('./assets/brickwall.png');
-
   z-index: 0;
-  // @media (pointer: coarse) {
-  //   @media screen and (max-width: $breakpoint-medium) {
-  //     display: none;
-  //   }
-  // }
+}
+.alerthThisParent {
 }
 
 .alertThis {
+  display: none;
   position: fixed;
   right: 2rem;
-  top: 8rem;
-  display: none;
+  top: 5rem;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--color-pallette-accent);
-  color: var(--color-pallette-dark);
+  background-color: var(--overlay-dark);
+  color: var(--white);
   max-width: 220px;
   padding: 0.6rem;
-  padding-bottom: 0.6rem !important;
+  padding-bottom: 0.6rem;
   border-radius: 0.5rem;
   text-align: center;
   z-index: 999;
+  @include fadeInAndOut;
 }
 
 .hyperlink {

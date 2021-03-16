@@ -33,7 +33,7 @@ const NavBar = () => {
   return (
     <Navbar className={styles.navBar} collapseOnSelect expand="lg" id="mainNav">
       <Navbar.Brand className={styles.navbarBrand} id="brand">
-        <MyAccount thisUser={thisUser} logInOut={logInOut} />
+        <MyAccount logInOut={logInOut} />
       </Navbar.Brand>
 
       <Navbar.Toggle

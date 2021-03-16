@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { UserContext, ProfilesContext } from '../../App';
+import { UserContext, ProfilesContext, ChatsContext } from '../../App';
 import { chatsCollection } from '../../firestore/index';
 import { createRandomString } from '../../functions/CreateRandomString';
 import { parseTimeLapsed } from '../../functions/ParseTimeLapsed';
@@ -10,6 +10,7 @@ import {
   OverlayTrigger,
   Tooltip,
 } from 'react-bootstrap';
+import $ from 'jquery';
 import styles from './Chat.module.scss';
 
 const uniqBy = require('lodash/uniqBy');
@@ -23,6 +24,7 @@ export default function Chat({
 }) {
   const allUsers = useContext(ProfilesContext);
   const thisUser = useContext(UserContext);
+  const allChats = useContext(ChatsContext);
   const me = thisUser.displayName;
   const myID = thisUser.id;
   const [myChats, setMyChats] = useState([]);
@@ -64,14 +66,14 @@ export default function Chat({
             let lastCommentObj = { ...mess[mess.length - 1] };
             const by = lastCommentObj.name;
             const sent = lastCommentObj.date.toDate();
-            const today = new Date();
-            const timeLapsed = today - sent;
-            const time = parseTimeLapsed(timeLapsed);
+            // const today = new Date();
+            // const timeLapsed = today - sent;
+            // const time = parseTimeLapsed(timeLapsed);
             const quote = lastCommentObj.paragraphs[0];
 
             let lastComment = {
-              comment: me ? `You: ${quote}` : `${by}: ${quote}`,
-              date: time,
+              comment: by === me ? `You: ${quote}` : `${by}: ${quote}`,
+              date: sent,
             };
 
             let theseChatters = [];
@@ -159,6 +161,9 @@ export default function Chat({
           let chatters = c.theseChatters ?? [];
           let chatterNames = [];
           let lastComment = c.lastComment ?? { comment: '', date: null };
+          let now = new Date();
+          let timeLapsed = now - lastComment.date;
+          let realTime = parseTimeLapsed(timeLapsed);
           let chatterPhotoURLs = [];
           let unreadArray = [...c.unread] ?? [];
           chatters.forEach((chatter) => {
@@ -268,9 +273,7 @@ export default function Chat({
                   </span>
                 </div>
               </div>
-              <span className={styles.lastCommentDate}>
-                {lastComment.date ?? ''}
-              </span>
+              <span className={styles.lastCommentDate}>{realTime ?? ''}</span>
               <div
                 className={styles.unreadDot}
                 style={{

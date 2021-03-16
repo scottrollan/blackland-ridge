@@ -58,9 +58,10 @@ $photoSize: 2.5rem;
   position: relative;
   background-color: var(--color-pallette-muted-accent);
   padding: 0.5rem;
-  // flex-basis: calc(100% - 4.5rem);
+  max-width: calc(100% - 4.5rem);
   margin: 1rem 0;
   border-radius: 0.5rem;
+  overflow-wrap: break-word;
 }
 .notMyBubble {
   :before {

@@ -1,19 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { UserContext } from '../App';
 import Chat from '../pages/chat/Chat';
 import OpenMessage from '../pages/chat/OpenMessage';
 import NewMessage from '../pages/chat/NewMessage';
+import { chatsCollection } from '../firestore/index';
 import { Dropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import $ from 'jquery';
 import styles from './MyAccount.module.scss';
 
-export const MyAccount = ({ thisUser, logInOut }) => {
+export const MyAccount = ({ logInOut }) => {
+  const thisUser = useContext(UserContext);
   const myID = thisUser.id;
-  const myChats = thisUser.chats;
+  // const myChats = thisUser.chats;
+  const [myChatArray, setMyChatArray] = useState([]);
   const [chatShow, setChatShow] = useState(false);
   const [messageShow, setMessageShow] = useState(false);
   const [newMessageShow, setNewMessageShow] = useState(false);
   const [openMessage, setOpenMessage] = useState({});
+  const [haveUnread, setHaveUnread] = useState(false);
   const handleChatShow = () => {
     setChatShow(true);
   };
@@ -27,7 +32,7 @@ export const MyAccount = ({ thisUser, logInOut }) => {
   const handleNewMessageShow = () => {
     setNewMessageShow(true);
   };
-  const handleMessageClose = (id) => {
+  const handleMessageClose = () => {
     setMessageShow(false);
     setChatShow(true);
   };
@@ -41,6 +46,33 @@ export const MyAccount = ({ thisUser, logInOut }) => {
     $('#logBtn').click();
   };
 
+  useEffect(() => {
+    if (!myID) {
+      return;
+    }
+    let myChats = [];
+    let unreadArray = [];
+    //listen for changes
+    chatsCollection
+      .where('chatters', 'array-contains', myID)
+      .onSnapshot((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          let data = { ...doc.data(), id: doc.id };
+          unreadArray = [...unreadArray, ...data.unread];
+          myChats = [...myChats, { ...data }];
+        });
+        if (unreadArray.includes(myID)) {
+          setHaveUnread(true);
+        } else {
+          setHaveUnread(false);
+        }
+        setMyChatArray([...myChats]);
+      });
+    const unsubscribe = chatsCollection.onSnapshot(() => {});
+
+    return unsubscribe();
+  }, [chatsCollection, myID]);
+
   return (
     <div style={{ position: 'relative' }}>
       <Chat
@@ -49,7 +81,7 @@ export const MyAccount = ({ thisUser, logInOut }) => {
         handleMessageShow={handleMessageShow}
         handleNewMessageShow={handleNewMessageShow}
         myID={myID}
-        myChats={myChats}
+        myChats={myChatArray}
       />
       <OpenMessage
         message={openMessage}
@@ -102,6 +134,21 @@ export const MyAccount = ({ thisUser, logInOut }) => {
                 style={{ display: thisUser ? 'inherit' : 'none' }}
               >
                 My Messages
+                <span
+                  id="haveUnread"
+                  style={{
+                    display: haveUnread ? 'inline-block' : 'none',
+                  }}
+                >
+                  &nbsp;&nbsp;&nbsp;
+                  <i
+                    className="fas fa-envelope"
+                    style={{
+                      color: 'var(--color-pallette-accent)',
+                      fontSize: 'small',
+                    }}
+                  ></i>
+                </span>
               </div>
               <Link
                 className="dropdown-item"

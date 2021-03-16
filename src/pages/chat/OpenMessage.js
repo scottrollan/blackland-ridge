@@ -26,9 +26,9 @@ const OpenMessage = ({ message, handleMessageClose, show }) => {
   const remove = require('lodash/remove');
 
   const openModal = () => {
-    document
-      .getElementById('endOfMessages')
-      .scrollIntoView({ behavior: 'smooth' });
+    // document
+    //   .getElementById('endOfMessages')
+    //   .scrollIntoView({ behavior: 'smooth' });
     //remove me from unread list
     let uList = [...message.unread];
     if (uList.includes(myID)) {
@@ -67,7 +67,6 @@ const OpenMessage = ({ message, handleMessageClose, show }) => {
       updatedAt: now,
     });
     setReplyText('');
-    $('#replyForm')[0].reset();
   };
 
   useEffect(() => {
@@ -84,9 +83,7 @@ const OpenMessage = ({ message, handleMessageClose, show }) => {
       cPhotoURLs = [...cPhotoURLs, chatter.chatterPhotoURL];
       cIDs = [...cIDs, chatter.chatterID];
     });
-    // cNames = uniqBy(cNames, chatterName);
-    // cPhotoURLs = uniq(cPhotoURLs);
-    // cIDs = uniq(cIDs);
+
     setChatterNames([...cNames]);
     setChatterPhotoURLs([...cPhotoURLs]);
     setChatterIDs([...cIDs]);
@@ -98,7 +95,19 @@ const OpenMessage = ({ message, handleMessageClose, show }) => {
         const newChatsArray = newData.messages;
         setChats([...newChatsArray]);
       }
+      if (document.getElementById('endOfMessages')) {
+        setTimeout(
+          () =>
+            document
+              .getElementById('endOfMessages')
+              .scrollIntoView({ behavior: 'smooth' }),
+          1500
+        );
+      }
     });
+    const unsubscribe = chatsCollection.onSnapshot(() => {});
+
+    return unsubscribe();
   }, [message, messageID]);
 
   return (
@@ -220,7 +229,7 @@ const OpenMessage = ({ message, handleMessageClose, show }) => {
                 style={{ '--photoURL': `url(${c.photoURL})` }}
               ></div>
               <div
-                id={index === lastIndex ? 'endOfMessages' : null}
+                // id={index === lastIndex ? 'endOfMessages' : null}
                 className={[
                   `${styles.speechBubble} ${
                     c.id === myID ? styles.myBubble : styles.notMyBubble
@@ -235,7 +244,7 @@ const OpenMessage = ({ message, handleMessageClose, show }) => {
             </div>
           );
         })}
-        {/* <div id="endOfMessages">.</div> */}
+        <div id="endOfMessages"></div>
       </Modal.Body>
       <Modal.Footer>
         <Form onSubmit={sendNewReply} className={styles.form} id="replyForm">
