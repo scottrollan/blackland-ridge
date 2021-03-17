@@ -10,7 +10,6 @@ import {
   OverlayTrigger,
   Tooltip,
 } from 'react-bootstrap';
-import $ from 'jquery';
 import styles from './Chat.module.scss';
 
 const uniqBy = require('lodash/uniqBy');

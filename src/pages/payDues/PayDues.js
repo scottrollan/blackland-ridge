@@ -8,7 +8,7 @@ export default function PayDues() {
     <>
       <QuickButtons />
       <div className={styles.payDues}>
-        <h3>Page Coming Soon...</h3>
+        <h3>Page Coming Soon... maybe.</h3>
         <br />
       </div>
       <Footer />
