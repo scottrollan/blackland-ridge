@@ -29,17 +29,21 @@ export const MyAccount = ({ logInOut }) => {
     setChatShow(false);
   };
   const handleMessageShow = (m) => {
+    //for <OpenMessage/>
     setOpenMessage({ ...m });
     setMessageShow(true);
   };
-  const handleNewMessageShow = () => {
-    setNewMessageShow(true);
-  };
   const handleMessageClose = () => {
+    //for <OpenMessage/>
     setMessageShow(false);
     setChatShow(true);
   };
+  const handleNewMessageShow = () => {
+    //for <NewMessage/>
+    setNewMessageShow(true);
+  };
   const handleNewMessageClose = () => {
+    //for <NewMessage/>
     setNewMessageShow(false);
     setChatShow(true);
   };
@@ -76,12 +80,8 @@ export const MyAccount = ({ logInOut }) => {
         });
         if (unreadArray.includes(myID)) {
           setHaveUnread(true);
-          console.log('My id is in the unreadArray');
-          console.log(unreadArray);
         } else {
           setHaveUnread(false);
-          console.log('My id is NOT in the unreadArray');
-          console.log(unreadArray);
         }
         setMyChatArray([...chats]);
       });

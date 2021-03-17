@@ -19,10 +19,13 @@ export default function NewMessageForm({ theseRecipients, closeNewMessage }) {
     e.preventDefault();
     //prepare for submission
     let recipientsIDs = [];
+    let recipientEmails = [];
     recipients.forEach((r) => {
       recipientsIDs = [...recipientsIDs, r.id];
+      recipientEmails = [...recipientEmails, r.email];
     });
     let unread = [...recipientsIDs];
+    let unreadEmails = [...recipientEmails];
     let chatters = [...recipientsIDs, myID]; //add myID to recipeints list
     let createdAt = now;
     let message = {
@@ -38,6 +41,7 @@ export default function NewMessageForm({ theseRecipients, closeNewMessage }) {
       createdAt,
       messages: [{ ...message }],
       unread,
+      unreadEmails,
       updatedAt,
     };
     chatsCollection.doc().set({

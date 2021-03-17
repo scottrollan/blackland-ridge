@@ -15,6 +15,9 @@ export const useProfiles = () => {
           name: profile.name,
           displayName: profile.displayName,
           photoURL: profile.photoURL,
+          receiveNotifications: profile.receiveNotifications,
+          email: profile.email,
+          phone: profile.phone,
         };
         profileArray = [...profileArray, profileInfo];
       });

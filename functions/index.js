@@ -115,6 +115,44 @@ exports.messageResponse = functions.firestore
     });
   });
 
+///// alert recipient(s) when there is a new Chat/Private Message /////
+exports.newChat = functions.firestore
+  .document('chats/{chatId}')
+  .onCreate(async (snap, context) => {
+    const data = snap.data();
+    const messagesArray = data.messages;
+    let parsedMessage = '';
+    const paragraphs = messagesArray[0].paragraphs;
+    paragraphs.forEach((p) => {
+      parsedMessage = `${parsedMessage}${p}<br>`;
+    });
+    const author = messagesArray[0].name;
+    const chatters = data.chatters;
+    const chattersNum = chatters.length;
+    const youAnd = chattersNum - 2;
+    const recipientEmails = data.unreadEmails;
+    const toEmails = recipientEmails.split().join(', ');
+
+    const mailOptions = {
+      from: 'blackland.ridge.notifications@gmail.com',
+      to: toEmails,
+      subject: 'You have a new private message.',
+      html: `<h2>from ${author}</h2>
+            <p>...to you and ${youAnd} others</p>
+            <p><span style="font-weight: bold;">${author}</span> said,  "<span style="font-style: italic;">${parsedMessage}</span>"</p>
+            <a href="https://blackland-ridge.com/" rel="noreferrer noopener"><button style="background-color: #b9d452; border: none; color: white; padding: 15px 32px; border-radius: 8px; text-align: center; text-decoration: none; display: inline-block;font-size: 16px;">Login to Respond to Your Message</button></a>
+    `,
+    };
+
+    return transporter.sendMail(mailOptions, (error, data) => {
+      if (error) {
+        console.log(error);
+        return false;
+      }
+      console.log('Email sent: ' + data.response);
+    });
+  });
+
 ///// URGENT alerts /////
 exports.urgentAlerts = functions.firestore
   .document('urgentAlerts/{urgentId}')

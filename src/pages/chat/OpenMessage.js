@@ -7,18 +7,19 @@ import {
 } from '../../firestore/index';
 import { createRandomString } from '../../functions/CreateRandomString';
 import { Modal, Form, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import $ from 'jquery';
 import styles from './OpenMessage.module.scss';
 
 const OpenMessage = ({ message, handleMessageClose, show }) => {
   const thisUser = useContext(UserContext);
   const me = thisUser.displayName;
   const myID = thisUser.id;
+  const myEmail = thisUser.email;
   const messageID = message.id ?? 'xyz';
   const myPhotoURL = thisUser.photoURL;
   const [chatterNames, setChatterNames] = useState([]);
   const [chatterPhotoURLs, setChatterPhotoURLs] = useState([]);
   const [chatterIDs, setChatterIDs] = useState([]);
+  const [chatterEmails, setChatterEmails] = useState([]);
   const [chats, setChats] = useState([]);
   const [replyText, setReplyText] = useState('');
 
@@ -56,10 +57,16 @@ const OpenMessage = ({ message, handleMessageClose, show }) => {
     unreadList = remove(unreadList, (u) => {
       return u !== myID;
     });
+    //add all chatter emails (except mine) to unreadEmails array
+    let unreadEmailList = [...chatterEmails];
+    unreadEmailList = remove(unreadEmailList, (u) => {
+      return u !== myEmail;
+    });
     //send reply and updated "unread" array to firestore
     chatsCollection.doc(messageID).update({
       messages: fsArrayUnion({ ...replyObj }),
       unread: unreadList,
+      unreadEmails: unreadEmailList,
       updatedAt: now,
     });
     setReplyText('');
@@ -70,6 +77,7 @@ const OpenMessage = ({ message, handleMessageClose, show }) => {
     let cNames = [];
     let cIDs = [];
     let cPhotoURLs = [];
+    let cEmails = [];
     let cChats = message.messages ?? [];
     theseChatters.forEach((chatter) => {
       cNames = [
@@ -78,11 +86,13 @@ const OpenMessage = ({ message, handleMessageClose, show }) => {
       ];
       cPhotoURLs = [...cPhotoURLs, chatter.chatterPhotoURL];
       cIDs = [...cIDs, chatter.chatterID];
+      cEmails = [...cEmails, chatter.chatterEmail];
     });
 
     setChatterNames([...cNames]);
     setChatterPhotoURLs([...cPhotoURLs]);
     setChatterIDs([...cIDs]);
+    setChatterEmails([...cEmails]);
     setChats([...cChats]);
     //listen for changes
     chatsCollection.doc(messageID).onSnapshot((doc) => {

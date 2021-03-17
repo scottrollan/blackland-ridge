@@ -81,6 +81,7 @@ export default function Chat({
                 chatterName: thisChatter.name,
                 chatterDisplayName: thisChatter.displayName,
                 chatterPhotoURL: thisChatter.photoURL,
+                chatterEmail: thisChatter.email,
               };
               theseChatters = [...theseChatters, { ...chatterObj }];
             });
