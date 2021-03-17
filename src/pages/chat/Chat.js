@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { UserContext, ProfilesContext, ChatsContext } from '../../App';
+import { UserContext, ProfilesContext } from '../../App';
 import { chatsCollection } from '../../firestore/index';
 import { createRandomString } from '../../functions/CreateRandomString';
 import { parseTimeLapsed } from '../../functions/ParseTimeLapsed';
@@ -24,7 +24,6 @@ export default function Chat({
 }) {
   const allUsers = useContext(ProfilesContext);
   const thisUser = useContext(UserContext);
-  const allChats = useContext(ChatsContext);
   const me = thisUser.displayName;
   const myID = thisUser.id;
   const [myChats, setMyChats] = useState([]);
@@ -42,7 +41,6 @@ export default function Chat({
 
   useEffect(() => {
     let mounted = true;
-
     try {
       let chats = [];
       chatsCollection
@@ -66,9 +64,6 @@ export default function Chat({
             let lastCommentObj = { ...mess[mess.length - 1] };
             const by = lastCommentObj.name;
             const sent = lastCommentObj.date.toDate();
-            // const today = new Date();
-            // const timeLapsed = today - sent;
-            // const time = parseTimeLapsed(timeLapsed);
             const quote = lastCommentObj.paragraphs[0];
 
             let lastComment = {
@@ -157,6 +152,10 @@ export default function Chat({
           flexDirection: 'column',
         }}
       >
+        <div style={{ display: myChats.length < 1 ? 'block' : 'none' }}>
+          No Messages
+        </div>
+
         {myChats.map((c, index) => {
           let chatters = c.theseChatters ?? [];
           let chatterNames = [];

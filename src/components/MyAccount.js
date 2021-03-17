@@ -19,6 +19,9 @@ export const MyAccount = ({ logInOut }) => {
   const [newMessageShow, setNewMessageShow] = useState(false);
   const [openMessage, setOpenMessage] = useState({});
   const [haveUnread, setHaveUnread] = useState(false);
+
+  const remove = require('lodash/remove');
+
   const handleChatShow = () => {
     setChatShow(true);
   };
@@ -50,23 +53,37 @@ export const MyAccount = ({ logInOut }) => {
     if (!myID) {
       return;
     }
-    let myChats = [];
+    let chats = [];
     let unreadArray = [];
     //listen for changes
     chatsCollection
       .where('chatters', 'array-contains', myID)
-      .onSnapshot((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          let data = { ...doc.data(), id: doc.id };
-          unreadArray = [...unreadArray, ...data.unread];
-          myChats = [...myChats, { ...data }];
+      .onSnapshot((snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          unreadArray = [];
+          let changeID = change.doc.id;
+          let changeData = { ...change.doc.data(), id: changeID };
+          let dataUnread = changeData.unread;
+          unreadArray = [...unreadArray, ...dataUnread]; // add all unread to array
+          chats = [...chats, changeData];
+          if (change.type === 'modified') {
+            //~if not initial fetch
+            chats = remove(chats, (c) => {
+              return c.id !== changeID; //remove pre-change element
+            });
+            chats = [...chats, changeData]; //replace with new element data
+          }
         });
         if (unreadArray.includes(myID)) {
           setHaveUnread(true);
+          console.log('My id is in the unreadArray');
+          console.log(unreadArray);
         } else {
           setHaveUnread(false);
+          console.log('My id is NOT in the unreadArray');
+          console.log(unreadArray);
         }
-        setMyChatArray([...myChats]);
+        setMyChatArray([...chats]);
       });
     const unsubscribe = chatsCollection.onSnapshot(() => {});
 

@@ -26,10 +26,6 @@ const OpenMessage = ({ message, handleMessageClose, show }) => {
   const remove = require('lodash/remove');
 
   const openModal = () => {
-    // document
-    //   .getElementById('endOfMessages')
-    //   .scrollIntoView({ behavior: 'smooth' });
-    //remove me from unread list
     let uList = [...message.unread];
     if (uList.includes(myID)) {
       uList = remove(uList, (c) => {
@@ -55,7 +51,7 @@ const OpenMessage = ({ message, handleMessageClose, show }) => {
       paragraphs: [...textArray],
       photoURL: myPhotoURL,
     };
-    //add all recipients (not me) to unread array
+    //add all chatters (except me) to unread array
     let unreadList = [...chatterIDs];
     unreadList = remove(unreadList, (u) => {
       return u !== myID;
