@@ -129,19 +129,29 @@ exports.newChat = functions.firestore
     const author = messagesArray[0].name;
     const chatters = data.chatters;
     const chattersNum = chatters.length;
-    const youAnd = chattersNum - 2;
+    const moreThanMe = chattersNum - 2;
+    let youAnd = '...to you';
+    if (moreThanMe > 0) {
+      if (moreThanMe > 1) {
+        youAnd = `...to you and ${moreThanMe} others`;
+      } else {
+        youAnd = '...to you and 1 other person';
+      }
+    }
+
     const recipientEmails = data.unreadEmails;
-    const toEmails = recipientEmails.split().join(', ');
+    const toEmails = recipientEmails.join(', ');
 
     const mailOptions = {
       from: 'blackland.ridge.notifications@gmail.com',
-      to: toEmails,
+      to: 'blackland.ridge.notifications@gmail.com',
+      bcc: toEmails,
       subject: 'You have a new private message.',
-      html: `<h2>from ${author}</h2>
-            <p>...to you and ${youAnd} others</p>
-            <p><span style="font-weight: bold;">${author}</span> said,  "<span style="font-style: italic;">${parsedMessage}</span>"</p>
-            <a href="https://blackland-ridge.com/" rel="noreferrer noopener"><button style="background-color: #b9d452; border: none; color: white; padding: 15px 32px; border-radius: 8px; text-align: center; text-decoration: none; display: inline-block;font-size: 16px;">Login to Respond to Your Message</button></a>
-    `,
+      html: ` <h2>from ${author}</h2>
+              <p>${youAnd}</p>
+              <p><span style="font-weight: bold;">${author}</span> said,  "<span style="font-style: italic;">${parsedMessage}</span>"</p>
+              <a href="https://blackland-ridge.com/" rel="noreferrer noopener"><button style="background-color: #b9d452; border: none; color: white; padding: 15px 32px; border-radius: 8px; text-align: center; text-decoration: none; display: inline-block;font-size: 16px;">Login to Respond to Your Message</button></a>
+      `,
     };
 
     return transporter.sendMail(mailOptions, (error, data) => {
