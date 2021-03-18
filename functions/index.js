@@ -176,12 +176,11 @@ exports.urgentAlerts = functions.firestore
     const mailOptions = {
       from: 'blackland.ridge.notifications@gmail.com',
       to: 'blackland.ridge.notifications@gmail.com',
-      bcc: 'barry.rollan@gmail.com', //add emails here
-      subject: 'URGENT Alert - Blackland Ridge',
+      bcc: emails, //add emails here
+      subject: '***TESTING**** URGENT Alert - Blackland Ridge',
       html: `<h2>${title}</h2>
           <p style="font-weight: bold;">${title}</p>
           <p>${poster} said,  "<span style="font-style: italic;">${urgentMessage}</span>"</p>
-          <p>${emails}</p>
           <a href="https://blackland-ridge.com/" rel="noreferrer noopener"><button style="background-color: #b9d452; border: none; color: white; padding: 15px 32px; border-radius: 8px; text-align: center; text-decoration: none; display: inline-block;font-size: 16px;">Go To BR Messages</button></a>
   `,
     };
