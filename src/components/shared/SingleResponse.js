@@ -10,6 +10,7 @@ import styles from './SingleResponse.module.scss';
 
 const SingleResponse = ({ m }) => {
   const thisResponse = { ...m };
+  console.log(thisResponse);
   const thisUser = useContext(UserContext);
   const myID = thisUser.id ?? '';
   const [show, setShow] = useState(false);
@@ -27,7 +28,7 @@ const SingleResponse = ({ m }) => {
   let rString = createRandomString(11);
   let photoURL;
   let thisAuthor;
-  const authorRef = m.authorRef;
+  const authorRef = m.authorRef ?? '';
   const authID = authorRef.id;
   if (authID === myID) {
     authorIsMe = true;

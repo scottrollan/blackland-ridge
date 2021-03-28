@@ -181,10 +181,10 @@ const Comment = ({
         updateWithoutNotification(comment);
       }
     }
-    if (messageType === 'Urgent') {
-      const urgentData = { me, message, title };
-      sendUrgentAlert(urgentData);
-    }
+    // if (messageType === 'Urgent') {
+    //   const urgentData = { me, message, title };
+    //   sendUrgentAlert(urgentData);
+    // }
     //resert form and state
     setTitle('');
     setMessage('');
