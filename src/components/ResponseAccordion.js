@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../App';
 import Responses from './Responses';
 import Comment from './shared/Comment';
@@ -15,9 +15,10 @@ import styles from './ResponseAccordion.module.scss';
 
 const ResponseAccordion = ({ m }) => {
   const myResponses = m.responses ?? [];
-  const responsesLength = myResponses.length;
+  // const responsesLength = myResponses.length;
   const thisUser = useContext(UserContext);
   const [show, setShow] = useState(false);
+  const [responsesLength, setResponsesLength] = useState([]);
 
   const handlePopoverShow = () => {
     setShow(true);
@@ -25,6 +26,10 @@ const ResponseAccordion = ({ m }) => {
   const handlePopoverHide = () => {
     setShow(false);
   };
+
+  useEffect(() => {
+    const messID = m.id;
+  }, []);
 
   return (
     <div className={styles.root} style={{ display: 'block' }}>

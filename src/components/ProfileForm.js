@@ -4,6 +4,7 @@ import { signOut, profilesCollection, usersRef } from '../firestore';
 import { Button, LinearProgress } from '@material-ui/core';
 import { Form } from 'react-bootstrap';
 import { createRandomString } from '../functions/CreateRandomString';
+import { Redirect } from 'react-router-dom';
 import $ from 'jquery';
 import styles from './ProfileForm.module.scss';
 
@@ -80,6 +81,7 @@ const ProfileForm = ({ thisUser, setError, handleClose }) => {
   });
   const [image, setImage] = useState(null);
   const [progress, setProgress] = useState(0);
+  const [redirect, setRedirect] = useState(null);
 
   const phoneMask = () => {
     let num = $('#profilePhoneInput').val().replace(/\D/g, '');
@@ -186,8 +188,12 @@ const ProfileForm = ({ thisUser, setError, handleClose }) => {
 
   const logout = () => {
     signOut();
+    setRedirect(true);
   };
 
+  if (redirect) {
+    return <Redirect to="/"></Redirect>;
+  }
   return (
     <Form
       id="profileForm"

@@ -1,6 +1,6 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const nodemailer = require('nodemailer');
+
 require('dotenv').config();
 
 admin.initializeApp(functions.config().firebase);
@@ -177,7 +177,7 @@ exports.urgentAlerts = functions.firestore
       from: 'blackland.ridge.notifications@gmail.com',
       to: 'blackland.ridge.notifications@gmail.com',
       bcc: emails, //add emails here
-      subject: '***TESTING**** URGENT Alert - Blackland Ridge',
+      subject: 'URGENT Alert - Blackland Ridge',
       html: `<h2>${title}</h2>
           <p style="font-weight: bold;">${title}</p>
           <p>${poster} said,  "<span style="font-style: italic;">${urgentMessage}</span>"</p>
