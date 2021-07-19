@@ -28,6 +28,7 @@
 }
 .paragraph {
   max-width: 400px;
+  margin: 1rem 0;
   @media screen and (max-width: $breakpoint-small) {
     max-width: 90vw;
   }
