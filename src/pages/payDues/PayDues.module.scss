@@ -1,8 +1,42 @@
 @import '../../styles/custom-properties.scss';
 
 .payDues {
-  z-index: 2;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  z-index: 10;
+  background: transparent;
+  border-radius: 0.25rem 1rem 1rem;
+  margin: 0 2rem 2rem;
+  @media screen and (max-width: $breakpoint-small) {
+    margin: 0 0.5rem;
+  }
 }
 .payDues h3 {
   color: var(--color-pallette-dark);
+}
+.body {
+  min-height: 20vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+.paragraph {
+  max-width: 400px;
+}
+
+.paypalDiv {
+  border: 1px solid var(--paypal-blue);
+  padding: 2vw;
+  border-radius: 2vw;
+}
+
+.link {
+  font-size: larger;
+  &:hover,
+  &:visited,
+  &:active {
+    text-decoration: none;
+  }
 }
