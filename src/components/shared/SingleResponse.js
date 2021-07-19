@@ -10,7 +10,6 @@ import styles from './SingleResponse.module.scss';
 
 const SingleResponse = ({ m }) => {
   const thisResponse = { ...m };
-  console.log(thisResponse);
   const thisUser = useContext(UserContext);
   const myID = thisUser.id ?? '';
   const [show, setShow] = useState(false);

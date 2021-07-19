@@ -47,7 +47,6 @@ export default function NavDropdownItems({ collapseNavbar }) {
         to="/payDues"
         className="dropdown-item"
         onClick={() => collapseNavbar()}
-        style={{ display: thisUser ? 'inherit' : 'none' }}
       >
         Pay Your Dues
       </Link>

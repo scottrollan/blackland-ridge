@@ -28,8 +28,10 @@ const ResponseAccordion = ({ m }) => {
   };
 
   useEffect(() => {
-    const messID = m.id;
-  }, []);
+    const totalResponses = m.responses;
+    const totalResponsesLength = totalResponses.length;
+    setResponsesLength(totalResponsesLength);
+  }, [m]);
 
   return (
     <div className={styles.root} style={{ display: 'block' }}>
