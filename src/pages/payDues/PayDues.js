@@ -29,10 +29,17 @@ export default function PayDues() {
           </div>
 
           <div className={styles.paragraph}>
-            Or you can write check, payable to{' '}
+            Or you can write a check, payable to{' '}
             <b>Blackland Ridge Garden Club</b>, and drop it off at the home of
-            Kim Timson, 94 Lakeshore Circle. Just place your check in the
-            mailbox.
+            Kim Timson,{' '}
+            <a
+              href="https://www.google.com/maps/place/94+Lakeshore+Cir+NE,+Marietta,+GA+30067/@33.9522419,-84.4321876,18z/"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              94 Lakeshore Circle
+            </a>
+            . Just place your check in the mailbox.
           </div>
         </div>
         <br />

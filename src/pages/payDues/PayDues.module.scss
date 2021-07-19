@@ -8,6 +8,7 @@
   background: transparent;
   border-radius: 0.25rem 1rem 1rem;
   margin: 0 2rem 2rem;
+  min-height: 40vh;
   @media screen and (max-width: $breakpoint-small) {
     margin: 0 0.5rem;
   }
@@ -21,9 +22,15 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  @media screen and (max-width: $breakpoint-small) {
+    min-height: 80vw;
+  }
 }
 .paragraph {
   max-width: 400px;
+  @media screen and (max-width: $breakpoint-small) {
+    max-width: 90vw;
+  }
 }
 
 .paypalDiv {
