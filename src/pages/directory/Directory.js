@@ -1,10 +1,12 @@
 import React, { useEffect, useContext } from 'react';
 import QuickButtons from '../../components/shared/QuickButtons';
 import Footer from '../../components/shared/Footer';
+import NewMessageForm from '../chat/NewMessageForm';
 import { profilesCollection } from '../../firestore';
-import { CardDeck, Card, Button } from 'react-bootstrap';
+import { CardDeck, Card, Button, Modal } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { UserContext } from '../../App';
+import $ from 'jquery';
 import styles from './Directory.module.scss';
 
 const Directory = () => {
@@ -76,6 +78,14 @@ const Directory = () => {
     };
   }, []);
 
+  const createNewMessage = (id) => {
+    console.log(id);
+    $(`#${id}`).attr('show', true);
+  };
+  const cancelNewMessage = (id) => {
+    $(`#${id}`).attr('show', false);
+  };
+
   return (
     <>
       <QuickButtons />
@@ -94,153 +104,92 @@ const Directory = () => {
         <CardDeck className={styles.cardGrid}>
           {neighborList.map((n) => {
             return (
-              <Card
-                key={n.photoURL}
-                className={styles.card}
-                style={{
-                  display: n.includeInDirectory ? 'flex' : 'none',
-                }}
-              >
-                <Card.Header>{addressMode ? n.address : n.name}</Card.Header>
-                <Card.Body className={styles.cardBody}>
-                  <div className={styles.infoDiv}>
-                    <Card.Text
-                      style={{ fontSize: 'larger', fontWeight: '500' }}
-                    >
-                      {addressMode ? n.name : n.address}
-                    </Card.Text>
+              <span key={`card${n.id}`}>
+                <Modal
+                  id={`newMessageTo${n.id}`}
+                  show={false}
+                  onHide={() => cancelNewMessage(`newMessageTo${n.id}`)}
+                >
+                  <Modal.Header closeButton>Message to {n.name}</Modal.Header>
+                  <Modal.Body>
+                    <NewMessageForm
+                      theseRecipients={[n]}
+                      closeNewMessage={() =>
+                        cancelNewMessage(`newMessageTo${n.id}`)
+                      }
+                    />
+                  </Modal.Body>
+                </Modal>
+                <Card
+                  className={styles.card}
+                  style={{
+                    display: n.includeInDirectory ? 'flex' : 'none',
+                  }}
+                >
+                  <Card.Header>{addressMode ? n.address : n.name}</Card.Header>
+                  <Card.Body className={styles.cardBody}>
+                    <div className={styles.infoDiv}>
+                      <Card.Text
+                        style={{ fontSize: 'larger', fontWeight: '500' }}
+                      >
+                        {addressMode ? n.name : n.address}
+                      </Card.Text>
 
-                    <Card.Text
-                      style={{
-                        display: n.phoneInDirectory ? 'block' : 'none',
-                      }}
-                    >
-                      {n.phone}
-                    </Card.Text>
-                    <Card.Text
-                      style={{
-                        display: n.emailInDirectory ? 'block' : 'none',
-                      }}
-                    >
-                      {n.email}
-                    </Card.Text>
-                  </div>
-                  <div className={styles.photoDiv}>
-                    <a
-                      href={n.photoURL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={styles.photo}
-                      style={{ backgroundImage: `url(${n.photoURL})` }}
-                    >
-                      <span></span>
-                    </a>
+                      <Card.Text
+                        style={{
+                          display: n.phoneInDirectory ? 'block' : 'none',
+                        }}
+                      >
+                        {n.phone}
+                      </Card.Text>
+                      <Card.Text
+                        style={{
+                          display: n.emailInDirectory ? 'block' : 'none',
+                        }}
+                      >
+                        {n.email}
+                      </Card.Text>
+                    </div>
+                    <div className={styles.photoDiv}>
+                      <a
+                        href={n.photoURL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.photo}
+                        style={{ backgroundImage: `url(${n.photoURL})` }}
+                      >
+                        <span></span>
+                      </a>
 
-                    <Button
-                      style={{
-                        display: n.name === me ? 'none' : 'block',
-                      }}
-                      onClick={() => history.push('/myProfile')}
-                      className={styles.sendMessage}
-                    >
-                      Message
-                    </Button>
-                    <Button
-                      style={{
-                        display: n.name === me ? 'block' : 'none',
-                      }}
-                      onClick={() => history.push('/myProfile')}
-                      className={styles.editProfile}
-                    >
-                      Edit Profile
-                    </Button>
-                  </div>
-                </Card.Body>
-              </Card>
+                      <Button
+                        style={{
+                          display: n.name === me ? 'none' : 'block',
+                        }}
+                        onClick={
+                          () => console.log(n.id)
+                          // () => $(`#newMessageTo${n.id}`).attr('show', true))
+                        }
+                        className={styles.sendMessage}
+                      >
+                        Message
+                      </Button>
+
+                      <Button
+                        style={{
+                          display: n.name === me ? 'block' : 'none',
+                        }}
+                        onClick={() => history.push('/myProfile')}
+                        className={styles.editProfile}
+                      >
+                        Edit Profile
+                      </Button>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </span>
             );
           })}
         </CardDeck>
-
-        {/* ////////////////secon "tab"/////////////////// */}
-        {/* <CardDeck className={styles.cardGrid}>
-              {neighborList.map((n) => {
-                return (
-                  <Card
-                    key={n.photoURL}
-                    className={styles.card}
-                    style={{
-                      display: n.includeInDirectory ? 'inherit' : 'none',
-                    }}
-                  >
-                    <Card.Header
-                      style={{
-                        display: addressMode ? 'inherit' : 'none',
-                      }}
-                    >
-                      {n.address}
-                    </Card.Header>
-                    <Card.Body className={styles.cardBody}>
-                      <div className={styles.infoDiv}>
-                        <Card.Title>{n.name}</Card.Title>
-
-                        <Card.Text
-                          style={{ display: addressMode ? 'none' : 'inherit' }}
-                        >
-                          {n.address}
-                        </Card.Text>
-                        <Card.Text
-                          style={{
-                            display: n.phoneInDirectory ? 'inherit' : 'none',
-                          }}
-                        >
-                          {n.phone}
-                        </Card.Text>
-                        <Card.Text
-                          style={{
-                            display: n.emailInDirectory ? 'inherit' : 'none',
-                          }}
-                        >
-                          {n.email}
-                        </Card.Text>
-                      </div>
-
-                      <div className={styles.photoDiv}>
-                        <a
-                          href={n.photoURL}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={styles.photo}
-                          style={{
-                            backgroundImage: `url(${n.photoURL})`,
-                          }}
-                        >
-                          <span></span>
-                        </a>
-
-                        <Button
-                          style={{
-                            display: n.name === me ? 'none' : 'block',
-                          }}
-                          onClick={() => history.push('/myProfile')}
-                          className={styles.sendMessage}
-                        >
-                          Message
-                        </Button>
-                        <Button
-                          style={{
-                            display: n.name === me ? 'block' : 'none',
-                          }}
-                          onClick={() => history.push('/myProfile')}
-                          className={styles.editProfile}
-                        >
-                          Edit Profile
-                        </Button>
-                      </div>
-                    </Card.Body>
-                  </Card>
-                );
-              })}
-            </CardDeck> */}
       </div>
       <Footer />
     </>

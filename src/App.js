@@ -68,7 +68,11 @@ const App = () => {
 
                 <Loading />
                 <ProfileModal />
-                <Authentication show={showLogin} thisUser={thisUser} />
+                <Authentication
+                  show={showLogin}
+                  thisUser={thisUser}
+                  hide={hideLoginPopup}
+                />
               </UnreadContext.Provider>
             </ChatsContext.Provider>
           </ProfilesContext.Provider>

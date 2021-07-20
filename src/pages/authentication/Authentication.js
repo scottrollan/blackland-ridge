@@ -7,7 +7,7 @@ import ErrorMessage from '../../components/ErrorMessage';
 import ResetPassword from '../../components/ResetPassword';
 import styles from './Authentication.module.scss';
 
-const Authentication = ({ show }) => {
+const Authentication = ({ show, hide }) => {
   // const user = useContext(UserContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -101,8 +101,9 @@ const Authentication = ({ show }) => {
       show={show}
       size="lg"
       style={{ marginTop: '80px' }}
-      backdrop="static"
-      data-keyboard={false}
+      // backdrop="static"
+      // data-keyboard={false}
+      onHide={() => hide()}
     >
       <ErrorMessage
         errorMessage={errorMessage}
@@ -114,7 +115,7 @@ const Authentication = ({ show }) => {
       <div className={styles.split}>
         <div className={styles.imageHalf}></div>
         <div className={styles.wordsHalf}>
-          <Modal.Header style={{ justifyContent: 'center' }}>
+          <Modal.Header style={{ justifyContent: 'center' }} closeButton>
             <Modal.Title style={{ textAlign: 'center' }}>
               Sign in to Blackland Ridge
             </Modal.Title>
