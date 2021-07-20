@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import QuickButtons from '../../components/shared/QuickButtons';
 import Footer from '../../components/shared/Footer';
 import NewMessageForm from '../chat/NewMessageForm';
@@ -14,8 +14,10 @@ const Directory = () => {
   const me = thisUser.name;
   const history = useHistory();
 
-  const [neighborList, setNeighborList] = React.useState([]);
-  const [addressMode, setAddressMode] = React.useState(true);
+  const [neighborList, setNeighborList] = useState([]);
+  const [addressMode, setAddressMode] = useState(true);
+  const [showNewMessage, setShowNewMessage] = useState(false);
+  const [recipient, setRecipient] = useState([]);
 
   let neighbors = [];
 
@@ -43,6 +45,14 @@ const Directory = () => {
     setNeighborList([...neighbors]);
     neighbors = [];
     setAddressMode(false);
+  };
+
+  const createNewMessage = (r) => {
+    const arrayOfOne = [r];
+    setRecipient([...arrayOfOne]);
+    setShowNewMessage(true);
+    $('#messageTo').text(`Message to ${r.name}`);
+    $('#test').text('new');
   };
 
   useEffect(() => {
@@ -78,17 +88,20 @@ const Directory = () => {
     };
   }, []);
 
-  const createNewMessage = (id) => {
-    console.log(id);
-    $(`#${id}`).attr('show', true);
-  };
-  const cancelNewMessage = (id) => {
-    $(`#${id}`).attr('show', false);
-  };
-
   return (
     <>
       <QuickButtons />
+      <Modal show={showNewMessage} onHide={() => setShowNewMessage(false)}>
+        <Modal.Header closeButton id="messageTo">
+          <span id="test">old</span>
+        </Modal.Header>
+        <Modal.Body>
+          <NewMessageForm
+            theseRecipients={recipient}
+            closeNewMessage={() => setShowNewMessage(false)}
+          />
+        </Modal.Body>
+      </Modal>
       <div
         className={styles.directory}
         style={{ display: thisUser ? 'initial' : 'none' }}
@@ -105,21 +118,6 @@ const Directory = () => {
           {neighborList.map((n) => {
             return (
               <span key={`card${n.id}`}>
-                <Modal
-                  id={`newMessageTo${n.id}`}
-                  show={false}
-                  onHide={() => cancelNewMessage(`newMessageTo${n.id}`)}
-                >
-                  <Modal.Header closeButton>Message to {n.name}</Modal.Header>
-                  <Modal.Body>
-                    <NewMessageForm
-                      theseRecipients={[n]}
-                      closeNewMessage={() =>
-                        cancelNewMessage(`newMessageTo${n.id}`)
-                      }
-                    />
-                  </Modal.Body>
-                </Modal>
                 <Card
                   className={styles.card}
                   style={{
@@ -161,18 +159,15 @@ const Directory = () => {
                         <span></span>
                       </a>
 
-                      <Button
+                      {/* <Button
                         style={{
                           display: n.name === me ? 'none' : 'block',
                         }}
-                        onClick={
-                          () => console.log(n.id)
-                          // () => $(`#newMessageTo${n.id}`).attr('show', true))
-                        }
+                        onClick={() => createNewMessage(n)}
                         className={styles.sendMessage}
                       >
                         Message
-                      </Button>
+                      </Button> */}
 
                       <Button
                         style={{
