@@ -82,4 +82,13 @@ export const referralCategories = [
       'Nail Techs',
     ],
   },
+  {
+    category: 'Professional Services',
+    subcategories: [
+      'Accountants',
+      'Financial Planners',
+      'Lawyers',
+      'Real Estate Agents',
+    ],
+  },
 ];
