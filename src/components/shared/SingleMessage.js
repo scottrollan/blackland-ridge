@@ -4,6 +4,11 @@ import ResponseAccordion from '../ResponseAccordion';
 import { profilesCollection } from '../../firestore/index';
 import { createRandomString } from '../../functions/CreateRandomString';
 import $ from 'jquery';
+import ReactHtmlParser, {
+  processNodes,
+  convertNodeToElement,
+  htmlparser2,
+} from 'react-html-parser';
 import styles from './SingleMessage.module.scss';
 
 const SingleMessage = ({ m }) => {
@@ -88,20 +93,12 @@ const SingleMessage = ({ m }) => {
           <div
             className={!newThread && authorIsMe ? styles.quoteMe : styles.quote}
           >
-            {m.message.map((p) => {
-              const pKey = createRandomString(10);
-              return <p key={pKey}>{p}</p>;
-            })}
+            {ReactHtmlParser(m.message)}
           </div>
         </div>
       </div>
       {/*\/  ONLY FOR SCREENS SMALLER THAN BREAKPOINT MEDIUM \/ */}
-      <div className={styles.mobileQuote}>
-        {m.message.map((p) => {
-          const pKey = createRandomString(10);
-          return <p key={pKey}>{p}</p>;
-        })}
-      </div>
+      <div className={styles.mobileQuote}>{ReactHtmlParser(m.message)}</div>
       <div className={styles.messageImagesDiv}>
         {m.attachedImages
           ? m.attachedImages.map((i) => {

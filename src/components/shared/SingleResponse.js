@@ -5,6 +5,11 @@ import ResponseIcons from './ResponseIcons';
 import { profilesCollection } from '../../firestore/index';
 import { createRandomString } from '../../functions/CreateRandomString';
 import { Overlay, Tooltip, OverlayTrigger, Popover } from 'react-bootstrap';
+import ReactHtmlParser, {
+  processNodes,
+  convertNodeToElement,
+  htmlparser2,
+} from 'react-html-parser';
 import $ from 'jquery';
 import styles from './SingleResponse.module.scss';
 
@@ -88,10 +93,7 @@ const SingleResponse = ({ m }) => {
           ref={target}
           onClick={() => setShowInfo(!showInfo)}
         >
-          {thisResponse.message.map((p) => {
-            const pKey = createRandomString(10);
-            return <p key={pKey}>{p}</p>;
-          })}
+          {ReactHtmlParser(thisResponse.message)}
         </div>
         <Overlay target={target.current} show={showInfo}>
           {(props) => (

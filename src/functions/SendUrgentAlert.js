@@ -1,7 +1,10 @@
 import { profilesCollection, urgentAlertsCollection } from '../firestore/index';
 
+require('dotenv').config();
+
 export const sendUrgentAlert = async (data) => {
   let emails = 'blackland.ridge.notifications@gmail.com';
+  let phones = "'+14048405408'";
   profilesCollection
     .where('receiveNotifications', '==', true)
     .get()
@@ -9,16 +12,21 @@ export const sendUrgentAlert = async (data) => {
       querySnapshot.forEach((doc) => {
         const profile = doc.data();
         emails = emails.concat(', ', profile.email);
+        if (profile.textUrgentAlerts) {
+          const phoneNo = profile.phone;
+          const noNonNumbers = phoneNo.replace(/\D/g, '');
+          phones = phones.concat(`, '+1${noNonNumbers}'`);
+        }
       });
 
       let document = {
         emails: emails,
+        phones: phones,
         urgentMessage: data.message,
         poster: data.me,
         title: data.title,
       };
-
-      console.log(document);
+      //add document to urgentMessages so the cloud function triggers
       try {
         urgentAlertsCollection.doc().set({ ...document });
       } catch (error) {

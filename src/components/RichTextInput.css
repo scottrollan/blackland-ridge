@@ -1,0 +1,36 @@
+.toolbars {
+  width: 100%;
+  background-color: transparent;
+}
+.editorContainer {
+  width: 100%;
+}
+
+.editors {
+  border: 1px gray solid;
+  padding: 1rem;
+  border-radius: 0.25rem;
+}
+
+.rdw-option-wrapper {
+  border-radius: 0.25rem;
+  margin-right: 0.25em;
+  width: auto;
+  padding: 0.75rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.rdw-option-wrapper img {
+  margin: 0 !important;
+}
+
+.editors {
+  background-color: white;
+}
+
+a:link,
+a:visited {
+  /* color: linear-gradient(to bottom, #6a11cb 0%, #2575fc 100%); */
+  color: radial-gradient(#16d9e3 0%, #30c7ec 47%, #46aef7 100%);
+}
