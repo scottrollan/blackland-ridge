@@ -3,7 +3,7 @@ import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './RichTextInput.css';
 
-const RichTextInput = ({ onEditorStateChange, editorState }) => {
+const RichTextInput = ({ onEditorStateChange, editorState, placeholder }) => {
   return (
     <div>
       <Editor
@@ -18,7 +18,7 @@ const RichTextInput = ({ onEditorStateChange, editorState }) => {
         wrapperClassName="editorContainer"
         editorClassName="editors"
         onEditorStateChange={onEditorStateChange}
-        placeholder="Your message..."
+        placeholder={placeholder}
       />
     </div>
   );

@@ -98,29 +98,31 @@ exports.messageResponse = functions.firestore
   .document('responseTriggers/{rTriggerId}')
   .onCreate(async (snapshot, context) => {
     const data = snapshot.data();
+    const authorEmail = data.authorEmail;
     const responderEmail = data.responderEmail;
     const responder = data.responder;
-    const snippet = data.snippet;
+    const message = data.message;
     const title = data.title;
 
-    // const mailOptions = {
-    //   from: 'blackland.ridge.notifications@gmail.com',
-    //   to: authorEmail,
-    //   subject: 'A response to your message:',
-    //   html: `<h2>People are talking...</h2>
-    //         <p>In response to your post <span style="font-style: italic; font-weight: bold;">${title}</span></p>
-    //         <p><span style="font-weight: bold;">${responder}</span> said,  "<span style="font-style: italic;">${snippet}</span>"</p>
-    //         <a href="https://blackland-ridge.com/" rel="noreferrer noopener"><button style="background-color: #b9d452; border: none; color: white; padding: 15px 32px; border-radius: 8px; text-align: center; text-decoration: none; display: inline-block;font-size: 16px;">Go To BR Messages</button></a>
-    // `,
-    // };
+    const mailOptions = {
+      from: 'blackland.ridge.notifications@gmail.com',
+      to: 'blackland.ridge.notifications@gmail.com',
+      bcc: authorEmail,
+      subject: 'A response to your message:',
+      html: `<h2>People are talking...</h2>
+            <p>In response to your post <span style="font-style: italic; font-weight: bold;">${title}</span></p>
+            <p><span style="font-weight: bold;">${responder} said:</span></p>${message}
+            <a href="https://blackland-ridge.com/" rel="noreferrer noopener"><button style="background-color: #b9d452; border: none; color: white; padding: 15px 32px; border-radius: 8px; text-align: center; text-decoration: none; display: inline-block;font-size: 16px;">Go To BR Messages</button></a>
+    `,
+    };
 
-    // return transporter.sendMail(mailOptions, (error, data) => {
-    //   if (error) {
-    //     console.log(error);
-    //     return false;
-    //   }
-    //   console.log('Email sent: ' + data.response);
-    // });
+    return transporter.sendMail(mailOptions, (error, data) => {
+      if (error) {
+        console.log(error);
+        return false;
+      }
+      console.log('Email sent: ' + data.response);
+    });
   });
 
 ///// alert recipient(s) when there is a new Chat/Private Message /////
@@ -192,7 +194,8 @@ exports.urgentAlerts = functions.firestore
       subject: 'URGENT Alert - Blackland Ridge',
       html: `<h2>${title}</h2>
             <p style="font-weight: bold;">${title}</p>
-            <p>${poster} said,  "<span style="font-style: italic;">${urgentMessage}</span>"</p>
+            <p>${poster} said:</p>  
+            ${urgentMessage}
             <a href="https://blackland-ridge.com/" rel="noreferrer noopener"><button style="background-color: #b9d452; border: none; color: white; padding: 15px 32px; border-radius: 8px; text-align: center; text-decoration: none; display: inline-block;font-size: 16px;">Go To BR Messages</button></a>
             <p>${phones}</p>
             <p>${emails}</p>

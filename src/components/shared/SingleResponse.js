@@ -5,11 +5,7 @@ import ResponseIcons from './ResponseIcons';
 import { profilesCollection } from '../../firestore/index';
 import { createRandomString } from '../../functions/CreateRandomString';
 import { Overlay, Tooltip, OverlayTrigger, Popover } from 'react-bootstrap';
-import ReactHtmlParser, {
-  processNodes,
-  convertNodeToElement,
-  htmlparser2,
-} from 'react-html-parser';
+import ReactHtmlParser from 'react-html-parser';
 import $ from 'jquery';
 import styles from './SingleResponse.module.scss';
 

@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { EditorState, convertToRaw } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
+import { EditorState, ContentState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import Loading from './Loading';
 import FileUpload from './FileUpload';
@@ -11,11 +10,11 @@ import {
   messagesCollection,
   fsArrayUnion,
   profilesCollection,
-  responseTriggers,
 } from '../../firestore/index';
 import { Button, InputGroup, DropdownButton, Dropdown } from 'react-bootstrap';
 import { UserContext } from '../../App';
 import { LoginContext } from '../../App';
+import { sendResponseNotification } from '../../functions/SendResponseNotification';
 import { sendUrgentAlert } from '../../functions/SendUrgentAlert';
 import { createRandomString } from '../../functions/CreateRandomString';
 import { Form } from 'react-bootstrap';
@@ -36,10 +35,11 @@ const Comment = ({
   const myEmail = thisUser.email;
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
-  const [response, setResponse] = useState({});
+  const [responseTriggerInfo, setResponseTriggerInfo] = useState({});
   const [attachedImages, setAttachedImages] = useState([]);
   const [progress, setProgress] = useState(0);
   const [messageType, setMessageType] = useState('General');
+  const [messageID, setMessageID] = useState('');
   const [authorID, setAuthorID] = useState();
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
@@ -47,12 +47,12 @@ const Comment = ({
     setEditorState(newState);
     const str = draftToHtml(convertToRaw(newState.getCurrentContent()));
     setMessage(str);
-    let snippet = str.substr(0, 144);
-    setResponse({
+    setResponseTriggerInfo({
+      authorEmail: m.authorEmail,
       responder: me,
       responderEmail: myEmail,
-      snippet: snippet,
-      title: title,
+      message: str,
+      title: m.title,
     });
   };
 
@@ -100,26 +100,6 @@ const Comment = ({
   const lastNotificationSent = m.lastResponseNotification ?? wayBack;
   const lastNotificationDate = lastNotificationSent.toDate();
 
-  const responseNotification = (comment) => {
-    console.log(comment);
-    return;
-    //runs if !newThread && > 24hrs since last message notification && receiveNotifications = true
-    try {
-      //adds a doc to responseTriggers
-      responseTriggers.doc().set(...response);
-      //upadate orginal author profile with new lastNotified timestamp
-      profilesCollection.doc(authorID).update({ lastNotified: now });
-      //update message with reply in responses array, new timestamps
-      messagesCollection.doc(`${m.id}`).update({
-        responses: fsArrayUnion({ ...comment }),
-        updatedAt: now,
-        lastResponseNotification: now,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const updateWithoutNotification = (comment) => {
     console.log(
       `Updating timestamp for "updatedAt" on message document ${m.id}`
@@ -128,7 +108,7 @@ const Comment = ({
     try {
       //update message with reply and new updatedAt timestamp
       messagesCollection.doc(`${m.id}`).update({
-        responses: fsArrayUnion({ ...comment }),
+        responses: fsArrayUnion(comment),
         updatedAt: now,
       });
     } catch (error) {
@@ -167,8 +147,8 @@ const Comment = ({
     } else {
       comment['responderEmail'] = myEmail;
       //if comment is a ~RESPONSE~ to a new thread (!newThread from props)//
-      if (nowDate - lastNotificationDate > 86400000) {
-        //last notification was over a day ago
+      if (nowDate - lastNotificationDate > 43200000) {
+        //last notification for this message was under 12 hours ago
         try {
           //get author info
           profilesCollection
@@ -177,15 +157,20 @@ const Comment = ({
             .then((doc) => {
               const data = { ...doc.data() };
               if (doc.exists) {
-                console.log('Profile found!');
                 const authorNotifications = data.receiveNotifications; //author receives notificaions?
                 const lastNotificationSent = data.lastNotified ?? wayBack;
                 if (
                   authorNotifications &&
-                  nowDate - lastNotificationSent.toDate() > 86400000 //(> 24 hours)
+                  nowDate - lastNotificationSent.toDate() > 43200000 //(> 12 hours)
                 ) {
-                  responseNotification(comment);
+                  sendResponseNotification(
+                    comment,
+                    responseTriggerInfo,
+                    authorID,
+                    messageID
+                  );
                 } else {
+                  console.log('Running update without notification');
                   updateWithoutNotification(comment);
                 }
               } else {
@@ -196,6 +181,7 @@ const Comment = ({
           console.log(error);
         }
       } else {
+        console.log("Didn't meet any of the IF's criteria");
         updateWithoutNotification(comment);
       }
     }
@@ -208,18 +194,12 @@ const Comment = ({
     setMessage('');
     setAttachedImages('');
     setMessage('');
+    const clearState = EditorState.push(
+      editorState,
+      ContentState.createFromText('')
+    );
+    setEditorState(clearState);
     $(`#${formID}`)[0].reset();
-  };
-
-  const setMessageHTML = (str) => {
-    setMessage(str);
-    let snippet = str.substr(0, 144);
-    setResponse({
-      responder: me,
-      responderEmail: myEmail,
-      snippet: snippet,
-      title: title,
-    });
   };
 
   if (newThread) {
@@ -229,6 +209,8 @@ const Comment = ({
   useEffect(() => {
     const authorRef = m.authorRef ?? 'x';
     setAuthorID(authorRef.id);
+    const mID = m.id;
+    setMessageID(mID);
   }, [m]);
 
   return (
@@ -265,19 +247,10 @@ const Comment = ({
               ></Form.Control>
             </Form.Group>
             <Form.Group>
-              {/* <Form.Control
-                as="textarea"
-                rows={3}
-                required
-                placeholder={fieldName}
-                name="editordata"
-                value={message}
-                // id="message"
-                onChange={(e) => setMessage(e.target.value)}
-              ></Form.Control> */}
               <RichTextInput
                 onEditorStateChange={onEditorStateChange}
                 editorState={editorState}
+                placeholder={fieldName}
               />
             </Form.Group>
           </div>
