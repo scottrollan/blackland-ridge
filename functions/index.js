@@ -130,7 +130,7 @@ exports.newChat = functions.firestore
   .onCreate(async (snapshot, context) => {
     console.log(snapshot);
     console.log(context.params);
-    const data = snap.data();
+    const data = snapshot.data();
     const messagesArray = data.messages;
     let parsedMessage = '';
     const paragraphs = messagesArray[0].paragraphs;
