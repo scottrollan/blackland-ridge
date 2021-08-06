@@ -14,7 +14,10 @@ import {
 import { Button, InputGroup, DropdownButton, Dropdown } from 'react-bootstrap';
 import { UserContext } from '../../App';
 import { LoginContext } from '../../App';
-import { sendResponseNotification } from '../../functions/SendResponseNotification';
+import {
+  sendResponseWithNotification,
+  sendResponseWithoutNotification,
+} from '../../functions/SendResponseNotification';
 import { sendUrgentAlert } from '../../functions/SendUrgentAlert';
 import { createRandomString } from '../../functions/CreateRandomString';
 import { Form } from 'react-bootstrap';
@@ -35,6 +38,7 @@ const Comment = ({
   const myEmail = thisUser.email;
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
+  const [plainTextMessage, setPlainTextMessage] = useState('');
   const [responseTriggerInfo, setResponseTriggerInfo] = useState({});
   const [attachedImages, setAttachedImages] = useState([]);
   const [progress, setProgress] = useState(0);
@@ -45,13 +49,17 @@ const Comment = ({
 
   const onEditorStateChange = (newState) => {
     setEditorState(newState);
-    const str = draftToHtml(convertToRaw(newState.getCurrentContent()));
-    setMessage(str);
+    const content = newState.getCurrentContent();
+    const htmlStr = draftToHtml(convertToRaw(content));
+    setMessage(htmlStr);
+    const textStr = content.getPlainText();
+    setPlainTextMessage(textStr);
     setResponseTriggerInfo({
       authorEmail: m.authorEmail,
       responder: me,
       responderEmail: myEmail,
-      message: str,
+      message: htmlStr,
+      plainText: textStr,
       title: m.title,
     });
   };
@@ -100,21 +108,6 @@ const Comment = ({
   const lastNotificationSent = m.lastResponseNotification ?? wayBack;
   const lastNotificationDate = lastNotificationSent.toDate();
 
-  const updateWithoutNotification = (comment) => {
-    console.log(
-      `Updating timestamp for "updatedAt" on message document ${m.id}`
-    );
-
-    try {
-      //update message with reply and new updatedAt timestamp
-      messagesCollection.doc(`${m.id}`).update({
-        responses: fsArrayUnion(comment),
-        updatedAt: now,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
   /////////////////////////////////////
   ////// ONSUBMIT OF COMMENT FORM /////
   const sendComment = async (event) => {
@@ -127,6 +120,7 @@ const Comment = ({
       createdAt: now,
       id: newID,
       message,
+      plainTextMessage,
       messageType: messageType,
       name: me,
     };
@@ -157,13 +151,13 @@ const Comment = ({
             .then((doc) => {
               const data = { ...doc.data() };
               if (doc.exists) {
-                const authorNotifications = data.receiveNotifications; //author receives notificaions?
+                const authorNotifications = data.receiveNotifications; //author receives notificaions true/flase?
                 const lastNotificationSent = data.lastNotified ?? wayBack;
                 if (
                   authorNotifications &&
                   nowDate - lastNotificationSent.toDate() > 43200000 //(> 12 hours)
                 ) {
-                  sendResponseNotification(
+                  sendResponseWithNotification(
                     comment,
                     responseTriggerInfo,
                     authorID,
@@ -171,7 +165,7 @@ const Comment = ({
                   );
                 } else {
                   console.log('Running update without notification');
-                  updateWithoutNotification(comment);
+                  sendResponseWithoutNotification(comment, messageID);
                 }
               } else {
                 console.log('Profile not found.');
@@ -182,16 +176,17 @@ const Comment = ({
         }
       } else {
         console.log("Didn't meet any of the IF's criteria");
-        updateWithoutNotification(comment);
+        sendResponseWithoutNotification(comment, messageID);
       }
     }
     if (messageType === 'Urgent') {
-      const urgentData = { me, message, title };
+      const urgentData = { me, plainTextMessage, title };
       sendUrgentAlert(urgentData);
     }
     //reset form and state
     setTitle('');
     setMessage('');
+    setPlainTextMessage('');
     setAttachedImages('');
     setMessage('');
     const clearState = EditorState.push(

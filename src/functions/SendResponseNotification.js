@@ -1,3 +1,5 @@
+//These functions are for updating the messages collection when a new response is added to a message document, with and without alerting the original author of such updates
+
 import {
   timeStamp,
   messagesCollection,
@@ -6,7 +8,8 @@ import {
   responseTriggers,
 } from '../firestore/index';
 
-export const sendResponseNotification = (
+//update messages collection with new response and send origingal author a notification
+export const sendResponseWithNotification = (
   comment,
   responseTriggerInfo,
   authorID,
@@ -27,6 +30,25 @@ export const sendResponseNotification = (
       responses: fsArrayUnion({ ...comment }),
       updatedAt: now,
       lastResponseNotification: now,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//update messages collection with new response without notifiying original author
+export const sendResponseWithoutNotification = (comment, messageID) => {
+  console.log(
+    `Updating timestamp for "updatedAt" on message document ${messageID}`
+  );
+
+  const nowDate = new Date();
+  const now = timeStamp.fromDate(nowDate);
+  try {
+    //update message with reply AND new updatedAt timestamp
+    messagesCollection.doc(`${messageID}`).update({
+      responses: fsArrayUnion(comment),
+      updatedAt: now,
     });
   } catch (error) {
     console.log(error);

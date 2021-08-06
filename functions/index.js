@@ -32,65 +32,49 @@ exports.sendEmail = functions.firestore
     const data = snapshot.data();
     console.log(data);
     console.log(context.params);
-    // let parsedMessage = '';
-    // data.message.forEach((p) => {
-    //   parsedMessage = `${parsedMessage}${p}<br>`;
-    // });
-    // admin
-    //   .firestore()
-    //   .doc('profiles/{profileID}')
-    //   .where('receiveNotifications', '==', true)
-    //   .get()
-    //   .then((querySnapshot) => {
-    //     querySnapshot.forEach((doc) => {
-    //       const email = doc.data().email;
-    //       recipients.concat(',', email);
-    //       const mailOptions = {
-    //         from: 'blackland.ridge.notifications@gmail.com',
-    //         to: adminEmail,
-    //         subject: 'Blackland Ridge Notification',
-    //         html: `
-    //           <h3>New Message from ${snapshot.data().name}</h3>
-    //           <p>${parsedMessage}</p>
-    //           `,
-    //         // };
-    //       };
-    //       return transporter.sendMail(mailOptions, (error, data) => {
-    //         if (error) {
-    //           console.log(error);
-    //           return false;
-    //         }
-    //         console.log('Email sent: ' + data.response);
-    //       });
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    let parsedMessage = data.message;
+    const mailOptions = {
+      from: 'blackland.ridge.notifications@gmail.com',
+      to: adminEmail,
+      subject: 'Blackland Ridge Notification',
+      html: `
+              <h3>New Message from ${name}</h3>
+              <p>${parsedMessage}</p>
+              `,
+      // };
+    };
+    return transporter.sendMail(mailOptions, (error, data) => {
+      if (error) {
+        console.log(error);
+        return false;
+      }
+      console.log('Email sent: ' + data.response);
+    });
   });
 
 ///// Alert administrator when New Profile created /////
 exports.alertAdministrator = functions.firestore
   .document('profiles/{profileId}')
   .onCreate((snapshot, context) => {
-    console.log(snapshot);
+    const data = snapshot.data();
+    const name = data.name;
     console.log(context.params);
-    // const mailOptions = {
-    //   from: 'blackland.ridge.notifications@gmail.com',
-    //   to: adminEmail,
-    //   subject: 'New Profile Added',
-    //   html: `<h3>${snapshot.data().name} just set up a new profile</h3>
-    //           <p>Check the profile out and see if it looks legit.</p>
-    //   `,
-    // };
+    const mailOptions = {
+      from: 'blackland.ridge.notifications@gmail.com',
+      to: adminEmail,
+      subject: 'New Profile Added',
+      html: `<h3>${name} just set up a new profile</h3>
+              <p>Check the profile out and see if it looks legit.</p>
+      `,
+    };
 
-    // return transporter.sendMail(mailOptions, (error, data) => {
-    //   if (error) {
-    //     console.log(error);
-    //     return false;
-    //   }
-    //   console.log('Email sent: ' + data.response);
-    // });
+    return transporter.sendMail(mailOptions, (error, data) => {
+      if (error) {
+        console.log(error);
+        return false;
+      }
+      console.log('Email sent: ' + data.response);
+    });
   });
 
 ///// alert author when there is a new document in responseTriggers /////
@@ -160,7 +144,7 @@ exports.newChat = functions.firestore
       subject: 'You have a new private message.',
       html: ` <h2>from ${author}</h2>
               <p>${youAnd}</p>
-              <p><span style="font-weight: bold;">${author}</span> said,  "<span style="font-style: italic;">${parsedMessage}</span>"</p>
+              <p><span style="font-weight: bold;">${author}</span> said:<span style="font-style: italic;">${parsedMessage}</span></p>
               <a href="https://blackland-ridge.com/" rel="noreferrer noopener"><button style="background-color: #b9d452; border: none; color: white; padding: 15px 32px; border-radius: 8px; text-align: center; text-decoration: none; display: inline-block;font-size: 16px;">Login to Respond to Your Message</button></a>
       `,
     };
@@ -206,7 +190,7 @@ exports.urgentAlerts = functions.firestore
       const message = await client.messages.create({
         body: smsBody,
         from: '+17702851340',
-        to: '+14048405408',
+        to: phones,
       });
       console.log(message.sid);
     } catch (error) {

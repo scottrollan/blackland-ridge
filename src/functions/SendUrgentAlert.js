@@ -15,14 +15,16 @@ export const sendUrgentAlert = async (data) => {
         if (profile.textUrgentAlerts) {
           const phoneNo = profile.phone;
           const noNonNumbers = phoneNo.replace(/\D/g, '');
-          phones = phones.concat(`, '+1${noNonNumbers}'`);
+          if (noNonNumbers.length === 10) {
+            phones = phones.concat(`, '+1${noNonNumbers}'`);
+          }
         }
       });
 
       let document = {
         emails: emails,
         phones: phones,
-        urgentMessage: data.message,
+        urgentMessage: data.plainTextMessage,
         poster: data.me,
         title: data.title,
       };
