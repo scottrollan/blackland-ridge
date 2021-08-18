@@ -23,23 +23,26 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-let recipients = 'blackland.ridge.notifications@gmail.com';
-
-///// Alert Administrator when newThread is created
+///// Alert Subscribers when newThread is created
 exports.sendEmail = functions.firestore
   .document('messages/{msgId}')
   .onCreate(async (snapshot, context) => {
     const data = snapshot.data();
-    console.log(data);
+    const sender = data.author;
+    const recipients = data.recipients;
+    const title = data.title;
+    const message = data.message;
     console.log(context.params);
-    let parsedMessage = data.message;
     const mailOptions = {
       from: 'blackland.ridge.notifications@gmail.com',
-      to: adminEmail,
-      subject: 'Blackland Ridge Notification',
+      to: 'blackland.ridge.notifications@gmail.com',
+      bcc: recipients,
+      subject: title,
       html: `
-              <h3>New Message from ${name}</h3>
-              <p>${parsedMessage}</p>
+              <h3>New Message in Blackland Ridge from ${sender}</h3>
+              <p>${message}</p>
+              <br>
+              <a href="https://blackland-ridge.com/" rel="noreferrer noopener"><button style="background-color: #b9d452; border: none; color: white; padding: 15px 32px; border-radius: 8px; text-align: center; text-decoration: none; display: inline-block;font-size: 16px;">Go To BR Messages</button></a>
               `,
       // };
     };
@@ -108,11 +111,66 @@ exports.messageResponse = functions.firestore
     });
   });
 
+///// alert chatter(s) when there is a new respohse to a Chat/Private Message /////
+exports.newChatResponse = functions.firestore
+  .document('chats/{chatId}')
+  .onUpdate(async (snapshot, context) => {
+    console.log(context.params);
+    const data = snapshot.data();
+    const messagesArray = data.messages;
+    const totalMessages = messageArray.length;
+    const lastMessageNum = totalMessages - 1;
+    let parsedMessage = '';
+    const paragraphs = messagesArray[lastMessageNum].paragraphs;
+    paragraphs.forEach((p) => {
+      parsedMessage = `${parsedMessage}${p}<br>`;
+    });
+    const author = messagesArray[lastMessageNum].name;
+    const toNotify = data.toNotify;
+    const chatters = data.chatters;
+    const chattersNum = chatters.length;
+    const moreThanMe = chattersNum - 2;
+    let youAnd = '...to you';
+    if (moreThanMe > 0) {
+      if (moreThanMe > 1) {
+        youAnd = `...to you and ${moreThanMe} others`;
+      } else {
+        youAnd = '...to you and 1 other person';
+      }
+    }
+
+    const recipientEmails = toNotify;
+    const toEmails = recipientEmails.join(', ');
+
+    const mailOptions = {
+      from: 'blackland.ridge.notifications@gmail.com',
+      to: 'blackland.ridge.notifications@gmail.com',
+      bcc: toEmails,
+      subject: 'You have a new private message.',
+      html: ` <h2>from ${author}</h2>
+              <p>${youAnd}</p>
+              <p><span style="font-weight: bold;">${author}</span> said:<span style="font-style: italic;">${parsedMessage}</span></p>
+              <a href="https://blackland-ridge.com/" rel="noreferrer noopener"><button style="background-color: #b9d452; border: none; color: white; padding: 15px 32px; border-radius: 8px; text-align: center; text-decoration: none; display: inline-block;font-size: 16px;">Login to Respond to Your Message</button></a>
+      `,
+    };
+    if (toNotify) {
+      //won't fire on brand new messages bc toNotify isn't created until a response to orginal post is added
+      return transporter.sendMail(mailOptions, (error, data) => {
+        if (error) {
+          console.log(error);
+          return false;
+        }
+        console.log('Email sent: ' + data.response);
+      });
+    } else {
+      return;
+    }
+  });
+
 ///// alert recipient(s) when there is a new Chat/Private Message /////
 exports.newChat = functions.firestore
   .document('chats/{chatId}')
   .onCreate(async (snapshot, context) => {
-    console.log(snapshot);
     console.log(context.params);
     const data = snapshot.data();
     const messagesArray = data.messages;
@@ -143,10 +201,10 @@ exports.newChat = functions.firestore
       bcc: toEmails,
       subject: 'You have a new private message.',
       html: ` <h2>from ${author}</h2>
-              <p>${youAnd}</p>
-              <p><span style="font-weight: bold;">${author}</span> said:<span style="font-style: italic;">${parsedMessage}</span></p>
-              <a href="https://blackland-ridge.com/" rel="noreferrer noopener"><button style="background-color: #b9d452; border: none; color: white; padding: 15px 32px; border-radius: 8px; text-align: center; text-decoration: none; display: inline-block;font-size: 16px;">Login to Respond to Your Message</button></a>
-      `,
+            <p>${youAnd}</p>
+            <p><span style="font-weight: bold;">${author}</span> said:<span style="font-style: italic;">${parsedMessage}</span></p>
+            <a href="https://blackland-ridge.com/" rel="noreferrer noopener"><button style="background-color: #b9d452; border: none; color: white; padding: 15px 32px; border-radius: 8px; text-align: center; text-decoration: none; display: inline-block;font-size: 16px;">Login to Respond to Your Message</button></a>
+    `,
     };
 
     return transporter.sendMail(mailOptions, (error, data) => {
@@ -171,17 +229,17 @@ exports.urgentAlerts = functions.firestore
 
     const mailOptions = {
       from: 'blackland.ridge.notifications@gmail.com',
-      to: 'blackland.ridge.notifications@gmail.com',
+      to: 'blackland,ridge.notifications@gmail.com',
       // bcc: emails, //add emails here
-      bcc: 'barry.rollan@gmail.com',
+      bcc: emails,
       subject: 'URGENT Alert - Blackland Ridge',
       html: `<h2>${title}</h2>
             <p style="font-weight: bold;">${title}</p>
             <p>${poster} said:</p>  
             ${urgentMessage}
+            <br>
             <a href="https://blackland-ridge.com/" rel="noreferrer noopener"><button style="background-color: #b9d452; border: none; color: white; padding: 15px 32px; border-radius: 8px; text-align: center; text-decoration: none; display: inline-block;font-size: 16px;">Go To BR Messages</button></a>
-            <p>${phones}</p>
-            <p>${emails}</p>
+
     `,
     };
     const smsBody = `Urgent Alert from Blackland Ridge: ${title} -- ${urgentMessage} - from ${poster}`;

@@ -14,6 +14,16 @@ export default function QuickButtons() {
           <span className={styles.bigButtonWords}>Message Board</span>
           <i className="fal fa-comment-alt-lines"></i>
         </Link>
+
+        <Link
+          to="/kidsForHire"
+          className={[`${styles.bigButton} ${styles.row}`]}
+        >
+          <i className="far fa-person-carry"></i>
+          <span className={styles.bigButtonWords}>Kids For Hire</span>
+          <i className="fas fa-baby"></i>
+        </Link>
+
         <Link to="/referrals" className={[`${styles.bigButton} ${styles.row}`]}>
           <i className="fad fa-shopping-cart"></i>
           <span className={styles.bigButtonWords}>Business Referrals</span>

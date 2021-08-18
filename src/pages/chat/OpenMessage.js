@@ -3,6 +3,7 @@ import { UserContext } from '../../App';
 import {
   timeStamp,
   chatsCollection,
+  profilesCollection,
   fsArrayUnion,
 } from '../../firestore/index';
 import { createRandomString } from '../../functions/CreateRandomString';
@@ -62,12 +63,36 @@ const OpenMessage = ({ message, handleMessageClose, show }) => {
     unreadEmailList = remove(unreadEmailList, (u) => {
       return u !== myEmail;
     });
+    //add all chatter emails (except mine and anyone who has received a notification in the last 6 hours) to toNotify array
+    let toNotify = [];
+    chatterIDs.forEach((id) => {
+      profilesCollection
+        .doc(id)
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            const data = doc.data();
+            if (data.lastNotified > now - 21600000) {
+              //if lastNotified longer than 6 hours ago
+              toNotify = [...toNotify, id];
+              //update last notified to now
+              profilesCollection.doc(id).update({
+                lastNotified: now,
+              });
+            }
+          }
+        });
+    });
+    toNotify = remove(unreadEmailList, (u) => {
+      return u !== myEmail;
+    });
     //send reply and updated "unread" array to firestore
     chatsCollection.doc(messageID).update({
       messages: fsArrayUnion({ ...replyObj }),
       unread: unreadList,
       unreadEmails: unreadEmailList,
       updatedAt: now,
+      toNotify,
     });
     setReplyText('');
   };

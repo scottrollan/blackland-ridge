@@ -59,6 +59,10 @@ export const urgentAlertsCollection = firebaseApp
   .firestore()
   .collection('urgentAlerts');
 
+export const kidsForHireCollection = firebaseApp
+  .firestore()
+  .collection('kidsForHire');
+
 export const firebaseTimestamp = firebase.firestore.FieldValue.serverTimestamp();
 export const timeStamp = firebase.firestore.Timestamp;
 export const fsArrayUnion = firebase.firestore.FieldValue.arrayUnion;

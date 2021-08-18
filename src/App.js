@@ -9,6 +9,7 @@ import Authentication from './pages/authentication/Authentication';
 import Loading from './components/shared/Loading';
 import Directory from './pages/directory/Directory';
 import PayDues from './pages/payDues/PayDues';
+import KidsForHire from './pages/kidsForHire/KidsForHire';
 import Referrals from './pages/referrals/Referrals';
 import ProfileModal from './components/ProfileModal';
 import MyProfile from './pages/myProfile/MyProfile';
@@ -63,6 +64,7 @@ const App = () => {
                     <Route path="/referrals" component={Referrals}></Route>
                     <Route path="/album" component={Album}></Route>
                     <Route path="/pets" component={Pets}></Route>
+                    <Route path="/kidsForHire" component={KidsForHire}></Route>
                   </Switch>
                 </Router>
 

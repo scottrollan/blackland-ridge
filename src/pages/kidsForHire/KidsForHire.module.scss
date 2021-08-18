@@ -1,0 +1,118 @@
+@import '../../styles/custom-properties.scss';
+
+@mixin photo-size() {
+  width: 6rem;
+  height: 6rem;
+  @media screen and (max-width: $breakpoint-small) {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+
+.kidsForHire {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  z-index: 10;
+  background: transparent;
+  border-radius: 0.25rem 1rem 1rem;
+  margin: 0 2rem 2rem;
+  @media screen and (max-width: $breakpoint-small) {
+    margin: 0 0.5rem;
+  }
+}
+
+.addBtn {
+  @include rectangle-out;
+  margin-left: 1rem;
+  font-size: small;
+  min-width: 20rem;
+  max-width: 20rem;
+}
+.contactWho,
+.contactHow,
+.contactAt {
+  display: inline;
+  font-size: small;
+  max-width: 40%;
+}
+.contactHow {
+  max-width: 30%;
+}
+.contactAt {
+  max-width: 30%;
+}
+.sortButtonDiv {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.sortButton {
+  @include rectangle-out;
+  margin: 0 1rem;
+}
+
+.cardGrid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.card {
+  min-width: 20rem;
+  max-width: 20rem;
+  padding: 0.5rem;
+  margin: 1rem;
+  text-align: left;
+  box-shadow: 3px 5px 10px --color-pallette-dark;
+  overflow: hidden;
+}
+.cardBody {
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  @media screen and (max-width: $breakpoint-small) {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.sendKidInfo {
+  @include rectangle-out;
+  padding: 0.5rem;
+  margin: 0.5rem 0 0 0;
+}
+.cardGrid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.card {
+  min-width: 20rem;
+  max-width: 20rem;
+  padding: 0.5rem;
+  margin: 1rem;
+  text-align: left;
+  box-shadow: 3px 5px 10px --color-pallette-dark;
+  overflow: hidden;
+}
+.footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.largerScreens {
+  @media screen and (max-width: $breakpoint-large) {
+    display: none;
+  }
+}
+.smallerScreens {
+  display: none;
+  @media screen and (max-width: $breakpoint-large) {
+    display: flex;
+    justify-content: center;
+  }
+}

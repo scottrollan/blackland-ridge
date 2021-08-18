@@ -26,6 +26,16 @@ export default function NavDropdownItems({ collapseNavbar }) {
       >
         Neighbor Directory
       </Link>
+
+      <Link
+        to="/kidsForHire"
+        className="dropdown-item"
+        onClick={() => collapseNavbar()}
+        style={{ display: thisUser ? 'inherit' : 'none' }}
+      >
+        Kids for Hire
+      </Link>
+
       <Link
         to="/album"
         className="dropdown-item"

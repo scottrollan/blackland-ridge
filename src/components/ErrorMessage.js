@@ -9,20 +9,32 @@ const ErrorMessage = ({
   tryAgainBtn,
   tryAgainText,
   resetBtn,
+  idFromProps,
 }) => {
   const resetPassword = (email) => {
     db.sendResetPassword(email);
     $('#errorMessage').hide();
   };
 
+  const closeErrorMessagePopup = () => {
+    if (idFromProps) {
+      $(`#${idFromProps}`).css('display', 'none');
+    } else {
+      $('#errorMessage').css('display', 'none');
+    }
+  };
+
   return (
-    <div className={styles.alertDiv} id="errorMessage">
+    <div
+      className={styles.alertDiv}
+      id={idFromProps === '' ? 'errorMessage' : idFromProps}
+    >
       <div className={styles.fadeIn}>
         <h4>{errorMessage}</h4>
         <div className={styles.buttonRow}>
           <Button
             variant="warning"
-            onClick={() => $('#errorMessage').css('display', 'none')}
+            onClick={() => closeErrorMessagePopup()}
             style={{
               display: `${tryAgainBtn}`,
               margin: '1rem 0.5rem',

@@ -8,7 +8,6 @@ import {
   attachmentsRef,
   timeStamp,
   messagesCollection,
-  fsArrayUnion,
   profilesCollection,
 } from '../../firestore/index';
 import { Button, InputGroup, DropdownButton, Dropdown } from 'react-bootstrap';
@@ -19,6 +18,7 @@ import {
   sendResponseWithoutNotification,
 } from '../../functions/SendResponseNotification';
 import { sendUrgentAlert } from '../../functions/SendUrgentAlert';
+import { sendComment } from '../../functions/SendComment';
 import { createRandomString } from '../../functions/CreateRandomString';
 import { Form } from 'react-bootstrap';
 import $ from 'jquery';
@@ -110,79 +110,21 @@ const Comment = ({
 
   /////////////////////////////////////
   ////// ONSUBMIT OF COMMENT FORM /////
-  const sendComment = async (event) => {
+  const commentSubmission = (event) => {
     event.preventDefault();
-    const newID = createRandomString(20);
-    const authorRef = thisUser.ref;
-    let comment = {
+    sendComment(
+      thisUser,
       attachedImages,
-      authorRef: authorRef,
-      createdAt: now,
-      id: newID,
       message,
       plainTextMessage,
-      messageType: messageType,
-      name: me,
-    };
-    console.log(comment);
-    if (newThread) {
-      //if starting a new thread, (newThread comes from props)
-      comment['authorEmail'] = myEmail;
-      comment['category'] = messageType;
-      comment['title'] = title;
-      comment['newThread'] = true;
-      comment['updatedAt'] = now;
-      comment['responses'] = [];
-      try {
-        messagesCollection.doc(newID).set({ ...comment });
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      comment['responderEmail'] = myEmail;
-      //if comment is a ~RESPONSE~ to a new thread (!newThread from props)//
-      if (nowDate - lastNotificationDate > 43200000) {
-        //last notification for this message was under 12 hours ago
-        try {
-          //get author info
-          profilesCollection
-            .doc(authorID) //authorId comes from props via useEffect
-            .get()
-            .then((doc) => {
-              const data = { ...doc.data() };
-              if (doc.exists) {
-                const authorNotifications = data.receiveNotifications; //author receives notificaions true/flase?
-                const lastNotificationSent = data.lastNotified ?? wayBack;
-                if (
-                  authorNotifications &&
-                  nowDate - lastNotificationSent.toDate() > 43200000 //(> 12 hours)
-                ) {
-                  sendResponseWithNotification(
-                    comment,
-                    responseTriggerInfo,
-                    authorID,
-                    messageID
-                  );
-                } else {
-                  console.log('Running update without notification');
-                  sendResponseWithoutNotification(comment, messageID);
-                }
-              } else {
-                console.log('Profile not found.');
-              }
-            });
-        } catch (error) {
-          console.log(error);
-        }
-      } else {
-        console.log("Didn't meet any of the IF's criteria");
-        sendResponseWithoutNotification(comment, messageID);
-      }
-    }
-    if (messageType === 'Urgent') {
-      const urgentData = { me, plainTextMessage, title };
-      sendUrgentAlert(urgentData);
-    }
+      messageType,
+      newThread,
+      title,
+      lastNotificationDate,
+      responseTriggerInfo,
+      authorID,
+      messageID
+    );
     //reset form and state
     setTitle('');
     setMessage('');
@@ -196,6 +138,92 @@ const Comment = ({
     setEditorState(clearState);
     $(`#${formID}`)[0].reset();
   };
+  // const sendComment = async (event) => {
+  //   event.preventDefault();
+  //   const newID = createRandomString(20);
+  //   const authorRef = thisUser.ref;
+  //   let comment = {
+  //     attachedImages,
+  //     authorRef: authorRef,
+  //     createdAt: now,
+  //     id: newID,
+  //     message,
+  //     plainTextMessage,
+  //     messageType: messageType,
+  //     name: me,
+  //   };
+  //   console.log(comment);
+  //   if (newThread) {
+  //     //if starting a new thread, (newThread comes from props)
+  //     comment['authorEmail'] = myEmail;
+  //     comment['category'] = messageType;
+  //     comment['title'] = title;
+  //     comment['newThread'] = true;
+  //     comment['updatedAt'] = now;
+  //     comment['responses'] = [];
+  //     try {
+  //       messagesCollection.doc(newID).set({ ...comment });
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   } else {
+  //     comment['responderEmail'] = myEmail;
+  //     //if comment is a ~RESPONSE~ to a new thread (!newThread from props)//
+  //     if (nowDate - lastNotificationDate > 43200000) {
+  //       //last notification for this message was under 12 hours ago
+  //       try {
+  //         //get author info
+  //         profilesCollection
+  //           .doc(authorID) //authorId comes from props via useEffect
+  //           .get()
+  //           .then((doc) => {
+  //             const data = { ...doc.data() };
+  //             if (doc.exists) {
+  //               const authorNotifications = data.receiveNotifications; //author receives notificaions true/flase?
+  //               const lastNotificationSent = data.lastNotified ?? wayBack;
+  //               if (
+  //                 authorNotifications &&
+  //                 nowDate - lastNotificationSent.toDate() > 43200000 //(> 12 hours)
+  //               ) {
+  //                 sendResponseWithNotification(
+  //                   comment,
+  //                   responseTriggerInfo,
+  //                   authorID,
+  //                   messageID
+  //                 );
+  //               } else {
+  //                 console.log('Running update without notification');
+  //                 sendResponseWithoutNotification(comment, messageID);
+  //               }
+  //             } else {
+  //               console.log('Profile not found.');
+  //             }
+  //           });
+  //       } catch (error) {
+  //         console.log(error);
+  //       }
+  //     } else {
+  //       console.log("Didn't meet any of the IF's criteria");
+  //       sendResponseWithoutNotification(comment, messageID);
+  //     }
+  //   }
+  //   if (messageType === 'Urgent') {
+  //     const urgentData = { me, plainTextMessage, title };
+  //     sendUrgentAlert(urgentData);
+  //   }
+  //   //reset form and state
+  //   setTitle('');
+  //   setMessage('');
+  //   setPlainTextMessage('');
+  //   setAttachedImages('');
+  //   setMessage('');
+  //   const clearState = EditorState.push(
+  //     editorState,
+  //     ContentState.createFromText('')
+  //   );
+  //   setEditorState(clearState);
+  //   $(`#${formID}`)[0].reset();
+  // };
 
   if (newThread) {
     $(`#${messageTypeID}`).attr('required');
@@ -211,7 +239,7 @@ const Comment = ({
   return (
     <>
       <Form
-        onSubmit={(e) => sendComment(e)}
+        onSubmit={(e) => commentSubmission(e)}
         className={styles.commentForm}
         id={formID}
       >
