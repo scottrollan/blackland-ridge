@@ -13,6 +13,7 @@ export default function NewKidModal({ kidModalShow, toggleKidModalShow }) {
   const [errorButtonText, setErrorButtonText] = useState('Go Back');
   const [kidInfo, setKidInfo] = useState({
     name: '',
+    birthdate: '',
     contactPerson: 'parent',
     contactBy: 'email',
     email: '',
@@ -55,6 +56,7 @@ export default function NewKidModal({ kidModalShow, toggleKidModalShow }) {
   };
   ///// Submit New Kid /////
   const submitKidInfo = (event) => {
+    console.log('submitKidInfo fired...');
     event.preventDefault();
     const nowDate = new Date();
     const now = timeStamp.fromDate(nowDate);
@@ -74,6 +76,7 @@ export default function NewKidModal({ kidModalShow, toggleKidModalShow }) {
         setKidInfo({
           ...kidInfo,
           name: '',
+          birthdate: '',
           email: '',
           phone: '',
           jobs: [],
@@ -133,6 +136,19 @@ export default function NewKidModal({ kidModalShow, toggleKidModalShow }) {
             onChange={(e) => setKidInfo({ ...kidInfo, name: e.target.value })}
             required
           ></Form.Control>
+          <div>
+            Kid's Birthday{' '}
+            <span style={{ fontSize: 'small' }}>
+              <em>optional - birthdate will not appear, only age in years</em>
+            </span>
+            <Form.Control
+              type="date"
+              onChange={(e) =>
+                setKidInfo({ ...kidInfo, birthdate: e.target.value })
+              }
+              value={kidInfo.birthdate}
+            ></Form.Control>
+          </div>
           <div>Contact Information</div>
           <Form.Control
             className={styles.contactWho}

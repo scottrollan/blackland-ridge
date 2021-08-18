@@ -52,8 +52,8 @@ export default function KidsForHire() {
 
   useEffect(() => {
     let rawKids = [];
+    const today = new Date();
     const sortAndFilterKids = (kidsArray) => {
-      const today = new Date();
       const lastSixMonths = new Date(today - 15768000000); //today - 6 months
       const sixMonthsAgo = timeStamp.fromDate(lastSixMonths);
       const sortedKids = kidsArray.sort((a, b) => {
@@ -120,21 +120,31 @@ export default function KidsForHire() {
             </Button>
           </OverlayTrigger>
         </div>
+        <h3
+          style={{ display: thisUser && kids.length < 1 ? 'initial' : 'none' }}
+        >
+          No kids signed up yet... come back later.
+        </h3>
         <div className={styles.cardGrid}>
           {kids.map((kid) => {
             const uniqueID = kid.uniqueID;
             const formattedPhone = kid.phone.replace(/\D/g, '');
+            const age =
+              new Date(new Date() - new Date(kid.birthdate)).getFullYear() -
+              1970;
             return (
               <Card
                 className={styles.card}
                 key={uniqueID}
                 id={`kidCard${kid.kidID}`}
               >
-                <Card.Header as="h4">{kid.name}</Card.Header>
+                <Card.Header as="h4">{kid.name} </Card.Header>
 
                 <ListGroup className="list-group-flush">
                   <ListGroupItem>
-                    <em>I can do:</em>
+                    <em>
+                      I <span>am {age} years old and I </span>can do:
+                    </em>
                   </ListGroupItem>
 
                   {kid.jobs.map((job) => {
