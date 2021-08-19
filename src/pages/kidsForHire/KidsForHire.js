@@ -2,12 +2,14 @@ import React, { useContext, useEffect, useState } from 'react';
 import NewKidModal from './NewKidModal.js';
 import ErrorMessage from '../../components/ErrorMessage';
 import { UserContext } from '../../App';
+import { kidsForHire } from '../../data/kidsForHire';
 import { kidsForHireCollection, timeStamp } from '../../firestore/index';
 import QuickButtons from '../../components/shared/QuickButtons';
 import {
   OverlayTrigger,
   Button,
   Tooltip,
+  Form,
   Card,
   ListGroup,
   ListGroupItem,
@@ -20,6 +22,7 @@ export default function KidsForHire() {
   const [kidModalShow, setKidModalShow] = useState(false);
   const [kids, setKids] = useState([]);
   const [popupNotification, setPopupNotification] = useState('');
+  const [filterOn, setFilterOn] = useState('Everything');
 
   const thisUser = useContext(UserContext);
   const thisUserID = thisUser.id;
@@ -32,6 +35,10 @@ export default function KidsForHire() {
 
   const toggleKidModalShow = () => {
     setKidModalShow(!kidModalShow);
+  };
+
+  const kidFilterOn = (job) => {
+    setFilterOn(job);
   };
 
   const removeKid = (id, name) => {
@@ -125,6 +132,37 @@ export default function KidsForHire() {
         >
           No kids signed up yet... come back later.
         </h3>
+        <div
+          style={{
+            display: thisUser && kids.length > 0 ? 'flex' : 'none',
+            width: '100%',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            paddingTop: '0.5rem',
+          }}
+        >
+          <div style={{ fontSize: 'large', whiteSpace: 'nowrap' }}>
+            Show me kids who can do:{'  '}
+          </div>
+          <div>
+            <Form.Control
+              as="select"
+              id="kidFilterDropdown"
+              variant="success"
+              label="x"
+              onChange={(e) => kidFilterOn(e.target.value)}
+              style={{ maxWidth: 'auto' }}
+            >
+              <option>Everything</option>
+              {kidsForHire.map((j) => (
+                <option key={j} value={j}>
+                  {j}
+                </option>
+              ))}
+            </Form.Control>
+          </div>
+        </div>
         <div className={styles.cardGrid}>
           {kids.map((kid) => {
             const uniqueID = kid.uniqueID;
@@ -132,11 +170,18 @@ export default function KidsForHire() {
             const age =
               new Date(new Date() - new Date(kid.birthdate)).getFullYear() -
               1970;
+            const thisKidJobs = kid.jobs.join(' ');
             return (
               <Card
-                className={styles.card}
+                className={[`${styles.card} ${thisKidJobs}`]}
                 key={uniqueID}
                 id={`kidCard${kid.kidID}`}
+                style={{
+                  display:
+                    kid.jobs.includes(filterOn) || filterOn === 'Everything'
+                      ? 'initial'
+                      : 'none',
+                }}
               >
                 <Card.Header as="h4">{kid.name} </Card.Header>
 

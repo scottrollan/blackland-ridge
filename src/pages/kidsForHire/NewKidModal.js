@@ -56,7 +56,6 @@ export default function NewKidModal({ kidModalShow, toggleKidModalShow }) {
   };
   ///// Submit New Kid /////
   const submitKidInfo = (event) => {
-    console.log('submitKidInfo fired...');
     event.preventDefault();
     const nowDate = new Date();
     const now = timeStamp.fromDate(nowDate);
