@@ -52,6 +52,8 @@ export default function QuickButtons() {
               <i className={[`fad fa-images ${styles.icon}`]}></i>
             </Link>
           </OverlayTrigger>
+        </span>
+        <span style={{ display: thisUser ? 'initial' : 'none' }}>
           <OverlayTrigger
             delay={{ show: 250, hide: 400 }}
             overlay={<Tooltip>Neighbor Directory</Tooltip>}

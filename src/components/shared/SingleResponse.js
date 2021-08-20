@@ -2,7 +2,6 @@ import React, { useState, useContext, useRef, useEffect } from 'react';
 import { UserContext } from '../../App';
 import ResponseReactions from './ResponseReactions';
 import ResponseIcons from './ResponseIcons';
-import { profilesCollection } from '../../firestore/index';
 import { createRandomString } from '../../functions/CreateRandomString';
 import { Overlay, Tooltip, OverlayTrigger, Popover } from 'react-bootstrap';
 import ReactHtmlParser from 'react-html-parser';
