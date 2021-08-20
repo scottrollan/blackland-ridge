@@ -26,7 +26,7 @@ $smallAvatar: 2.5rem;
     '.. quote .. ...... ..';
   // justify-items: center;
   @media screen and (max-width: $breakpoint-medium) {
-    grid-template-columns: 1px $smallAvatar 12px auto 1px;
+    grid-template-columns: 1px auto 12px $smallAvatar 1px;
     grid-template-rows: $smallAvatar auto;
   }
 }
