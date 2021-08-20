@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import { UserContext } from '../../App';
 import ResponseReactions from './ResponseReactions';
 import ResponseIcons from './ResponseIcons';
@@ -15,6 +15,7 @@ const SingleResponse = ({ m }) => {
   const myID = thisUser.id ?? '';
   const [show, setShow] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
+  const [authorIsMe, setAuthorIsMe] = useState(false);
   const target = useRef(null);
 
   const handlePopoverShow = () => {
@@ -23,16 +24,9 @@ const SingleResponse = ({ m }) => {
   const handlePopoverHide = () => {
     setShow(false);
   };
-  let authorIsMe = false;
   let originalPostDate;
   let rString = createRandomString(11);
-  let photoURL;
-  let thisAuthor;
-  const authorRef = m.authorRef ?? '';
-  const authID = authorRef.id;
-  if (authID === myID) {
-    authorIsMe = true;
-  }
+
   const date = m.createdAt;
   const milliseconds = date.seconds * 1000;
   const rawDate = new Date(milliseconds);
@@ -44,40 +38,27 @@ const SingleResponse = ({ m }) => {
     rawDate.getDate() +
     ', ' +
     rawDate.getFullYear();
-
-  profilesCollection
-    .doc(authID)
-    .get()
-    .then((doc) => {
-      switch (doc.exists) {
-        case true:
-          const profile = { ...doc.data() };
-          photoURL = profile.photoURL;
-          thisAuthor = profile.displayName;
-          $(`#image${rString}`).attr('src', photoURL);
-          $(`#aTag${rString}`).attr('href', photoURL);
-          $(`#name${rString}`).html(authorIsMe ? 'ME' : thisAuthor);
-          break;
-        default:
-          console.log('Sorry, that user no longer exists');
-      }
-    })
-    .catch((error) => {
-      console.log(error.message);
-    });
-
+  useEffect(() => {
+    const authorRef = m.authorRef ?? '';
+    const authID = authorRef.id;
+    if (authID === myID) {
+      setAuthorIsMe(true);
+    }
+  }, []);
   return (
     <div style={{ width: '100%' }}>
-      <div className={styles.quoteContainer}>
+      <div
+        className={authorIsMe ? styles.myQuoteContainer : styles.quoteContainer}
+      >
         <div className={styles.avatarDiv}>
           <a
-            href={photoURL}
+            href={thisResponse.authorImageURL}
             target="_blank"
             rel="noopener noreferrer"
             id={`aTag${rString}`}
           >
             <img
-              src={photoURL}
+              src={thisResponse.authorImageURL}
               alt=""
               className={styles.avatarImg}
               id={`image${rString}`}
@@ -89,15 +70,55 @@ const SingleResponse = ({ m }) => {
           ref={target}
           onClick={() => setShowInfo(!showInfo)}
         >
+          <span style={{ fontSize: 'small' }}>
+            <em>
+              {' '}
+              On {originalPostDate} {thisResponse.name} said:
+            </em>
+          </span>
           {ReactHtmlParser(thisResponse.message)}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+
+              width: '100%',
+            }}
+          >
+            <span style={{ width: '33%' }}>
+              <ResponseIcons m={thisResponse} />
+              {/* thisResponse contains responseToID */}
+            </span>
+
+            <OverlayTrigger
+              trigger="click"
+              placement="auto"
+              show={show}
+              onToggle={() => handlePopoverShow()}
+              overlay={
+                <Popover
+                  style={{ padding: '0.75rem' }}
+                  onClick={() => handlePopoverHide()}
+                >
+                  <ResponseReactions m={thisResponse} />
+                </Popover>
+              }
+            >
+              <span
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  width: '33%',
+                  visibility: thisUser && !authorIsMe ? 'visible' : 'hidden',
+                }}
+                className={styles.likeButton}
+              >
+                <span>
+                  <i className="far fa-thumbs-up" /> Like
+                </span>{' '}
+              </span>
+            </OverlayTrigger>
+          </div>
         </div>
-        <Overlay target={target.current} show={showInfo}>
-          {(props) => (
-            <Tooltip {...props}>
-              <span id={`name${rString}`}></span> on {originalPostDate}
-            </Tooltip>
-          )}
-        </Overlay>
       </div>
 
       <div className={styles.messageImagesDiv}>
@@ -114,46 +135,6 @@ const SingleResponse = ({ m }) => {
               );
             })
           : null}
-      </div>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'flex-start',
-          width: '100%',
-        }}
-      >
-        <span style={{ width: '33%' }}>
-          <ResponseIcons m={thisResponse} />
-          {/* thisResponse contains responseToID */}
-        </span>
-
-        <OverlayTrigger
-          trigger="click"
-          placement="auto"
-          show={show}
-          onToggle={() => handlePopoverShow()}
-          overlay={
-            <Popover
-              style={{ padding: '0.75rem' }}
-              onClick={() => handlePopoverHide()}
-            >
-              <ResponseReactions m={thisResponse} />
-            </Popover>
-          }
-        >
-          <span
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              width: '33%',
-              visibility: thisUser ? 'visible' : 'hidden',
-            }}
-            className={styles.likeButton}
-          >
-            <span>
-              <i className="far fa-thumbs-up" /> Like
-            </span>{' '}
-          </span>
-        </OverlayTrigger>
       </div>
     </div>
   );

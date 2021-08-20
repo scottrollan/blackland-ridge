@@ -18,6 +18,7 @@ export default function QuickButtons() {
         <Link
           to="/kidsForHire"
           className={[`${styles.bigButton} ${styles.row}`]}
+          style={{ display: thisUser ? 'initial' : 'none' }}
         >
           <i className="far fa-person-carry"></i>
           <span className={styles.bigButtonWords}>Kids For Hire</span>
@@ -32,7 +33,7 @@ export default function QuickButtons() {
       </div>
       <div
         className={styles.row}
-        style={{ display: thisUser ? 'flex' : 'none' }}
+        style={{ justifyContent: thisUser ? 'space-between' : 'center' }}
       >
         <OverlayTrigger
           delay={{ show: 250, hide: 400 }}
@@ -42,22 +43,24 @@ export default function QuickButtons() {
             <i className={[`fal fa-dog ${styles.icon}`]}></i>
           </Link>
         </OverlayTrigger>
-        <OverlayTrigger
-          delay={{ show: 250, hide: 400 }}
-          overlay={<Tooltip>Photo Albums</Tooltip>}
-        >
-          <Link to="/album">
-            <i className={[`fad fa-images ${styles.icon}`]}></i>
-          </Link>
-        </OverlayTrigger>
-        <OverlayTrigger
-          delay={{ show: 250, hide: 400 }}
-          overlay={<Tooltip>Neighbor Directory</Tooltip>}
-        >
-          <Link to="/directory">
-            <i className={[`fal fa-address-book ${styles.icon}`]}></i>
-          </Link>
-        </OverlayTrigger>
+        <span style={{ display: thisUser ? 'initial' : 'none' }}>
+          <OverlayTrigger
+            delay={{ show: 250, hide: 400 }}
+            overlay={<Tooltip>Photo Albums</Tooltip>}
+          >
+            <Link to="/album">
+              <i className={[`fad fa-images ${styles.icon}`]}></i>
+            </Link>
+          </OverlayTrigger>
+          <OverlayTrigger
+            delay={{ show: 250, hide: 400 }}
+            overlay={<Tooltip>Neighbor Directory</Tooltip>}
+          >
+            <Link to="/directory">
+              <i className={[`fal fa-address-book ${styles.icon}`]}></i>
+            </Link>
+          </OverlayTrigger>
+        </span>
       </div>
     </div>
   );

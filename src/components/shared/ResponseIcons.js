@@ -77,7 +77,9 @@ export default function ResponseIcons({ m }) {
             {numberOfReactions > 0 ? (
               numberOfReactions
             ) : (
-              <span className={styles.noReactionsYet}>No reactions yet.</span>
+              <span className={styles.noReactionsYet}>
+                <em>No reactions yet.</em>
+              </span>
             )}
           </span>
         </div>

@@ -10,7 +10,21 @@ $smallAvatar: 2.5rem;
   grid-template-areas:
     '.. avatar .. quote ..'
     '.. ...... .. quote ..';
-  justify-items: start;
+  // justify-items: center;
+  @media screen and (max-width: $breakpoint-medium) {
+    grid-template-columns: 1px $smallAvatar 12px auto 1px;
+    grid-template-rows: $smallAvatar auto;
+  }
+}
+
+.myQuoteContainer {
+  display: grid;
+  grid-template-columns: 1rem auto 12px $bigAvatar 1rem;
+  grid-template-rows: $bigAvatar auto;
+  grid-template-areas:
+    '.. quote .. avatar ..'
+    '.. quote .. ...... ..';
+  // justify-items: center;
   @media screen and (max-width: $breakpoint-medium) {
     grid-template-columns: 1px $smallAvatar 12px auto 1px;
     grid-template-rows: $smallAvatar auto;
@@ -33,12 +47,14 @@ $smallAvatar: 2.5rem;
 
 .quote,
 .quoteMe {
+  min-width: 300px;
   grid-area: quote;
   background-color: var(--color-pallette-accent);
   border-radius: 0.75rem;
   padding: 5px 12px;
   height: auto;
   @media screen and (max-width: $breakpoint-medium) {
+    min-width: 100px;
     font-size: smaller;
   }
 }
@@ -77,7 +93,7 @@ $smallAvatar: 2.5rem;
   border-radius: 0.5rem;
   text-align: center;
   &:hover {
-    background-color: var(--overlay-dark);
+    background-color: var(--color-pallette-dark);
     color: var(--white);
   }
 }

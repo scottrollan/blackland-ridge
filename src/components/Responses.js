@@ -44,16 +44,16 @@ const Responses = ({ m }) => {
         const key = createRandomString(7);
         mr = { ...mr, arrayIndex: index, responseToID: messageID }; // add index of responses array as an object, as well as the original message id, for later querying
         return (
-          <UICard
-            key={key}
-            className={styles.card}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            <SingleResponse m={mr} />
-          </UICard>
+          // <UICard
+          //   key={key}
+          //   className={styles.card}
+          //   style={{
+          //     display: 'flex',
+          //     flexDirection: 'column',
+          //   }}
+          // >
+          <SingleResponse key={key} m={mr} />
+          // </UICard>
         );
       })
     : null;

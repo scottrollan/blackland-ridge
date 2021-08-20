@@ -109,7 +109,7 @@ export default function KidsForHire() {
         style={{ display: thisUser ? 'initial' : 'none' }}
       >
         <h3>Kids for Hire</h3>
-        <div style={{ width: '100%', textAlign: 'center' }}>
+        <div style={{ width: '100%', textAlign: 'center', margin: '1rem 0' }}>
           <OverlayTrigger
             placement="auto"
             delay={{ show: 250, hide: 400 }}

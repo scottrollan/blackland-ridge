@@ -13,12 +13,13 @@
 }
 .statsReactions .icon {
   margin-right: -6px;
-  background-color: var(--white);
+  background-color: transparent;
   padding: 2px;
   border-radius: 50%;
 }
 
 .noReactionsYet {
+  font-size: small;
   @media screen and (max-width: $breakpoint-medium) {
     @media (pointer: coarse) {
       display: none;

@@ -9,7 +9,6 @@ import {
 } from './SendResponseNotification';
 import { sendUrgentAlert } from './SendUrgentAlert';
 import { createRandomString } from './CreateRandomString';
-import $ from 'jquery';
 
 export const sendComment = async (
   thisUser,
@@ -24,8 +23,9 @@ export const sendComment = async (
   authorID,
   messageID
 ) => {
-  const me = thisUser.name;
+  const me = thisUser.displayName;
   const myEmail = thisUser.email;
+  const authorImageURL = thisUser.photoURL;
   const nowDate = new Date();
   const now = timeStamp.fromDate(nowDate);
   const dayOne = new Date('1970-01-01');
@@ -35,6 +35,7 @@ export const sendComment = async (
   let comment = {
     attachedImages,
     authorRef: authorRef,
+    authorImageURL,
     createdAt: now,
     id: newID,
     message,
