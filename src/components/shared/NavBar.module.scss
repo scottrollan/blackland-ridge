@@ -52,7 +52,9 @@ button,
 #collasible-nav-dropdown:after {
   display: none;
 }
-
+.wiggle {
+  animation: wigglewiggle 0.1s infinite alternate;
+}
 @media screen and (max-width: $breakpoint-medium) {
   .subDrop {
     display: none;
@@ -61,5 +63,14 @@ button,
     display: flex;
     width: 100%;
     justify-content: center;
+  }
+}
+
+@keyframes wigglewiggle {
+  0% {
+    transform: rotate(5deg);
+  }
+  100% {
+    transform: rotate(-5deg);
   }
 }

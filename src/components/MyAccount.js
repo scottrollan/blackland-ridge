@@ -3,24 +3,18 @@ import { UserContext } from '../App';
 import Chat from '../pages/chat/Chat';
 import OpenMessage from '../pages/chat/OpenMessage';
 import NewMessage from '../pages/chat/NewMessage';
-import { chatsCollection } from '../firestore/index';
 import { Dropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import $ from 'jquery';
 import styles from './MyAccount.module.scss';
 
-export const MyAccount = ({ logInOut }) => {
+export const MyAccount = ({ logInOut, myChatArray, haveUnread }) => {
   const thisUser = useContext(UserContext);
   const myID = thisUser.id;
-  // const myChats = thisUser.chats;
-  const [myChatArray, setMyChatArray] = useState([]);
   const [chatShow, setChatShow] = useState(false);
   const [messageShow, setMessageShow] = useState(false);
   const [newMessageShow, setNewMessageShow] = useState(false);
   const [openMessage, setOpenMessage] = useState({});
-  const [haveUnread, setHaveUnread] = useState(false);
-
-  const remove = require('lodash/remove');
 
   const handleChatShow = () => {
     setChatShow(true);
@@ -52,43 +46,6 @@ export const MyAccount = ({ logInOut }) => {
     $('#brandDropdown').removeClass('show');
     $('#logBtn').click();
   };
-
-  useEffect(() => {
-    if (!myID) {
-      return;
-    }
-    let chats = [];
-    let unreadArray = [];
-    //listen for changes
-    chatsCollection
-      .where('chatters', 'array-contains', myID)
-      .onSnapshot((snapshot) => {
-        snapshot.docChanges().forEach((change) => {
-          unreadArray = [];
-          let changeID = change.doc.id;
-          let changeData = { ...change.doc.data(), id: changeID };
-          let dataUnread = changeData.unread;
-          unreadArray = [...unreadArray, ...dataUnread]; // add all unread to array
-          chats = [...chats, changeData];
-          if (change.type === 'modified') {
-            //~if not initial fetch
-            chats = remove(chats, (c) => {
-              return c.id !== changeID; //remove pre-change element
-            });
-            chats = [...chats, changeData]; //replace with new element data
-          }
-        });
-        if (unreadArray.includes(myID)) {
-          setHaveUnread(true);
-        } else {
-          setHaveUnread(false);
-        }
-        setMyChatArray([...chats]);
-      });
-    const unsubscribe = chatsCollection.onSnapshot(() => {});
-
-    return unsubscribe();
-  }, [chatsCollection, myID]);
 
   return (
     <div style={{ position: 'relative' }}>
