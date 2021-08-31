@@ -105,10 +105,8 @@ const ProfileForm = ({ thisUser, setError, handleClose }) => {
   const uploadImage = async (e) => {
     e.preventDefault();
 
-    const randomString = createRandomString(8);
-    const uploadTask = usersRef
-      .child(`${randomString}${image.name}`)
-      .put(image);
+    const randomString = createRandomString(22);
+    const uploadTask = usersRef.child(`${randomString}`).put(image);
 
     uploadTask.on(
       'state_changed',
