@@ -23,12 +23,20 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+const errorMailOptions = {
+  from: 'blackland.ridge.notifications@gmail.com',
+  to: 'blackland.ridge.notifications@gmail.com',
+  bcc: 'barry.rollan@gmail.com',
+  subject: 'A message failed to send',
+  html: `<p>That didn't work<p>`,
+};
+
 ///// Alert Subscribers when newThread is created
 exports.sendEmail = functions.firestore
   .document('messages/{msgId}')
   .onCreate(async (snapshot, context) => {
     const data = snapshot.data();
-    const sender = data.author;
+    const sender = await data.name;
     const recipients = data.recipients;
     const title = data.title;
     const message = data.message;
@@ -43,6 +51,106 @@ exports.sendEmail = functions.firestore
               <p>${message}</p>
               <br>
               <a href="https://blackland-ridge.com/" rel="noreferrer noopener"><button style="background-color: #b9d452; border: none; color: white; padding: 15px 32px; border-radius: 8px; text-align: center; text-decoration: none; display: inline-block;font-size: 16px;">Go To BR Messages</button></a>
+              `,
+      // };
+    };
+    return transporter.sendMail(mailOptions, (error, data) => {
+      if (error) {
+        console.log(error);
+        return false;
+      }
+      console.log('Email sent: ' + data.response);
+    });
+  });
+
+///// Alert Susan Drechsel when document added to paperDirectory
+exports.alertNewDirectoryItem = functions.firestore
+  .document('paperDirectory/{docId}')
+  .onCreate(async (snapshot, context) => {
+    const data = snapshot.data();
+    const name = data.name;
+    const address = data.address;
+    const sameInfo = data.sameInfo;
+    const homePhone = data.homePhone;
+    const cellPhones = data.cellPhones;
+    const children = data.children;
+    const email = data.email;
+    const emailListed = data.emailListed;
+    const childrenJobs = data.childrenJobs;
+    const streetCaptain = data.streetCaptain;
+    const progressivePoolParty = data.progressivePoolParty;
+    const movieNight = data.movieNight;
+    const iceCreamSocial = data.iceCreamSocial;
+    const summerParty = data.summerParty;
+    const halloweenParty = data.halloweenParty;
+    const holidayParty = data.holidayParty;
+    const volunteerOptions = [
+      streetCaptain ? 'Street Captian' : null,
+      progressivePoolParty ? 'Progressive Pool Party' : null,
+      movieNight ? 'Movie Night' : null,
+      iceCreamSocial ? 'End of School Year / Ice Cream Social' : null,
+      summerParty ? 'July 4th / Summer Party' : null,
+      halloweenParty ? 'Halloween Party' : null,
+      holidayParty ? 'Holiday Party' : null,
+    ];
+    const volunteerArray = volunteerOptions.filter((v) => v); // v is truthy;
+    let volunteeringFor = '';
+    if (volunteerArray.length > 0) {
+      volunteerArray.forEach((v) => {
+        volunteeringFor === ''
+          ? (volunteeringFor = volunteeringFor.concat(v))
+          : (volunteeringFor = volunteeringFor.concat(' and ', v));
+      });
+    }
+    console.log(context.params);
+    const mailOptions = {
+      from: 'blackland.ridge.notifications@gmail.com',
+      to: 'blackland.ridge.notifications@gmail.com',
+      // bcc: 'susan@drechsel.us',
+      bcc: 'barry.rollan@gmail.com,susan@drechsel.us',
+      subject: `Directory info for ${name}`,
+      html: `
+              <h3>${name} just filled out their contact information</h3>
+              <h4>${address ? address : 'No address provided'}</h4>
+              <h5>Below is all the information they provided</h5>
+              <div>${
+                sameInfo
+                  ? `${name} indicated that their info was the same as last year`
+                  : `
+              <p>${
+                homePhone
+                  ? `Home phone: ${homePhone}`
+                  : '- No home phone number provided'
+              }</p>
+              <p>${
+                cellPhones
+                  ? `Cell Phones: ${cellPhones}`
+                  : '- No cell phone numbers provided'
+              }</p>
+              <p>${
+                email ? `Email: ${email}` : '- No email address provided'
+              }</p>
+              <p>${email && emailListed ? '- Ok to list email' : ''}</p>
+              <p>${
+                !emailListed
+                  ? '- Please DO NOT list email address in directory.'
+                  : ''
+              }</p>
+              <p>${
+                !email && emailListed
+                  ? '- Ok to list email if it is on file'
+                  : ''
+              }</p>
+              
+              <p>${children ? `Children: ${children}` : ''}</p>
+              <p>${childrenJobs ? 'Their kids can do these jobs:' : ''}</p>
+              <p>${childrenJobs ? childrenJobs : ''}</p>`
+              }</div>
+              <p>${
+                volunteeringFor === ''
+                  ? `--${name} didn't volunteer for anything--`
+                  : `${name} volunteered for ${volunteeringFor}`
+              }</p>
               `,
       // };
     };
