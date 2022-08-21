@@ -1,18 +1,15 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../../App';
 import ResponseAccordion from '../ResponseAccordion';
 import { profilesCollection } from '../../firestore/index';
 import { createRandomString } from '../../functions/CreateRandomString';
 import $ from 'jquery';
-import ReactHtmlParser, {
-  processNodes,
-  convertNodeToElement,
-  htmlparser2,
-} from 'react-html-parser';
+import ReactHtmlParser from 'react-html-parser';
 import styles from './SingleMessage.module.scss';
 
 const SingleMessage = ({ m }) => {
-  // const [m, setm] = useState({ ...m });
+  const [photoURL, setPhotoURL] = useState();
+  const [thisAuthor, setThisAuthor] = useState();
   const thisUser = useContext(UserContext);
   const myID = thisUser.id ?? '';
   const newThread = m.newThread ?? false;
@@ -20,8 +17,6 @@ const SingleMessage = ({ m }) => {
   let authorIsMe = false;
   let originalPostDate;
   let rString = createRandomString(11);
-  let photoURL;
-  let thisAuthor;
   const authorRef = m.authorRef;
   const authID = authorRef.id;
   if (authID === myID) {
@@ -39,7 +34,7 @@ const SingleMessage = ({ m }) => {
     ', ' +
     rawDate.getFullYear();
 
-  React.useEffect(() => {
+  useEffect(() => {
     profilesCollection
       .doc(authID)
       .get()
@@ -47,8 +42,10 @@ const SingleMessage = ({ m }) => {
         switch (doc.exists) {
           case true:
             const profile = { ...doc.data() };
-            photoURL = profile.photoURL;
-            thisAuthor = profile.displayName;
+            let photo = profile.photoURL;
+            setPhotoURL(photo);
+            let author = profile.displayName;
+            setThisAuthor(author);
             $(`#image${rString}`).attr('src', photoURL);
             $(`#aTag${rString}`).attr('href', photoURL);
             $(`#name${rString}`).html(authorIsMe ? 'ME' : thisAuthor);

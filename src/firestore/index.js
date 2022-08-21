@@ -45,6 +45,10 @@ export const messagesCollection = firebaseApp
   .firestore()
   .collection('messages');
 
+export const directoryCollection = firebaseApp
+  .firestore()
+  .collection('paperDirectory');
+
 export const referralsCollection = firebaseApp
   .firestore()
   .collection('referrals');

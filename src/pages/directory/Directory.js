@@ -47,14 +47,6 @@ const Directory = () => {
     setAddressMode(false);
   };
 
-  const createNewMessage = (r) => {
-    const arrayOfOne = [r];
-    setRecipient([...arrayOfOne]);
-    setShowNewMessage(true);
-    $('#messageTo').text(`Message to ${r.name}`);
-    $('#test').text('new');
-  };
-
   useEffect(() => {
     let mounted = true;
     let allNeighbors = [];

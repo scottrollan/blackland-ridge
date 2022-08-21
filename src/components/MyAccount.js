@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { UserContext } from '../App';
 import Chat from '../pages/chat/Chat';
 import OpenMessage from '../pages/chat/OpenMessage';

@@ -2,8 +2,6 @@ import React, { useContext } from 'react';
 import { UserContext } from '../../App';
 import { LoginContext } from '../../App';
 import { Link } from 'react-router-dom';
-import Zillow from '../../assets/zillow.png';
-import styles from './NavBar.module.scss';
 
 export default function NavDropdownItems({ collapseNavbar }) {
   const thisUser = useContext(UserContext);

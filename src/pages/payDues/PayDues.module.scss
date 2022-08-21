@@ -38,13 +38,12 @@
   border: 1px solid var(--paypal-blue);
   padding: 2vw;
   border-radius: 2vw;
+  background-color: white;
 }
-
-.link {
-  font-size: larger;
-  &:hover,
-  &:visited,
-  &:active {
-    text-decoration: none;
-  }
+.paypalDiv:hover {
+  cursor: pointer;
+  background-color: var(--overlay-light);
+}
+.paypalDiv:active {
+  transform: scale(0.95);
 }

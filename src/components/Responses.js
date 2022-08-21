@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { messagesCollection } from '../firestore/index';
 import { createRandomString } from '../functions/CreateRandomString';
 import SingleResponse from './shared/SingleResponse';
-import { Card as UICard } from '@material-ui/core';
-import styles from './Responses.module.scss';
 
 const Responses = ({ m }) => {
   const thisMessage = { ...m };

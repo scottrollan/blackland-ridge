@@ -23,14 +23,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const errorMailOptions = {
-  from: 'blackland.ridge.notifications@gmail.com',
-  to: 'blackland.ridge.notifications@gmail.com',
-  bcc: 'barry.rollan@gmail.com',
-  subject: 'A message failed to send',
-  html: `<p>That didn't work<p>`,
-};
-
 ///// Alert Subscribers when newThread is created
 exports.sendEmail = functions.firestore
   .document('messages/{msgId}')

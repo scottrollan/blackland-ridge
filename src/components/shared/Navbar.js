@@ -31,7 +31,6 @@ const NavBar = () => {
   };
 
   const collapseNavbar = () => {
-    // $('.navbar-toggler').click();
     $('.navbar-toggler').click();
   };
 
@@ -70,7 +69,7 @@ const NavBar = () => {
     const unsubscribe = chatsCollection.onSnapshot(() => {});
 
     return unsubscribe();
-  }, [chatsCollection, myID]);
+  }, [remove, myID]);
 
   return (
     <Navbar className={styles.navBar} collapseOnSelect expand="lg" id="mainNav">

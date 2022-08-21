@@ -241,7 +241,6 @@ const OpenMessage = ({ message, handleMessageClose, show }) => {
       </Modal.Header>
       <Modal.Body>
         {chats.map((c, index) => {
-          let lastIndex = chats.length - 1;
           let paragraphs = c.paragraphs;
           let key = `${c.id}${index}`;
 

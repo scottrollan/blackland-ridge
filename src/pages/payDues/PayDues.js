@@ -1,31 +1,33 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
+import ContactInfoPopup from './ContactInfoPopup';
 import QuickButtons from '../../components/shared/QuickButtons';
 import Footer from '../../components/shared/Footer';
-import PaypalLogo from '../../assets/paypal.png';
 import styles from './PayDues.module.scss';
 
 export default function PayDues() {
+  const [contactModalOpen, setContactModalOpen] = useState(false);
+
   return (
     <>
+      <ContactInfoPopup
+        contactModalOpen={contactModalOpen}
+        setContactModalOpen={setContactModalOpen}
+      />
       <QuickButtons />
       <div className={styles.payDues}>
         <h3>Pay Your $70 Annual Dues</h3>
         <div className={styles.body}>
           <div className={styles.paragraph}>
-            <a
-              href="https://www.paypal.me/BlacklandridgeGC"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.link}
+            <div
+              className={styles.paypalDiv}
+              onClick={() => setContactModalOpen(true)}
             >
-              <div className={styles.paypalDiv}>
-                <p>Pay here with </p>
-                <img
-                  src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/PP_logo_h_150x38.png"
-                  alt="PayPal"
-                />
-              </div>
-            </a>
+              <p>Pay here with </p>
+              <img
+                src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/PP_logo_h_150x38.png"
+                alt="PayPal"
+              />
+            </div>
           </div>
 
           <div className={styles.paragraph}>

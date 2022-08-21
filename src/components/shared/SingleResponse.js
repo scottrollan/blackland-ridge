@@ -3,9 +3,8 @@ import { UserContext } from '../../App';
 import ResponseReactions from './ResponseReactions';
 import ResponseIcons from './ResponseIcons';
 import { createRandomString } from '../../functions/CreateRandomString';
-import { Overlay, Tooltip, OverlayTrigger, Popover } from 'react-bootstrap';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 import ReactHtmlParser from 'react-html-parser';
-import $ from 'jquery';
 import styles from './SingleResponse.module.scss';
 
 const SingleResponse = ({ m }) => {
@@ -43,7 +42,7 @@ const SingleResponse = ({ m }) => {
     if (authID === myID) {
       setAuthorIsMe(true);
     }
-  }, []);
+  }, [m.authorRef, myID]);
   return (
     <div style={{ width: '100%' }}>
       <div

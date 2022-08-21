@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import ErrorMessage from '../../components/ErrorMessage.js';
 import { UserContext } from '../../App';
 import { kidsForHire } from '../../data/kidsForHire';
@@ -24,7 +24,6 @@ export default function NewKidModal({ kidModalShow, toggleKidModalShow }) {
   });
   const thisUser = useContext(UserContext);
   const parent = thisUser.name;
-  const parentID = thisUser.id;
   const kidJobs = kidsForHire.sort();
 
   const phoneMask = () => {
@@ -59,7 +58,13 @@ export default function NewKidModal({ kidModalShow, toggleKidModalShow }) {
     event.preventDefault();
     const nowDate = new Date();
     const now = timeStamp.fromDate(nowDate);
-    const myKidInfo = { ...kidInfo, date: now, parent };
+    const myKidInfo = {
+      ...kidInfo,
+      date: now,
+      parent,
+      contactPerson: thisUser.name,
+      parentID: thisUser.id,
+    };
     if (myKidInfo.jobs.length < 1) {
       setPopupText('You have to select at least one job from the list.');
       setErrorButtonText('Go Back');
@@ -79,9 +84,9 @@ export default function NewKidModal({ kidModalShow, toggleKidModalShow }) {
           email: '',
           phone: '',
           jobs: [],
-          contactPerson: parent,
+          contactPerson: thisUser.name,
+          parentID: thisUser.id,
           contactBy: 'email',
-          parentID: '',
           notes: '',
         });
         setPopupText('Your kid has been added to the database successfully.');
@@ -93,16 +98,6 @@ export default function NewKidModal({ kidModalShow, toggleKidModalShow }) {
       console.log(error.message);
     }
   };
-
-  useEffect(() => {
-    $('input[name="jobCheck"]').prop('checked', false);
-    setKidInfo({
-      ...kidInfo,
-      jobs: [],
-      contactPerson: thisUser.name,
-      parentID: thisUser.id,
-    });
-  }, [thisUser]);
 
   return (
     <Modal show={kidModalShow} onHide={toggleKidModalShow} scrollable>

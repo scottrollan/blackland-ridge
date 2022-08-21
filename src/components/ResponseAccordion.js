@@ -14,7 +14,7 @@ import { OverlayTrigger, Popover } from 'react-bootstrap';
 import styles from './ResponseAccordion.module.scss';
 
 const ResponseAccordion = ({ m }) => {
-  const myResponses = m.responses ?? [];
+  // const myResponses = m.responses ?? [];
   // const responsesLength = myResponses.length;
   const thisUser = useContext(UserContext);
   const [show, setShow] = useState(false);

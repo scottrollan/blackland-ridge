@@ -41,7 +41,7 @@ const Messages = () => {
     const unsubscribe = messagesCollection.onSnapshot(() => {});
 
     return unsubscribe();
-  }, []);
+  }, [messages]);
 
   return (
     <>
