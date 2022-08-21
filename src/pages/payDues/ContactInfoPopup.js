@@ -60,9 +60,8 @@ export default function ContactInfoPopup({
 
   useEffect(() => {
     const autoFill = async () => {
-      const me = await thisUser.name;
       const myAddress = thisUser.address;
-      setForm({ ...form, name: me, address: myAddress });
+      setForm({ ...form, address: myAddress });
     };
     autoFill();
   }, []);
@@ -98,13 +97,19 @@ export default function ContactInfoPopup({
         </div>
         <div id="formDiv">
           <Form id="contactForm" onSubmit={(e) => submitForm(e)}>
-            <Form.Control
-              value={form.name}
-              onChange={(e) => handleChange('name', e.target.value)}
-              required
-              placeholder="Name(s)"
-              style={{ margin: '1em 0' }}
-            />
+            <Form.Group>
+              <Form.Control
+                value={form.name}
+                onChange={(e) => handleChange('name', e.target.value)}
+                required
+                placeholder="Name(s)"
+                style={{ margin: '1em 0' }}
+              />
+              <Form.Text>
+                List all adult household members (ex: Jo and Tina Smith) as you
+                want them to appear in the directory.
+              </Form.Text>
+            </Form.Group>
             <Form.Control
               value={form.address}
               onChange={(e) => handleChange('address', e.target.value)}
