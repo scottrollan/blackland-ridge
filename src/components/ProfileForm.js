@@ -74,10 +74,12 @@ const reducer = (state, action) => {
 };
 
 const ProfileForm = ({ thisUser, setError, handleClose }) => {
+  const today = new Date();
   const initialData = { ...thisUser };
   const [state, dispatch] = useReducer(reducer, {
     ...initialData,
     firstTimeLogin: false,
+    dateCreated: today,
   });
   const [image, setImage] = useState(null);
   const [progress, setProgress] = useState(0);

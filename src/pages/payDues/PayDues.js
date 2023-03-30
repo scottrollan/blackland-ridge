@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import ContactInfoPopup from './ContactInfoPopup';
 import QuickButtons from '../../components/shared/QuickButtons';
 import Footer from '../../components/shared/Footer';
