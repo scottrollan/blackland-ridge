@@ -16,11 +16,11 @@ export default function PayDues() {
       <QuickButtons />
       <div className={styles.payDues}>
         <h3>
-          $70 - annual directory &amp; maintenance of our front entrance &amp;
+          $90 - annual directory &amp; maintenance of our front entrance &amp;
           social activities
         </h3>
         <h3>~or~</h3>
-        <h3>$35 - annual directory &amp; maintenance of front entance only</h3>
+        <h3>$40 - annual directory &amp; maintenance of front entance only</h3>
         <div className={styles.body}>
           <div className={styles.paragraph}>
             <div
