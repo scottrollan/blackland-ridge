@@ -1,6 +1,6 @@
 import * as firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/firestore';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 import 'firebase/storage';
 import 'firebase/firebase-functions';
 import 'firebase/firebase-messaging';
@@ -67,7 +67,8 @@ export const kidsForHireCollection = firebaseApp
   .firestore()
   .collection('kidsForHire');
 
-export const firebaseTimestamp = firebase.firestore.FieldValue.serverTimestamp();
+export const firebaseTimestamp =
+  firebase.firestore.FieldValue.serverTimestamp();
 export const timeStamp = firebase.firestore.Timestamp;
 export const fsArrayUnion = firebase.firestore.FieldValue.arrayUnion;
 

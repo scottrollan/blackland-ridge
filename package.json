@@ -17,7 +17,7 @@
     "cors": "^2.8.5",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
-    "firebase": "^7.24.0",
+    "firebase": "^10.8.0",
     "firebase-admin": "^9.5.0",
     "firebase-functions": "^3.13.2",
     "firebaseui": "^4.7.3",
